@@ -1,9 +1,9 @@
 <template>
-  <NuxtLink to="/" aria-label="Novatrix AI">
+  <a href="/" aria-label="Novatrix AI">
     <div class="logo-container">
       <h1 class="logo-text">Novatrix<span>AI.</span></h1>
     </div>
-  </NuxtLink>
+  </a>
 </template>
 
 <style>

@@ -13,7 +13,7 @@ import Header from "./Header.vue";
           Révolutionnez votre futur avec NovatrixAi
         </p>
         <div
-          class="font-volkhov font-bold text-5xl md:text-6xl lg:text-7xl text-[#101828]"
+          class="font-volkhov font-bold text-4xl sm:text-5xl md:text-6xl lg:text-7xl text-[#101828]"
         >
           <div class="flex space-x-3">
             <div>Innover,</div>
@@ -47,22 +47,21 @@ import Header from "./Header.vue";
           Ensemble, façonnons un avenir plus intelligent.
         </p>
         <div class="flex items-center space-x-4">
-          <button
+          <a
+            href="#realisations"
             type="button"
             aria-label="Découvrir nos solutions"
             class="block bg-[#1A73E8] text-white px-6 py-3 text-sm font-poppins rounded-md shadow-md hover:bg-[#1662C4]"
           >
             Découvrir nos solutions
-          </button>
+          </a>
         </div>
       </div>
       <div>
         <nuxt-picture
-          src="../../assets/images/hero.png"
+          src="/images/hero.png"
           width="765"
-          height="764"
           alt="Illustration futuriste"
-          sizes="sm:100vw md:50vw lg:400px"
         />
         <svg
           class="absolute top-0 right-0 w-[35rem] -z-10"

@@ -7,7 +7,7 @@ import PlusPlusSVG from "~/components/global/svg/PlusPlusSVG.vue";
 </script>
 
 <template>
-  <section class="p-6 sm:p-20">
+  <section id="services" class="p-6 sm:p-20">
     <div class="text-center space-y-3 relative">
       <p class="uppercase font-semibold text-[#F1A501]">Nos Services</p>
       <h2 class="text-[#181E4B] font-bold text-4xl sm:text-5xl font-volkhov">

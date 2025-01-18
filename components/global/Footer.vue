@@ -1,5 +1,5 @@
 <template>
-  <footer class="p-5 sm:px-16 sm:py-6 mt-12">
+  <footer class="px-5 sm:px-16 sm:p6 mt12">
     <div
       class="w-full text-center p-12 sm:p-0 space-y-4 sm:space-y-0 sm:grid sm:grid-cols-10 gap-20 md:gap-12 lg:gap-20"
     >
@@ -16,40 +16,52 @@
         <div class="space-y-4 col-span-2">
           <p class="font-bold text-lg">Liens rapides</p>
           <div class="space-y-2">
-            <NuxtLink to="/about" class="block text-[#5E6282]"
+            <NuxtLink to="#a-propos" class="block text-[#5E6282]"
               >À propos</NuxtLink
             >
-            <NuxtLink to="/careers" class="block text-[#5E6282]"
+            <NuxtLink to="#services" class="block text-[#5E6282]"
               >Services</NuxtLink
             >
-            <NuxtLink to="/careers" class="block text-[#5E6282]"
+            <NuxtLink to="#realisations" class="block text-[#5E6282]"
               >Réalisations</NuxtLink
             >
           </div>
         </div>
         <div class="space-y-4">
           <p class="font-bold text-lg">Contacts</p>
-          <div class="space-x-4 flex mx-auto items-center justify-center">
+          <div
+            id="contact"
+            class="space-x-0 mx-auto items-center justify-center"
+          >
             <NuxtLink
               target="_blank"
               to="https://www.linkedin.com/company/novatrix-dev/"
-              class="block text-[#5E6282]"
+              class="flex items-center space-x-3 justify-start text-[#5E6282]"
             >
-              <SvgLinkedinSVG
-            /></NuxtLink>
-            <NuxtLink
-              target="_blank"
-              to="mailto:mrdeck30@gmail.com"
-              class="block text-[#5E6282]"
+              <SvgLinkedinSVG />
+              <div>Novatrix AI</div></NuxtLink
             >
-              <Icon size="3em" name="mdi:email" />
-            </NuxtLink>
+            <a
+              href="mailto:mrdeck30@gmail.com"
+              class="flex items-center space-x-2"
+            >
+              <NuxtLink
+                to="mailto:mrdeck30@gmail.com"
+                class="flex items-center space-x-2 justify-start text-[#5E6282]"
+              >
+                <SvgEmailSVG
+              /></NuxtLink>
+              <div>mrdeck30@gmail.com</div></a
+            >
+
             <NuxtLink
               target="_blank"
               to="https://wa.me/22952746912"
-              class="block text-[#5E6282]"
+              style="position: relative; right: 5px"
+              class="flex items-center space-x- justify-start text-[#5E6282]"
             >
               <SvgWhatsappSVG />
+              <div>+229 52 74 69 12</div>
             </NuxtLink>
           </div>
         </div>

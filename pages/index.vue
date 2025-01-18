@@ -6,14 +6,29 @@ import Bookings from "~/components/bookings/index.vue";
 import Testimonials from "~/components/testimonials/index.vue";
 import Companies from "~/components/companies/index.vue";
 import Subscribe from "~/components/subscribe/index.vue";
+
+onMounted(() => {
+  if (import.meta.client) {
+    ScrollReveal().reveal(".headline", { delay: 400 });
+  }
+  ScrollReveal().reveal(".headline1", { delay: 400 });
+});
+
+useHead({
+  script: [
+    {
+      src: "https://unpkg.com/scrollreveal",
+    },
+  ],
+});
 </script>
 
 <template>
-  <LazyHero />
-  <LazyCategory />
-  <LazyDestinations />
-  <LazyBookings />
+  <Hero />
+  <Category class="headline1" />
+  <Destinations class="headline" />
+  <Bookings class="headline" />
   <!-- <LazyTestimonials />
   <LazyCompanies /> -->
-  <LazySubscribe />
+  <Subscribe class="headline" />
 </template>

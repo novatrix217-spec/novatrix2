@@ -1,7 +1,7 @@
 <script setup></script>
 
 <template>
-  <section class="p-6 sm:p-20 sm:-mt-32 font-poppins">
+  <section id="a-propos" class="p-6 sm:p-20 sm:-mt-32 font-poppins">
     <div
       class="grid grid-cols-1 sm:grid-cols-2 items-center gap-20 md:gap-16 lg:gap-20"
     >

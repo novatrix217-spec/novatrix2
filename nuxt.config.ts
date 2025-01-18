@@ -8,6 +8,7 @@ export default defineNuxtConfig({
     "@nuxtjs/tailwindcss",
     "nuxt-headlessui",
   ],
+
   tailwindcss: {
     cssPath: "~/assets/css/tailwind.css",
     config: {
@@ -20,4 +21,6 @@ export default defineNuxtConfig({
       plugins: [require("tailwind-scrollbar-hide")],
     },
   },
+
+  compatibilityDate: "2025-01-18",
 });
