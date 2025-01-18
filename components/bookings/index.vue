@@ -6,9 +6,11 @@
       class="grid grid-cols-1 sm:grid-cols-2 items-center gap-20 md:gap-16 lg:gap-20"
     >
       <div class="space-y-6">
-        <p class="capitalize font-semibold text-gray-600">Easy and Fast</p>
+        <p class="capitalize font-semibold text-gray-600">
+          Innovation et Réactivité
+        </p>
         <h2 class="text-[#14183E] font-bold text-4xl sm:text-5xl font-volkhov">
-          Book your next trip in 3 easy steps
+          Révolutionnez votre entreprise avec l'Intelligence Artificielle
         </h2>
         <div class="space-y-7">
           <div class="flex space-x-4">
@@ -27,10 +29,11 @@
             </svg>
 
             <div>
-              <p class="text-gray-600 font-bold">Choose Destination</p>
+              <p class="text-gray-600 font-bold">Évaluation des Besoins</p>
               <p class="text-sm text-gray-600">
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Urna,
-                tortor tempus.
+                Nous identifions les défis uniques de votre entreprise et
+                explorez les solutions technologiques innovantes adaptées à vos
+                objectifs.
               </p>
             </div>
           </div>
@@ -82,10 +85,11 @@
             </svg>
 
             <div>
-              <p class="text-gray-600 font-bold">Make Payment</p>
+              <p class="text-gray-600 font-bold">Solution Sur Mesure</p>
               <p class="text-sm text-gray-600">
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Urna,
-                tortor tempus.
+                NovatrixAI développe des solutions sur mesure intégrant l'IA
+                pour améliorer l'efficacité et atteindre vos objectifs
+                stratégiques.
               </p>
             </div>
           </div>
@@ -119,12 +123,10 @@
             </svg>
 
             <div>
-              <p class="text-gray-600 font-bold">
-                Reach Airport on Selected Date
-              </p>
+              <p class="text-gray-600 font-bold">Analyse Prédictive</p>
               <p class="text-sm text-gray-600">
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Urna,
-                tortor tempus.
+                Nous utilisons l'IA pour anticiper les tendances, optimiser les
+                processus et prendre des décisions éclairées.
               </p>
             </div>
           </div>

@@ -58,7 +58,7 @@ import Header from "./Header.vue";
       </div>
       <div>
         <nuxt-picture
-          src="../../assets//images//hero.png"
+          src="../../assets/images/hero.png"
           width="765"
           height="764"
           alt="Illustration futuriste"
