@@ -9,9 +9,14 @@ import Subscribe from "~/components/subscribe/index.vue";
 
 onMounted(() => {
   if (import.meta.client) {
-    ScrollReveal().reveal(".headline", { delay: 400 });
+    ScrollReveal().reveal(".headline", { delay: 650 });
+    ScrollReveal().reveal(".headline2", {
+      delay: 650,
+    });
   }
-  ScrollReveal().reveal(".headline1", { delay: 400 });
+  ScrollReveal().reveal(".headline1", {
+    delay: 650,
+  });
 });
 
 useHead({
@@ -26,7 +31,7 @@ useHead({
 <template>
   <Hero />
   <Category class="headline1" />
-  <Destinations class="headline" />
+  <Destinations class="headline2" />
   <Bookings class="headline" />
   <!-- <LazyTestimonials />
   <LazyCompanies /> -->

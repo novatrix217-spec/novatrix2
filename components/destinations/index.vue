@@ -1,4 +1,8 @@
-<script setup></script>
+<script setup>
+const showRealisation1 = ref(false);
+const showRealisation2 = ref(false);
+const showRealisation3 = ref(false);
+</script>
 
 <template>
   <section id="realisations" class="p-6 sm:p-20 sm:-mt-32 font-poppins">
@@ -15,14 +19,12 @@
       <div>
         <nuxt-img
           format="webp"
-          src="/images/rome.png"
+          src="/images/booking1.png"
           alt="rome"
-          class="w-full h-80 object-cover rounded-t-3xl"
-          width="314"
-          height="457"
+          class="w-full h-80 object-contain rounded-t-3xl"
         />
         <div
-          class="space-y-3 p-3 border-b border-r border-l rounded-x-3xl rounded-b-3xl bg-white shadow-xl"
+          class="space-y-3 p-3 border-b border-r border-l rounded-x-3xl rounded-b-3xl bg-white shadow-md"
         >
           <div class="flex items-center justify-between font-poppins">
             <p class="text-gray-500 font-medium">Prédiction de Demande</p>
@@ -41,7 +43,11 @@
                 fill="#080809"
               />
             </svg> -->
-            <p class="text-gray-500 font-medium truncate">
+            <p
+              @click="showRealisation1 = !showRealisation1"
+              class="text-gray-500 font-medium cursor-pointer"
+              :class="{ truncate: !showRealisation1 }"
+            >
               Développement d’un algorithme de prévision de la demande pour une
               chaîne de magasins, réduisant les ruptures de stock de 30 %.
             </p>
@@ -51,11 +57,9 @@
       <div>
         <nuxt-img
           format="webp"
-          src="/images/london.jpg"
+          src="/images/booking2.png"
           alt="london"
-          class="w-full h-80 object-cover rounded-t-3xl"
-          width="314"
-          height="457"
+          class="w-full h-80 object-contain rounded-t-3xl"
         />
         <div
           class="space-y-3 p-3 border-b border-r border-l rounded-x-3xl rounded-b-3xl bg-white shadow-xl"
@@ -77,7 +81,11 @@
                 fill="#080809"
               />
             </svg> -->
-            <p class="text-gray-500 font-medium truncate">
+            <p
+              @click="showRealisation2 = !showRealisation2"
+              class="text-gray-500 font-medium cursor-pointer"
+              :class="{ truncate: !showRealisation2 }"
+            >
               Création d’un système intelligent pour optimiser les flux de
               livraison, réduisant les délais de 20 %.
             </p>
@@ -113,7 +121,11 @@
                 fill="#080809"
               />
             </svg> -->
-            <p class="text-gray-500 font-medium truncate">
+            <p
+              @click="showRealisation3 = !showRealisation3"
+              :class="{ truncate: !showRealisation3 }"
+              class="text-gray-500 font-medium cursor-pointer"
+            >
               Mise en place d’un modèle de maintenance prédictive pour une
               usine, réduisant les arrêts de production imprévus de 35 %.
             </p>

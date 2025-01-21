@@ -8,7 +8,7 @@
           >Novatrix AI</NuxtLink
         >
         <p class="text-[#080809] text-xs font-light">
-          Réservez votre voyage en toute simplicité
+          Grâce à l'IA nous donnons vie à vos projets
         </p>
       </div>
 
@@ -45,12 +45,12 @@
               href="mailto:mrdeck30@gmail.com"
               class="flex items-center space-x-2"
             >
-              <NuxtLink
+              <div
                 to="mailto:mrdeck30@gmail.com"
                 class="flex items-center space-x-2 justify-start text-[#5E6282]"
               >
-                <SvgEmailSVG
-              /></NuxtLink>
+                <SvgEmailSVG />
+              </div>
               <div>mrdeck30@gmail.com</div></a
             >
 
@@ -61,7 +61,7 @@
               class="flex items-center space-x- justify-start text-[#5E6282]"
             >
               <SvgWhatsappSVG />
-              <div>+229 52 74 69 12</div>
+              <div>+229 01 52 74 69 12</div>
             </NuxtLink>
           </div>
         </div>
