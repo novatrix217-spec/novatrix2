@@ -132,13 +132,10 @@
           </div>
         </div>
       </div>
-      <nuxt-picture
-        src="/images/bookings.jpg"
+      <img
+        src="/images/cover.png"
         alt="bookings"
-        class="-mt-16 sm:mt-0"
-        width="314"
-        height="457"
-        sizes="sm:100vw md:50vw lg:400px"
+        class="-mt-16 sm:mt-0 rounded-x-3xl rounded-b-3xl rounded-t-3xl bg-white shadow-md"
       />
     </div>
   </section>

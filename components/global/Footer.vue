@@ -95,7 +95,7 @@
     </div>
 
     <p class="text-center text-xs text-[#5E6282] mb-8 sm:mt-8">
-      Made with ❤️, <a href="/" class="text-indigo-600">Novatrix AI</a>
+      Made with ❤️, <a href="/" class="text-indigo-600">Novatrix AI</a> team
     </p>
   </footer>
 </template>

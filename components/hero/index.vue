@@ -1,6 +1,21 @@
 <script setup>
 import Header from "./Header.vue";
 </script>
+<style scoped>
+.animated-image {
+  display: block; /* Optionnel, pour s'assurer que l'image est traitée comme un bloc */
+  animation: vertical-move 1s infinite alternate ease-in-out;
+}
+
+@keyframes vertical-move {
+  0% {
+    transform: translateY(0);
+  }
+  100% {
+    transform: translateY(-10px); /* Ajustez la distance selon vos besoins */
+  }
+}
+</style>
 
 <template>
   <div class="relative">
@@ -51,17 +66,18 @@ import Header from "./Header.vue";
             href="#realisations"
             type="button"
             aria-label="Découvrir nos solutions"
-            class="block bg-[#1A73E8] text-white px-6 py-3 text-sm font-poppins rounded-md shadow-md hover:bg-[#1662C4]"
+            class="animated-image block bg-[#1A73E8] text-white px-6 py-3 text-sm font-poppins rounded-md shadow-md hover:bg-[#1662C4]"
           >
             Découvrir nos solutions
           </a>
         </div>
       </div>
-      <div>
+      <div class="image-container">
         <nuxt-picture
           src="/images/hero.png"
           width="765"
           alt="Illustration futuriste"
+          class="animated-image"
         />
         <svg
           class="absolute top-0 right-0 w-[35rem] -z-10"

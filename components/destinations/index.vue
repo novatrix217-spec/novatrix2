@@ -24,7 +24,7 @@ const showRealisation3 = ref(false);
           class="w-full h-80 object-contain rounded-t-3xl"
         />
         <div
-          class="space-y-3 p-3 border-b border-r border-l rounded-x-3xl rounded-b-3xl bg-white shadow-md"
+          class="space-y-3 p-3 border-b border-r border-l rounded-x-3xl rounded-b-3xl rounded-t-3xl bg-white shadow-md"
         >
           <div class="flex items-center justify-between font-poppins">
             <p class="text-gray-500 font-medium">Prédiction de Demande</p>
@@ -62,7 +62,7 @@ const showRealisation3 = ref(false);
           class="w-full h-80 object-contain rounded-t-3xl"
         />
         <div
-          class="space-y-3 p-3 border-b border-r border-l rounded-x-3xl rounded-b-3xl bg-white shadow-xl"
+          class="space-y-3 p-3 border-b border-r border-l rounded-x-3xl rounded-b-3xl rounded-t-3xl bg-white shadow-md"
         >
           <div class="flex items-center justify-between font-poppins">
             <p class="text-gray-500 font-medium">Optimisation des Flux</p>
@@ -95,14 +95,12 @@ const showRealisation3 = ref(false);
       <div class="relative">
         <nuxt-img
           format="webp"
-          src="/images/europe.jpg"
+          src="/images/booking3.jpg"
           alt="europe"
-          class="w-full h-80 object-cover rounded-t-3xl"
-          width="314"
-          height="457"
+          class="w-full h-80 object-contain rounded-t-3xl"
         />
         <div
-          class="space-y-3 p-3 border-b border-r border-l rounded-x-3xl rounded-b-3xl bg-white shadow-xl"
+          class="space-y-3 p-3 border-b border-r border-l rounded-x-3xl rounded-b-3xl rounded-t-3xl bg-white shadow-md"
         >
           <div class="flex items-center justify-between font-poppins">
             <p class="text-gray-500 font-medium">Maintenance Prédictive</p>
