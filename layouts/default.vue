@@ -7,7 +7,7 @@ useHead({
   meta: [
     {
       property: "og:title",
-      content: `Novatrix AI - Agence de développement d'applications IA - Développement Web - Applications Mobiles - Création de Modèles IA - Automatisation & Intégration IA`,
+      content: `Novatrix AI est une agence de développement informatique spécialisée dans l'Intelligence Artificielle IA et l'innovation technologique - Agence de développement d'applications IA - Développement Web - Applications Mobiles - Création de Modèles IA - Automatisation & Intégration IA`,
     },
     {
       property: "og:site:name",
@@ -31,8 +31,7 @@ useHead({
     { property: "og:url", content: "https://novatrixai.com" },
     {
       name: "twitter:title",
-      content:
-        "Novatrix AI - Agence de développement d'applications IA - Développement Web - Applications Mobiles - Création de Modèles IA - Automatisation & Intégration IA",
+      content: `Novatrix AI est une agence de développement informatique spécialisée dans l'Intelligence Artificielle IA et l'innovation technologique - Agence de développement d'applications IA - Développement Web - Applications Mobiles - Création de Modèles IA - Automatisation & Intégration IA`,
     },
     {
       name: "twitter:description",
@@ -41,7 +40,7 @@ useHead({
     },
     { name: "twitter:site", content: "https://novatrixai.com" },
   ],
-  title: `Novatrix AI - Agence de développement d'applications IA - Développement Web - Applications Mobiles - Création de Modèles IA - Automatisation & Intégration IA`,
+  title: `Novatrix AI est une agence de développement informatique spécialisée dans l'Intelligence Artificielle IA et l'innovation technologique - Agence de développement d'applications IA - Développement Web - Applications Mobiles - Création de Modèles IA - Automatisation & Intégration IA`,
 });
 </script>
 
