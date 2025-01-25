@@ -9,6 +9,11 @@ useHead({
       property: "og:title",
       content: `Novatrix AI est une agence de développement informatique spécialisée dans l'Intelligence Artificielle IA et l'innovation technologique - Agence de développement d'applications IA - Développement Web - Applications Mobiles - Création de Modèles IA - Automatisation & Intégration IA`,
     },
+    // favicon
+    {
+      name: "favicon",
+      content: "/favicon.ico",
+    },
     {
       property: "og:site:name",
       content: `Novatrix AI - Agence de développement d'applications IA - Développement Web - Applications Mobiles - Création de Modèles IA - Automatisation & Intégration IA`,
