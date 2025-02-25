@@ -63,6 +63,15 @@
               <SvgWhatsappSVG />
               <div>+229 01 52 74 69 12</div>
             </NuxtLink>
+            <NuxtLink
+              target="_blank"
+              to="https://comeup.com/fr/@novatrixai"
+              style="position: relative; right: 5px"
+              class="flex items-center space-x- justify-start text-[#5E6282]"
+            >
+              <Img src="/images/channels4_profile.jpg" width="30em" alt="Profil comeup Novatrix AI" class="me-2 rounded" ></Img>
+              <div>@novatrixai</div>
+            </NuxtLink>
           </div>
         </div>
         <!-- <div class="space-y-4">
