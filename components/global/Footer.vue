@@ -42,16 +42,16 @@
               <div>Novatrix AI</div></NuxtLink
             >
             <a
-              href="mailto:mrdeck30@gmail.com"
+              href="mailto:novatrix217@gmail.com"
               class="flex items-center space-x-2"
             >
               <div
-                to="mailto:mrdeck30@gmail.com"
+                to="mailto:novatrix217@gmail.com"
                 class="flex items-center space-x-2 justify-start text-[#5E6282]"
               >
                 <SvgEmailSVG />
               </div>
-              <div>mrdeck30@gmail.com</div></a
+              <div>novatrix217@gmail.com</div></a
             >
 
             <NuxtLink
