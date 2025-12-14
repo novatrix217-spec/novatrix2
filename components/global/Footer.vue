@@ -69,7 +69,7 @@
               style="position: relative; right: 3px; top: 5px"
               class="flex items-center space-x- justify-start text-[#5E6282]"
             >
-              <Img src="/images/channels4_profile.jpg" width="30em" alt="Profil comeup Novatrix AI" class="me-2 rounded" ></Img>
+              <img src="/images/channels4_profile.jpg" width="30em" alt="Profil comeup Novatrix AI" class="me-2 rounded" />
               <div>@novatrixai</div>
             </NuxtLink>
           </div>

@@ -7,12 +7,8 @@ export default defineNuxtConfig({
     "@nuxt/image",
     "@nuxtjs/tailwindcss",
     "nuxt-headlessui",
-    'vue3-carousel-nuxt'
+    'nuxt-swiper'
   ],
-  carousel: {
-    // optional, pour ajouter un préfixe si tu veux
-    prefix: 'Vc'
-  },
   app: {
     head: {
       htmlAttrs: {
