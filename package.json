@@ -14,7 +14,8 @@
     "@nuxt/image": "^1.0.0-rc.1",
     "@types/node": "^18.16.19",
     "nuxt": "^3.6.3",
-    "nuxt-icon": "^0.4.2"
+    "nuxt-icon": "^0.4.2",
+    "vue3-carousel-nuxt": "^1.1.6"
   },
   "dependencies": {
     "@headlessui/vue": "^1.7.14",
@@ -26,7 +27,8 @@
     "nuxt-headlessui": "^1.1.4",
     "pinia": "^2.1.4",
     "scrollreveal": "^4.0.9",
-    "tailwind-scrollbar-hide": "^1.1.7"
+    "tailwind-scrollbar-hide": "^1.1.7",
+    "vue3-carousel": "^0.17.0"
   },
   "overrides": {
     "vue": "latest"

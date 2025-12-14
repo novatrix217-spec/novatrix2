@@ -9,13 +9,13 @@ import Subscribe from "~/components/subscribe/index.vue";
 
 onMounted(() => {
   if (import.meta.client) {
-    ScrollReveal().reveal(".headline", { delay: 650 });
+    ScrollReveal().reveal(".headline", { delay: 500 });
     ScrollReveal().reveal(".headline2", {
-      delay: 650,
+      delay: 500,
     });
   }
   ScrollReveal().reveal(".headline1", {
-    delay: 650,
+    delay: 500,
   });
 });
 
