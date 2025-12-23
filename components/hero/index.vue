@@ -23,9 +23,6 @@ onMounted(() => {
   transform: translateY(-4px) scale(1.02);
 }
 
-.cta-btn {
-  background-image: linear-gradient(90deg, rgba(255,255,255,0.06), rgba(255,255,255,0));
-}
 .cta-btn .label {
   display: inline-block;
   position: relative;
@@ -146,24 +143,23 @@ onMounted(() => {
 </style>
 
 <template>
-  <div class="relative">
-    <Header />
+  <div class="relative overflow-hidden">
     <section
-      class="w-full grid grid-cols-1 md:grid-cols-2 items-start p-5 sm:p-20 my-2"
+      class="w-full grid grid-cols-1 md:grid-cols-2 items-center gap-8 md:gap-12 px-5 py-8 sm:px-10 sm:py-12 md:px-16 md:py-16 lg:px-20 lg:py-20"
     >
-      <div class="space-y-10">
-        <p class="uppercase font-poppins text-sm text-[#1A73E8] font-bold">
+      <div class="space-y-6 sm:space-y-8 md:space-y-10">
+        <p class="uppercase font-poppins text-xs sm:text-sm text-blue-600 font-bold tracking-wide">
           Révolutionnez votre futur avec NovatrixAi
         </p>
         <div
-          class="font-volkhov font-bold text-4xl sm:text-5xl md:text-6xl lg:text-7xl text-[#101828]"
+          class="font-volkhov font-bold text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl text-gray-900 leading-tight"
         >
-          <div class="flex space-x-3">
+          <div class="flex space-x-2 sm:space-x-3 flex-wrap items-center">
             <div>Innover,</div>
             <div class="relative">
               exceller
               <svg
-                class="absolute bottom-0 -left-4 w-44 sm:w-80"
+                class="absolute bottom-0 -left-2 sm:-left-4 w-28 sm:w-36 md:w-44 lg:w-60 xl:w-80"
                 viewBox="0 0 385 12"
                 fill="none"
                 xmlns="http://www.w3.org/2000/svg"
@@ -182,43 +178,43 @@ onMounted(() => {
               </svg>
             </div>
           </div>
-          <div>et redéfinir les limites du possible</div>
+          <div class="mt-2 sm:mt-3">et redéfinir les limites du possible</div>
         </div>
-        <p class="font-poppins text-gray-600 text-sm">
+        <p class="font-poppins text-gray-600 text-sm sm:text-base leading-relaxed max-w-xl">
           Chez NovatrixAi, nous vous accompagnons dans l’intégration des
           technologies de pointe pour atteindre vos objectifs stratégiques.
           Ensemble, façonnons un avenir plus intelligent.
         </p>
-        <div class="flex items-center space-x-4">
-          <a
-            href="#realisations"
+        <div class="flex items-center">
+          <NuxtLink
+            to="/services"
             type="button"
             aria-label="Découvrir nos solutions"
-            class="cta-btn block bg-[#1A73E8] text-white px-6 py-3 text-sm font-poppins rounded-md shadow-md hover:bg-[#1662C4] relative overflow-hidden"
+            class="cta-btn block bg-gradient-to-r from-blue-600 to-purple-600 text-white px-5 sm:px-6 md:px-8 py-2.5 sm:py-3 md:py-3.5 text-xs sm:text-sm md:text-base font-poppins rounded-full shadow-md hover:shadow-xl relative overflow-hidden"
             :class="{ 'in-view': inView }"
           >
             <span class="label">Découvrir nos solutions</span>
             <span class="arrow" aria-hidden="true">➜</span>
-          </a>
+          </NuxtLink>
         </div>
       </div>
-      <div class="image-container">
+      <div class="image-container mt-8 md:mt-0">
         <nuxt-picture
           src="/images/hero.png"
           width="765"
           alt="Illustration futuriste"
-          class="side-image"
+          class="side-image w-full h-auto max-w-full"
           :class="{ 'in-view': inView }"
         />
         <svg
-          class="absolute top-0 right-0 w-[35rem] -z-10"
+          class="absolute top-0 right-0 w-48 sm:w-64 md:w-96 lg:w-[28rem] xl:w-[35rem] -z-10 opacity-90"
           viewBox="0 0 704 724"
           fill="none"
           xmlns="http://www.w3.org/2000/svg"
         >
           <path
             d="M22.3069 222C-18.0931 153.2 5.4736 13.3333 22.3069 -48L701.807 -149L766.307 122.5L727.807 723.5C649.14 724.5 473.707 717 401.307 679C310.807 631.5 351.807 555 276.807 515C201.807 475 244.807 369.5 218.807 329.5C192.807 289.5 72.8069 308 22.3069 222Z"
-            fill="#EAF3FF"
+            fill="#E0EEFF"
           />
         </svg>
       </div>

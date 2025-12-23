@@ -1,26 +1,48 @@
 <script setup>
 import Hero from "~/components/hero/index.vue";
 import Category from "~/components/category/index.vue";
-import Destinations from "~/components/destinations/index.vue";
+import FeaturedServices from "~/components/services/FeaturedServices.vue";
 import Bookings from "~/components/bookings/index.vue";
-import Testimonials from "~/components/testimonials/index.vue";
+import TestimonialsReal from "~/components/testimonials/TestimonialsReal.vue";
+import FeaturedProjects from "~/components/projects/FeaturedProjects.vue";
 import Companies from "~/components/companies/index.vue";
 import Subscribe from "~/components/subscribe/index.vue";
+import StatsSection from "~/components/stats/StatsSection.vue";
+import ProcessSection from "~/components/process/ProcessSection.vue";
+import FaqSection from "~/components/faq/FaqSection.vue";
+import WhatsAppWidget from "~/components/whatsapp/WhatsAppWidget.vue";
 
 onMounted(() => {
   if (import.meta.client) {
-    ScrollReveal().reveal(".headline", { delay: 500 });
+    const isMobile = window.innerWidth < 768;
+    const revealConfig = {
+      delay: isMobile ? 50 : 100,
+      distance: isMobile ? '15px' : '20px',
+      origin: 'bottom',
+      duration: isMobile ? 800 : 1200,
+      easing: 'cubic-bezier(0.25, 0.46, 0.45, 0.94)',
+      opacity: 0,
+      scale: 0.99,
+      interval: isMobile ? 50 : 100,
+      reset: false,
+      mobile: true,
+      viewFactor: isMobile ? 0.1 : 0.2
+    };
+    
+    ScrollReveal().reveal(".headline", revealConfig);
     ScrollReveal().reveal(".headline2", {
-      delay: 500,
+      ...revealConfig,
+      interval: 0
+    });
+    ScrollReveal().reveal(".headline1", {
+      ...revealConfig,
+      interval: 0
     });
   }
-  ScrollReveal().reveal(".headline1", {
-    delay: 500,
-  });
 });
 
-const title = "Novatrix AI - Agence IA, Développement Web & Mobile, Automatisation & Innovation Technologique";
-const description = "Novatrix AI est une agence de développement informatique spécialisée en Intelligence Artificielle (IA) et innovation. Création d'applications web/mobile, modèles IA, automatisation et intégration sur mesure.";
+const title = "Novatrix AI - Agence IA & Automatisation | Développement Web & Mobile, Chatbots IA, Make, Zapier";
+const description = "Agence spécialisée en Intelligence Artificielle et automatisation. Création d’applications web/mobile, chatbots IA, automatisation Make/Zapier, développement WordPress. Solutions IA sur mesure pour entreprises et entrepreneurs.";
 const siteUrl = "https://novatrixai.com";
 const siteName = "Novatrix AI";
 const image = "https://novatrixai.com/logo.png";
@@ -28,11 +50,16 @@ const favicon = "/favicon.ico";
 
 
 useHead({
+  link: [
+    {
+      rel: 'canonical',
+      href: siteUrl
+    }
+  ],
   script: [
     {
       src: "https://unpkg.com/scrollreveal",
     },
-    ,
     {
       type: "application/ld+json",
       children: JSON.stringify({
@@ -52,7 +79,7 @@ useHead({
         },
         contactPoint: {
           "@type": "ContactPoint",
-          telephone: "+229 01 52 74 69 12",
+          telephone: "+229 01 63 77 42 95",
           contactType: "customer support",
           areaServed: "FR",
           availableLanguage: ["French", "English"]
@@ -80,7 +107,7 @@ useHead({
     {
       name: "keywords",
       content:
-        "Développement Web,  Applications Mobiles, Création de Modèles IA, Automatisation & Intégration IA, Des solutions adaptées à vos besoins, Développement d'applications IA, Développement d'applications web, Développement d'applications mobiles, Développement de modèles IA, Automatisation et intégration IA",
+        "Agence IA, Intelligence Artificielle, Automatisation, Make, Zapier, Chatbot IA, Développement Web, Applications Mobiles, SaaS IA, Modèles GPT, API NodeJS, WordPress, Bot Discord, Bot Telegram, Web Scraping, Serveur Linux, Agent IA, Automatisation entreprise, Solutions IA, Développement sur mesure, Transformation digitale",
     },
     {
       name: "favicon",
@@ -136,10 +163,14 @@ useSeoMeta({
 
 <template>
   <Hero />
-  <Category class="headline1" />
-  <Destinations class="headline2" />
+  <StatsSection class="headline1" />
+  <FeaturedServices class="headline2" />
+  <ProcessSection class="headline" />
+  <FeaturedProjects class="headline" />
+  <TestimonialsReal class="headline" />
+  <FaqSection class="headline" />
   <Bookings class="headline" />
-  <!-- <LazyTestimonials />
-  <LazyCompanies /> -->
+  <!-- <LazyCompanies /> -->
   <Subscribe class="headline" />
+  <WhatsAppWidget />
 </template>

@@ -1,0 +1,23 @@
+/* Modal transition animations */
+.modal-enter-active,
+.modal-leave-active {
+  transition: opacity 0.3s ease;
+}
+
+.modal-enter-from,
+.modal-leave-to {
+  opacity: 0;
+}
+
+.modal-enter-active .bg-white,
+.modal-leave-active .bg-white {
+  transition: transform 0.3s ease;
+}
+
+.modal-enter-from .bg-white {
+  transform: scale(0.9) translateY(20px);
+}
+
+.modal-leave-to .bg-white {
+  transform: scale(0.9) translateY(20px);
+}

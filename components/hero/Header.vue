@@ -7,6 +7,38 @@ import { XMarkIcon } from "@heroicons/vue/24/outline";
 const mobileMenuOpen = ref(false);
 </script>
 
+<style scoped>
+.router-link-active,
+.router-link-exact-active {
+  background: linear-gradient(135deg, #2563EB 0%, #9333EA 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  font-weight: 600;
+  position: relative;
+}
+
+.router-link-active::after,
+.router-link-exact-active::after {
+  content: '';
+  position: absolute;
+  bottom: -4px;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(135deg, #2563EB 0%, #9333EA 100%);
+  border-radius: 2px;
+}
+
+.mobile-link.router-link-active,
+.mobile-link.router-link-exact-active {
+  background: linear-gradient(135deg, #2563EB 0%, #9333EA 100%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+</style>
+
 <template>
   <div
     class="p-5 sm:px-16 sm:py-6 flex items-center w-full justify-between font-poppins"
@@ -14,10 +46,10 @@ const mobileMenuOpen = ref(false);
     <Logo />
     <div class="hidden lg:flex items-center space-x-20">
       <ul class="flex items-center space-x-12">
-        <li><a href="/">Accueil</a></li>
-        <li><NuxtLink to="#services">Services</NuxtLink></li>
-        <li><NuxtLink to="#realisations">Réalisations</NuxtLink></li>
-        <li><NuxtLink to="#a-propos">À propos</NuxtLink></li>
+        <li><NuxtLink to="/">Accueil</NuxtLink></li>
+        <li><NuxtLink to="/services">Services</NuxtLink></li>
+        <li><NuxtLink to="/realisations">Réalisations</NuxtLink></li>
+        <li><NuxtLink to="/a-propos">À propos</NuxtLink></li>
       </ul>
       <ul class="flex items-center space-x-8">
         <li>
@@ -65,29 +97,34 @@ const mobileMenuOpen = ref(false);
         <div class="mt-6 flow-root">
           <div class="-my-6 divide-y divide-gray-500/10">
             <div class="space-y-2 py-6">
-              <a
-                href="/"
-                class="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"
-                >Accueil</a
+              <NuxtLink
+                to="/"
+                class="mobile-link -mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"
+                @click="mobileMenuOpen = false"
+                >Accueil</NuxtLink
               >
               <NuxtLink
-                to="#services"
-                class="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"
+                to="/services"
+                class="mobile-link -mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"
+                @click="mobileMenuOpen = false"
                 >Services</NuxtLink
               >
               <NuxtLink
-                to="#realisations"
-                class="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"
+                to="/realisations"
+                class="mobile-link -mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"
+                @click="mobileMenuOpen = false"
                 >Réalisations</NuxtLink
               >
               <NuxtLink
-                to="#a-propos"
-                class="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"
+                to="/a-propos"
+                class="mobile-link -mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"
+                @click="mobileMenuOpen = false"
                 >À propos</NuxtLink
               >
               <NuxtLink
-                to="#contact"
-                class="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"
+                to="/#contact"
+                class="mobile-link -mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"
+                @click="mobileMenuOpen = false"
                 >Contact</NuxtLink
               >
             </div>

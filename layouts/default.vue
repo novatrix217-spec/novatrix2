@@ -1,4 +1,5 @@
 <script setup>
+import Header from "~/components/hero/Header.vue";
 import Footer from "~/components/global/Footer.vue";
 useHead({
   htmlAttrs: {
@@ -51,6 +52,7 @@ useHead({
 
 <template>
   <main class="max-w-8xl">
+    <Header />
     <slot />
     <Footer />
   </main>
