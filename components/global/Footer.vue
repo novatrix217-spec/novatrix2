@@ -6,7 +6,7 @@
       <div class="col-span-4 space-y-3">
         <NuxtLink to="/" class="flex items-center justify-center md:justify-start">
           <span class="font-medium text-2xl sm:text-3xl md:text-4xl lg:text-5xl" style="display: flex; align-items: center; gap: 0;">
-            <span style="background: linear-gradient(135deg, #2563EB 0%, #9333EA 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">N</span><img src="/logo.png" alt="" class="inline-block" style="width: 2rem; height: 2rem; margin: 0 -2px; position: relative; top: 5px;" /><span style="background: linear-gradient(135deg, #2563EB 0%, #9333EA 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">vatrix </span><span style="background: linear-gradient(135deg, #9333EA 0%, #2563EB 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">AI</span>
+            <span style="background: linear-gradient(135deg, #2563EB 0%, #9333EA 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">N</span><img src="/logo.png" alt="" class="inline-block w-5 h-5 md:w-8 md:h-8 lg:w-10 lg:h-10" style="margin: 0 -2px; position: relative; top: 3px;" /><span style="background: linear-gradient(135deg, #2563EB 0%, #9333EA 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">vatrix </span><span style="background: linear-gradient(135deg, #9333EA 0%, #2563EB 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">AI</span>
           </span>
         </NuxtLink>
         <p class="text-[#080809] text-xs sm:text-sm font-light text-center md:text-left">

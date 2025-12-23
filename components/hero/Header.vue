@@ -122,7 +122,7 @@ const mobileMenuOpen = ref(false);
                 >À propos</NuxtLink
               >
               <NuxtLink
-                to="/#contact"
+                to="#contact"
                 class="mobile-link -mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"
                 @click="mobileMenuOpen = false"
                 >Contact</NuxtLink

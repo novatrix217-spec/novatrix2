@@ -108,7 +108,7 @@ useSeoMeta({
     <!-- Hero Section -->
     <section class="py-20 px-5 sm:px-16 bg-gradient-to-r from-blue-600 to-purple-600 text-white">
       <div class="max-w-7xl mx-auto">
-        <h1 class="text-5xl md:text-6xl font-bold mb-6 animate-fade-in font-volkhov">
+        <h1 class="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-6 animate-fade-in font-volkhov">
           Nos Services d'IA et d'Automatisation
         </h1>
         <p class="text-xl md:text-2xl mb-8 opacity-90 font-poppins">
