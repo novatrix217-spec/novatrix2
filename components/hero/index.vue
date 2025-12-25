@@ -145,7 +145,7 @@ onMounted(() => {
 <template>
   <div class="relative overflow-hidden">
     <section
-      class="w-full grid grid-cols-1 md:grid-cols-2 items-center gap-8 md:gap-12 px-5 py-8 sm:px-10 sm:py-12 md:px-16 md:py-16 lg:px-20 lg:py-20"
+      class="w-full grid grid-cols-1 md:grid-cols-2 items-center gap-8 md:gap-12 px-5 py-2 sm:px-10 sm:py-4 md:px-16 md:py-5 lg:px-20 lg:py-6"
     >
       <div class="space-y-6 sm:space-y-8 md:space-y-10">
         <p class="uppercase font-poppins text-xs sm:text-sm text-blue-600 font-bold tracking-wide">

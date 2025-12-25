@@ -283,7 +283,7 @@ const expertise = [
             <div :class="`absolute inset-0 bg-gradient-to-br ${value.gradient} opacity-0 group-hover:opacity-5 transition-opacity`"></div>
             <div class="relative z-10">
               <h3 class="text-2xl font-bold mb-3 text-gray-800 text-left">{{ value.title }}</h3>
-              <p class="text-gray-600 text-left" style="text-align: justify; text-align-last: left;">{{ value.description }}</p>
+              <p class="text-gray-600 text-left">{{ value.description }}</p>
             </div>
           </div>
         </div>
