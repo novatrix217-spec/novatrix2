@@ -61,7 +61,7 @@ useHead({
     },
     {
       name: "keywords",
-      content: "À propos Novatrix AI, Agence IA France, Automatisation entreprise, Transformation digitale, Développement IA sur mesure, Innovation technologique, Expertise Make Zapier, Spécialiste chatbot, Agence automatisation, Intelligence artificielle PME, Solutions IA startup, Partenaire digital, Consultant IA, Avis Novatrix, Équipe IA",
+      content: "À propos Novatrix AI, Agence IA France, Automatisation entreprise, Transformation digitale, Développement IA sur mesure, Innovation technologique, Expertise Make Zapier n8n, Spécialiste chatbot, Agence automatisation, Intelligence artificielle PME, Solutions IA startup, Partenaire digital, Consultant IA, Avis Novatrix, Équipe IA",
     },
     {
       property: "og:description",

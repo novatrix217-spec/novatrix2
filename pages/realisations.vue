@@ -32,7 +32,7 @@ const truncateText = (text, maxLength = 120) => {
 };
 
 const title = "Portfolio & Réalisations IA | Projets d'Automatisation & Développement - Novatrix AI";
-const description = "Découvrez nos réalisations : automatisations Make/Zapier, chatbots IA, agents intelligents, intégrations GPT, sites web, applications SaaS. 14+ projets réussis pour booster la productivité de nos clients.";
+const description = "Découvrez nos réalisations : automatisations Make/Zapier/n8n, chatbots IA, agents intelligents, intégrations GPT, sites web, applications SaaS. 14+ projets réussis pour booster la productivité de nos clients.";
 const siteUrl = "https://novatrixai.com/realisations";
 
 useHead({
@@ -82,7 +82,7 @@ useHead({
     },
     {
       name: "keywords",
-      content: "Portfolio IA, Réalisations automatisation, Projets Make, Projets Zapier, Chatbot projet, Agent IA réalisé, Application SaaS créée, Intégration GPT, CRM automatisation, Publication automatique réseaux sociaux, Web scraping projet, Bot Discord réalisé, Tunnel de vente, Facturation automatique, Signature électronique, Agenda intelligent",
+      content: "Portfolio IA, Réalisations automatisation, Projets Make, Projets Zapier, Projets n8n, Chatbot projet, Agent IA réalisé, Application SaaS créée, Intégration GPT, CRM automatisation, Publication automatique réseaux sociaux, Web scraping projet, Bot Discord réalisé, Tunnel de vente, Facturation automatique, Signature électronique, Agenda intelligent",
     },
     {
       property: "og:description",

@@ -41,8 +41,8 @@ onMounted(() => {
   }
 });
 
-const title = "Novatrix AI - Agence IA & Automatisation | Développement Web & Mobile, Chatbots IA, Make, Zapier";
-const description = "Agence spécialisée en Intelligence Artificielle et automatisation. Création d’applications web/mobile, chatbots IA, automatisation Make/Zapier, développement WordPress. Solutions IA sur mesure pour entreprises et entrepreneurs.";
+const title = "Novatrix AI - Agence IA & Automatisation | Développement Web & Mobile, Chatbots IA, Make, Zapier, n8n";
+const description = "Agence spécialisée en Intelligence Artificielle et automatisation. Création d'applications web/mobile, chatbots IA, automatisation Make/Zapier/n8n, développement WordPress. Solutions IA sur mesure pour entreprises et entrepreneurs.";
 const siteUrl = "https://novatrixai.com";
 const siteName = "Novatrix AI";
 const image = "https://novatrixai.com/logo.png";
@@ -107,7 +107,7 @@ useHead({
     {
       name: "keywords",
       content:
-        "Agence IA, Intelligence Artificielle, Automatisation, Make, Zapier, Chatbot IA, Développement Web, Applications Mobiles, SaaS IA, Modèles GPT, API NodeJS, WordPress, Bot Discord, Bot Telegram, Web Scraping, Serveur Linux, Agent IA, Automatisation entreprise, Solutions IA, Développement sur mesure, Transformation digitale",
+        "Agence IA, Intelligence Artificielle, Automatisation, Make, Zapier, n8n, Chatbot IA, Développement Web, Applications Mobiles, SaaS IA, Modèles GPT, API NodeJS, WordPress, Bot Discord, Bot Telegram, Web Scraping, Serveur Linux, Agent IA, Automatisation entreprise, Solutions IA, Développement sur mesure, Transformation digitale",
     },
     {
       name: "favicon",

@@ -8,8 +8,8 @@ const cleanTitle = (title) => {
   return title.replace(/^(Je vais |je vais )/i, '').replace(/^([a-z])/, (match) => match.toUpperCase());
 };
 
-const title = "Nos Services IA & Automatisation | Chatbots, Make, Zapier, Développement - Novatrix AI";
-const description = "Services IA professionnels : création d'applications SaaS IA, chatbots intelligents, automatisation Make/Zapier, développement WordPress, configuration serveurs Linux, intégration GPT, web scraping. Solutions sur mesure pour votre business.";
+const title = "Nos Services IA & Automatisation | Chatbots, Make, Zapier, n8n, Développement - Novatrix AI";
+const description = "Services IA professionnels : création d'applications SaaS IA, chatbots intelligents, automatisation Make/Zapier/n8n, développement WordPress, configuration serveurs Linux, intégration GPT, web scraping. Solutions sur mesure pour votre business.";
 const siteUrl = "https://novatrixai.com/services";
 
 useHead({
@@ -61,7 +61,7 @@ useHead({
     },
     {
       name: "keywords",
-      content: "Services IA, Automatisation Make, Automatisation Zapier, Chatbot IA, Application SaaS IA, WordPress, Bot Discord, Bot Telegram, API NodeJS, GPT-4, Web scraping, Serveur Linux VPS, Agent IA, Génération de leads, E-commerce IA, Assistant GPT, Tunnel de vente, Automatisation Python, Site web Odoo, Intégration Shopify, SEO IA",
+      content: "Services IA, Automatisation Make, Automatisation Zapier, Automatisation n8n, Chatbot IA, Application SaaS IA, WordPress, Bot Discord, Bot Telegram, API NodeJS, GPT-4, Web scraping, Serveur Linux VPS, Agent IA, Génération de leads, E-commerce IA, Assistant GPT, Tunnel de vente, Automatisation Python, Site web Odoo, Intégration Shopify, SEO IA",
     },
     {
       property: "og:description",
