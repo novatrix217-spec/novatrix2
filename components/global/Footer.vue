@@ -69,13 +69,13 @@
               <div>Novatrix AI</div></NuxtLink
             >
             <a
-              href="mailto:novatrix217@gmail.com"
+              href="mailto:contact@novatrixai.com"
               class="flex items-center gap-2 text-[#5E6282]"
             >
               <div class="w-6 h-6 flex items-center justify-center flex-shrink-0">
                 <SvgEmailSVG class="w-6 h-6" />
               </div>
-              <div>novatrix217@gmail.com</div></a
+              <div>contact@novatrixai.com</div></a
             >
           </div>
         </div>
