@@ -1,0 +1,3 @@
+import { LeadModel } from '../../../models/Lead'
+const cell=(v:unknown)=>`"${String(v??'').replace(/"/g,'""')}"`
+export default defineEventHandler(async event=>{await requireAdmin(event);await connectDb();const items=await LeadModel.find().sort({createdAt:-1}).lean();const rows=[['Prénom','Email','Téléphone','Entreprise','Source','Ressource','Statut','Consentement','Date'],...items.map(x=>[x.firstName,x.email,x.phone,x.domain,x.source,x.resourceSlug,x.status,x.consent,x.createdAt])];setResponseHeaders(event,{'content-type':'text/csv; charset=utf-8','content-disposition':'attachment; filename="leads-novatrix.csv"'});return '\uFEFF'+rows.map(row=>row.map(cell).join(',')).join('\n')})

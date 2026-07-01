@@ -1,0 +1,2 @@
+import { LeadModel } from '../../../models/Lead'
+export default defineEventHandler(async event=>{await requireAdmin(event);await connectDb();const q=getQuery(event),page=Math.max(1,Number(q.page)||1),limit=Math.min(100,Math.max(1,Number(q.limit)||30)),filter:any={};if(q.status)filter.status=String(q.status);const [items,total]=await Promise.all([LeadModel.find(filter).sort({createdAt:-1}).skip((page-1)*limit).limit(limit).lean(),LeadModel.countDocuments(filter)]);return {items,total,page,limit}})

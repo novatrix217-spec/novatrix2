@@ -1,0 +1,5 @@
+import bcrypt from 'bcryptjs'
+import { z } from 'zod'
+import { UserModel } from '../../models/User'
+const schema=z.object({email:z.string().email(),password:z.string().min(8).max(200)})
+export default defineEventHandler(async event=>{assertRateLimit(event,'login',5,15*60*1000);const parsed=schema.safeParse(await readBody(event));if(!parsed.success)throw createError({statusCode:400,statusMessage:'Identifiants invalides'});await connectDb();const config=useRuntimeConfig();if(await UserModel.countDocuments()===0&&config.adminEmail&&config.adminPassword){await UserModel.create({name:'Administrateur',email:String(config.adminEmail).toLowerCase(),passwordHash:await bcrypt.hash(String(config.adminPassword),12),role:'admin'})}const user=await UserModel.findOne({email:parsed.data.email.toLowerCase()});if(!user||!await bcrypt.compare(parsed.data.password,user.passwordHash))throw createError({statusCode:401,statusMessage:'Email ou mot de passe incorrect'});user.lastLoginAt=new Date();await user.save();await setAuthSession(event,user);return {user:{id:String(user._id),name:user.name,email:user.email,role:user.role}}})

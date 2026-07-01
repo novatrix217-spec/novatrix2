@@ -1,0 +1,4 @@
+import { z } from 'zod'
+import { ResourceModel } from '../../../models/Resource'
+const schema=z.object({title:z.string().min(3).max(180).optional(),description:z.string().min(10).max(1000).optional(),type:z.enum(['pdf','video','image','template','link']).optional(),sector:z.string().min(2).max(80).optional(),fileKey:z.string().min(2).max(500).optional(),coverImageKey:z.string().max(500).optional(),published:z.boolean().optional()})
+export default defineEventHandler(async event=>{await requireAdmin(event);const parsed=schema.safeParse(await readBody(event));if(!parsed.success)throw createError({statusCode:400,statusMessage:'Modification invalide'});await connectDb();const item=await ResourceModel.findByIdAndUpdate(getRouterParam(event,'id'),parsed.data,{new:true});if(!item)throw createError({statusCode:404});return item})

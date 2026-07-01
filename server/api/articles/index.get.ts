@@ -1,0 +1,3 @@
+import { ArticleModel } from '../../models/Article'
+import { demoArticles } from '../../../shared/demo'
+export default defineEventHandler(async event=>{const q=getQuery(event),page=Math.max(1,Number(q.page)||1),limit=Math.min(24,Math.max(1,Number(q.limit)||12)),filter:any={status:'published'};if(q.category)filter.category=String(q.category);try{await connectDb();const [items,total]=await Promise.all([ArticleModel.find(filter).sort({publishedAt:-1}).skip((page-1)*limit).limit(limit).lean(),ArticleModel.countDocuments(filter)]);return {items:items.length?items:demoArticles,total:items.length?total:demoArticles.length,page,limit}}catch{return {items:demoArticles,total:demoArticles.length,page:1,limit}}})

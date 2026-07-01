@@ -1,0 +1,16 @@
+<template>
+  <div ref="revealRoot">
+    <PageHero :kicker="kicker" :description="description"><slot name="title">{{ title }}</slot><template #actions><a :href="calendarUrl" target="_blank" rel="noopener noreferrer" class="btn-primary">Réserver un appel <ArrowRight class="h-4 w-4"/></a><NuxtLink to="#systeme" class="btn-secondary">Voir le système</NuxtLink></template></PageHero>
+    <section id="systeme" class="section-pad"><div class="container-shell grid items-start gap-12 lg:grid-cols-2"><div class="reveal-left"><SectionHeading kicker="le système">{{ systemTitle }}</SectionHeading><p class="mt-6 text-lg leading-8 text-[var(--muted)]">{{ systemText }}</p><div v-if="guard" class="mt-7 rounded-xl border border-amber-500/20 bg-amber-500/5 p-5 text-sm leading-6 text-[var(--muted)]"><ShieldCheck class="mb-3 h-5 w-5 text-amber-600"/>{{ guard }}</div></div><slot name="visual"><div class="card glass-sheen reveal-right !p-8"><div v-for="(item,i) in modules" :key="item" class="reveal flex items-center gap-4 border-b py-4 last:border-0" :data-reveal-delay="i*70"><span class="grid h-9 w-9 place-items-center rounded-lg bg-violet-600/10 font-mono text-xs font-bold text-violet-700 dark:text-violet-300">{{ String(i+1).padStart(2,'0') }}</span><p class="font-semibold">{{ item }}</p><Check class="ml-auto h-4 w-4 text-[var(--teal)]"/></div></div></slot></div></section>
+    <section class="section-pad border-y bg-[var(--surface)]"><div class="container-shell"><div class="reveal"><SectionHeading kicker="capacités" center>{{ capabilitiesTitle }}</SectionHeading></div><div class="mt-12 grid gap-5 md:grid-cols-3"><div v-for="(item,i) in capabilities" :key="item.title" class="card card-hover glass-sheen reveal-scale" :data-reveal-delay="i*120"><component :is="item.icon" class="h-6 w-6 text-violet-600"/><h3 class="mt-4 text-lg font-bold">{{ item.title }}</h3><p class="mt-2 text-sm leading-6 text-[var(--muted)]">{{ item.text }}</p></div></div></div></section>
+    <section class="section-pad"><div class="container-shell"><div class="reveal"><SectionHeading kicker="livraison" center description="Chaque étape se termine par un livrable testé avant de passer à la suivante.">Une progression <span class="text-gradient">sans maillon flou.</span></SectionHeading></div><div class="mt-12 grid gap-5 md:grid-cols-2 lg:grid-cols-4"><div v-for="(item,i) in steps" :key="item.step" class="card card-hover reveal" :data-reveal-delay="i*100"><span class="font-heading text-4xl font-bold text-violet-600/15">{{ item.step }}</span><h3 class="mt-4 font-bold">{{ item.title }}</h3><p class="mt-2 text-sm leading-6 text-[var(--muted)]">{{ item.text }}</p></div></div></div></section>
+    <CtaBand :title="ctaTitle"/>
+  </div>
+</template>
+<script setup lang="ts">
+import { ArrowRight,Check,ShieldCheck } from 'lucide-vue-next'
+import type { Component } from 'vue'
+defineProps<{kicker:string;title:string;description:string;systemTitle:string;systemText:string;guard?:string;modules:string[];capabilitiesTitle:string;capabilities:{icon:Component;title:string;text:string}[];steps:{step:string;title:string;text:string}[];ctaTitle:string}>()
+const calendarUrl=useRuntimeConfig().public.calendarUrl
+const revealRoot=useScrollReveal()
+</script>

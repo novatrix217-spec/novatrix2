@@ -1,0 +1,4 @@
+import { randomUUID } from 'node:crypto'
+import { uploadObject } from '../../utils/storage'
+const allowed=new Set(['application/pdf','image/png','image/jpeg','image/webp','video/mp4','application/zip'])
+export default defineEventHandler(async event=>{await requireAdmin(event);const parts=await readMultipartFormData(event),file=parts?.find(p=>p.name==='file');if(!file?.data||!file.filename||!file.type)throw createError({statusCode:400,statusMessage:'Fichier manquant'});if(!allowed.has(file.type))throw createError({statusCode:415,statusMessage:'Type de fichier refusé'});if(file.data.byteLength>25*1024*1024)throw createError({statusCode:413,statusMessage:'Fichier trop volumineux'});const ext=file.filename.split('.').pop()?.replace(/[^a-z0-9]/gi,'')||'bin',key=`resources/${new Date().getFullYear()}/${randomUUID()}.${ext}`;await uploadObject(key,file.data,file.type);return {key}})

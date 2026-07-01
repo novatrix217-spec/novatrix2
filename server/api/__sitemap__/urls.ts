@@ -1,0 +1,3 @@
+import { ArticleModel } from '../../models/Article'
+import { ResourceModel } from '../../models/Resource'
+export default defineSitemapEventHandler(async()=>{const fixed=['/','/offres/acquisition','/offres/pilotage-ia','/offres/creation-web-apps','/ressources','/blog','/a-propos','/contact'];try{await connectDb();const [articles,resources]=await Promise.all([ArticleModel.find({status:'published'}).select('slug updatedAt').lean(),ResourceModel.find({published:true}).select('slug updatedAt').lean()]);return [...fixed.map(loc=>({loc})),...articles.map(a=>({loc:`/blog/${a.slug}`,lastmod:a.updatedAt})),...resources.map(r=>({loc:`/ressources/${r.slug}`,lastmod:r.updatedAt}))]}catch{return fixed.map(loc=>({loc}))}})

@@ -1,0 +1,3 @@
+export type ResourceType = 'pdf' | 'video' | 'image' | 'template' | 'link'
+export interface PublicResource { _id?:string;title:string;slug:string;description:string;type:ResourceType;sector:string;fileKey?:string;coverImageKey?:string;gateFields?:string[];published:boolean;leadCount?:number;createdAt?:string }
+export interface PublicArticle { _id?:string;title:string;slug:string;excerpt:string;body:string;coverImageKey?:string;category:string;tags:string[];readingTime:number;seo?:{metaTitle?:string;metaDescription?:string;ogImage?:string;canonical?:string};status:'draft'|'published';source:'manual'|'automation';publishedAt?:string;createdAt?:string }

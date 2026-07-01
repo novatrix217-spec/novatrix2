@@ -1,40 +1,38 @@
 {
   "name": "novatrixai",
+  "version": "2.0.0",
   "private": true,
+  "type": "module",
   "scripts": {
     "build": "nuxt build",
-    "start": "node .output/server/index.mjs",
     "dev": "nuxt dev",
-    "generate": "nuxt generate",
     "preview": "nuxt preview",
+    "start": "node .output/server/index.mjs",
     "postinstall": "nuxt prepare"
   },
-  "devDependencies": {
-    "@nuxt/devtools": "^2.0.0-beta.3",
-    "@nuxt/image": "^1.0.0-rc.1",
-    "@types/node": "^18.16.19",
-    "nuxt": "^3.6.3",
-    "nuxt-icon": "^0.4.2",
-    "nuxt-swiper": "^2.0.1",
-    "vue3-carousel-nuxt": "^1.1.6"
-  },
   "dependencies": {
-    "@headlessui/vue": "^1.7.14",
-    "@heroicons/vue": "^2.0.18",
-    "@nuxtjs/tailwindcss": "^6.8.0",
-    "jadoo": "file:",
-    "novatrixai": "file:",
-    "NovatrixAI": "file:",
-    "nuxt-headlessui": "^1.1.4",
-    "pinia": "^2.1.4",
-    "scrollreveal": "^4.0.9",
-    "tailwind-scrollbar-hide": "^1.1.7",
-    "vue3-carousel": "^0.17.0"
+    "@aws-sdk/client-s3": "^3.700.0",
+    "@aws-sdk/s3-request-presigner": "^3.700.0",
+    "@nuxt/image": "^1.9.0",
+    "@nuxtjs/color-mode": "^3.5.2",
+    "@nuxtjs/google-fonts": "^3.2.0",
+    "@nuxtjs/robots": "^5.2.0",
+    "@nuxtjs/sitemap": "^7.2.0",
+    "@nuxtjs/tailwindcss": "^6.13.1",
+    "@vueuse/motion": "^3.0.3",
+    "@vueuse/nuxt": "^13.0.0",
+    "bcryptjs": "^2.4.3",
+    "jose": "^5.9.6",
+    "lucide-vue-next": "^0.468.0",
+    "marked": "^15.0.4",
+    "mongoose": "^8.9.2",
+    "nuxt": "^3.15.4",
+    "reka-ui": "^2.0.0",
+    "zod": "^3.24.1"
   },
-  "overrides": {
-    "vue": "latest"
-  },
-  "version": "1.0.0",
-  "main": "index.js",
-  "homepage": "https://novatrixai.com"
+  "devDependencies": {
+    "@types/bcryptjs": "^2.4.6",
+    "@types/node": "^22.10.2",
+    "typescript": "^5.7.2"
+  }
 }

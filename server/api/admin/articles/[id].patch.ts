@@ -1,0 +1,4 @@
+import { z } from 'zod'
+import { ArticleModel } from '../../../models/Article'
+const schema=z.object({title:z.string().min(5).max(180).optional(),excerpt:z.string().min(20).max(400).optional(),body:z.string().min(20).max(200000).optional(),category:z.string().min(2).max(80).optional(),tags:z.array(z.string()).optional(),status:z.enum(['draft','published']).optional()})
+export default defineEventHandler(async event=>{await requireAdmin(event);const parsed=schema.safeParse(await readBody(event));if(!parsed.success)throw createError({statusCode:400});await connectDb();const update:any={...parsed.data};if(update.body)update.readingTime=readingTime(update.body);if(update.status==='published')update.publishedAt=new Date();return ArticleModel.findByIdAndUpdate(getRouterParam(event,'id'),update,{new:true})})

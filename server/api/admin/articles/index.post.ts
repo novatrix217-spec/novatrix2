@@ -1,0 +1,4 @@
+import { z } from 'zod'
+import { ArticleModel } from '../../../models/Article'
+const schema=z.object({title:z.string().min(5).max(180),excerpt:z.string().min(20).max(400),body:z.string().min(20).max(200000),category:z.string().min(2).max(80),tags:z.array(z.string()).default([]),status:z.enum(['draft','published']).default('draft')})
+export default defineEventHandler(async event=>{await requireAdmin(event);const parsed=schema.safeParse(await readBody(event));if(!parsed.success)throw createError({statusCode:400,statusMessage:'Article invalide'});await connectDb();const input=parsed.data,item=await ArticleModel.create({...input,slug:slugifyFr(input.title),readingTime:readingTime(input.body),source:'manual',publishedAt:input.status==='published'?new Date():undefined,seo:{metaTitle:input.title.slice(0,70),metaDescription:input.excerpt.slice(0,170)}});return item})
