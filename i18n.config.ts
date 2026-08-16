@@ -4,7 +4,7 @@ export default defineI18nConfig(() => ({
   fallbackLocale: 'fr',
   messages: {
     fr: {
-      nav: { home: 'Accueil', offers: 'Offres', solutions: 'Solutions', realisations: 'Réalisations', resources: 'Ressources', blog: 'Blog', about: 'À propos', contact: 'Contact', avis: 'Avis clients' },
+      nav: { home: 'Accueil', offers: 'Offres', solutions: 'Solutions', realisations: 'Réalisations', resources: 'Ressources', blog: 'Blog', formation: 'Formation', about: 'À propos', contact: 'Contact', avis: 'Avis clients' },
       header: { bookCall: 'Réserver un appel', openMenu: 'Ouvrir le menu', closeMenu: 'Fermer le menu', darkMode: 'Activer le mode sombre', lightMode: 'Activer le mode clair', changeTheme: 'Changer de thème', switchLang: 'Switch to English' },
       footer: {
         tagline: "Des systèmes complets pour acquérir des clients, piloter l'activité et créer les produits numériques qui font avancer l'entreprise.",
@@ -25,7 +25,7 @@ export default defineI18nConfig(() => ({
       cta: { kicker: '// prochain maillon', button: 'Réserver mon diagnostic gratuit', disclaimer: 'Vous repartez avec la carte de votre chaîne, même si vous ne continuez pas avec nous.', defaultTitle: '30 minutes, et vous repartez avec la carte de votre chaîne.', defaultText: 'On repère ensemble où elle fuit, ce que ça vous coûte chaque mois, et la suite à donner.' },
     },
     en: {
-      nav: { home: 'Home', offers: 'Services', solutions: 'Solutions', realisations: 'Case studies', resources: 'Resources', blog: 'Blog', about: 'About', contact: 'Contact', avis: 'Reviews' },
+      nav: { home: 'Home', offers: 'Services', solutions: 'Solutions', realisations: 'Case studies', resources: 'Resources', blog: 'Blog', formation: 'Workshop', about: 'About', contact: 'Contact', avis: 'Reviews' },
       header: { bookCall: 'Book a call', openMenu: 'Open menu', closeMenu: 'Close menu', darkMode: 'Switch to dark mode', lightMode: 'Switch to light mode', changeTheme: 'Change theme', switchLang: 'Voir en français' },
       footer: {
         tagline: 'Complete systems to acquire clients, run the business, and build the digital products that move it forward.',
