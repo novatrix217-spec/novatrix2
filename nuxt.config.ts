@@ -9,9 +9,22 @@ export default defineNuxtConfig({
     '@vueuse/motion/nuxt',
     '@nuxt/image',
     '@nuxtjs/google-fonts',
+    '@nuxtjs/i18n',
     '@nuxtjs/sitemap',
     '@nuxtjs/robots',
   ],
+  i18n: {
+    restructureDir: false,
+    baseUrl: process.env.SITE_URL || 'http://localhost:3000',
+    locales: [
+      { code: 'fr', iso: 'fr-FR', name: 'Français' },
+      { code: 'en', iso: 'en-US', name: 'English' },
+    ],
+    defaultLocale: 'fr',
+    strategy: 'prefix_except_default',
+    vueI18n: './i18n.config.ts',
+    detectBrowserLanguage: false,
+  },
   css: ['~/assets/css/main.css'],
   colorMode: {
     preference: 'light',
@@ -33,7 +46,7 @@ export default defineNuxtConfig({
     quality: 82,
   },
   runtimeConfig: {
-    mongodbUri: process.env.MONGODB_URI || (process.env.NODE_ENV === 'production' ? '' : 'mongodb://127.0.0.1:27017/novatrixai'),
+    mongodbUri: process.env.MONGODB_URI || process.env.NUXT_MONGO_URL || (process.env.NODE_ENV === 'production' ? '' : 'mongodb://127.0.0.1:27017/novatrixai'),
     authSessionSecret: process.env.AUTH_SESSION_SECRET || '',
     adminEmail: process.env.ADMIN_EMAIL || '',
     adminPassword: process.env.ADMIN_PASSWORD || '',
@@ -46,17 +59,20 @@ export default defineNuxtConfig({
     s3Bucket: process.env.S3_BUCKET || '',
     s3Key: process.env.S3_KEY || '',
     s3Secret: process.env.S3_SECRET || '',
+    cloudinaryCloudName: process.env.NUXT_CLOUDINARY_CLOUD_NAME || '',
+    cloudinaryApiKey: process.env.NUXT_CLOUDINARY_API_KEY || '',
+    cloudinaryApiSecret: process.env.NUXT_CLOUDINARY_API_SECRET || '',
     allowDemoDownloads: process.env.ALLOW_DEMO_DOWNLOADS === 'true',
     public: {
       siteUrl: process.env.SITE_URL || 'http://localhost:3000',
       calendarUrl: process.env.NUXT_PUBLIC_CALENDAR_URL || 'https://calendly.com/novatrixai',
       whatsappUrl: process.env.NUXT_PUBLIC_WHATSAPP_URL || 'https://wa.me/22900000000',
+      cloudinaryCloudName: process.env.NUXT_CLOUDINARY_CLOUD_NAME || '',
     },
   },
   app: {
     pageTransition: { name: 'page', mode: 'out-in' },
     head: {
-      htmlAttrs: { lang: 'fr' },
       titleTemplate: '%s · NovatrixAI',
       meta: [
         { name: 'theme-color', content: '#1C0038' },
@@ -75,7 +91,7 @@ export default defineNuxtConfig({
     sources: ['/api/__sitemap__/urls'],
   },
   robots: {
-    groups: [{ userAgent: '*', allow: '/', disallow: ['/admin', '/api/admin'] }],
+    groups: [{ userAgent: '*', allow: '/', disallow: ['/admin', '/api/admin', '/en/admin'] }],
     sitemap: ['/sitemap.xml'],
   },
   nitro: {

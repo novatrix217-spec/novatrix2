@@ -1,0 +1,114 @@
+{
+  "name": "NovatrixAI — Auto-publication d'articles (Claude)",
+  "nodes": [
+    {
+      "id": "sticky1",
+      "name": "Lisez-moi",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [-320, -260],
+      "parameters": {
+        "content": "## NovatrixAI — Auto-publication d'articles\n\n1. Ouvrez le nœud **Configuration** et remplacez les 3 placeholders : clé API Anthropic, URL du site, clé API NovatrixAI (visible dans /admin/articles, section \"Auto-publication\").\n2. Lancez le workflow (Test workflow), ou activez-le pour obtenir une URL de formulaire publique/partageable.\n3. Chaque exécution crée un article en **brouillon** par défaut — relisez-le dans /admin/articles avant de le publier, ou tapez \"oui\" dans le champ \"Publier immédiatement\" du formulaire pour le publier direct.\n\nNœuds à vérifier après import : les types de champs du formulaire et la version du nœud HTTP Request peuvent varier selon votre version de n8n — ce workflow a été construit sans accès à une instance n8n réelle pour le tester, donc contrôlez chaque nœud avant le premier run.",
+        "width": 420,
+        "height": 320
+      }
+    },
+    {
+      "id": "trigger1",
+      "name": "Sujet de l'article",
+      "type": "n8n-nodes-base.formTrigger",
+      "typeVersion": 2.2,
+      "position": [-320, 120],
+      "webhookId": "novatrix-article-form",
+      "parameters": {
+        "formTitle": "Nouvel article NovatrixAI",
+        "formDescription": "Décrivez le sujet, Claude rédige l'article et le dépose en brouillon.",
+        "formFields": {
+          "values": [
+            { "fieldLabel": "Sujet / angle de l'article", "fieldType": "text", "requiredField": true },
+            { "fieldLabel": "Catégorie (Acquisition / Pilotage IA / Web & applications / Stratégie)", "fieldType": "text", "requiredField": true },
+            { "fieldLabel": "Notes ou points à inclure (optionnel)", "fieldType": "text", "requiredField": false },
+            { "fieldLabel": "Publier immédiatement ? (oui / non)", "fieldType": "text", "requiredField": false }
+          ]
+        }
+      }
+    },
+    {
+      "id": "config1",
+      "name": "Configuration",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [-40, 120],
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            { "id": "a1", "name": "anthropicApiKey", "type": "string", "value": "COLLEZ_VOTRE_CLE_ANTHROPIC_ICI" },
+            { "id": "a2", "name": "siteUrl", "type": "string", "value": "https://votredomaine.com" },
+            { "id": "a3", "name": "novatrixApiKey", "type": "string", "value": "COLLEZ_LA_CLE_API_NOVATRIXAI_ICI" }
+          ]
+        }
+      }
+    },
+    {
+      "id": "claude1",
+      "name": "Rédaction (Claude)",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [260, 120],
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.anthropic.com/v1/messages",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            { "name": "x-api-key", "value": "={{ $('Configuration').item.json.anthropicApiKey }}" },
+            { "name": "anthropic-version", "value": "2023-06-01" },
+            { "name": "content-type", "value": "application/json" }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({\n  model: \"claude-sonnet-5\",\n  max_tokens: 4000,\n  system: \"Tu écris pour le blog de NovatrixAI, agence de systèmes IA basée à Cotonou (Bénin). Ton : direct, concret, orienté résultat business, phrases courtes, vouvoiement. Pas de tarif chiffré inventé. Réponds UNIQUEMENT avec un objet JSON valide (rien avant, rien après), avec exactement ces clés : title (string, 40-100 caractères), excerpt (string, 100-300 caractères, résume l'angle), body (string, markdown avec # ## et -, au moins 600 mots), tags (array de 2 à 5 strings courtes).\",\n  messages: [{\n    role: \"user\",\n    content: \"Sujet : \" + $('Sujet de l\\'article').item.json['Sujet / angle de l\\'article'] + \"\\nCatégorie : \" + $('Sujet de l\\'article').item.json['Catégorie (Acquisition / Pilotage IA / Web & applications / Stratégie)'] + \"\\nNotes : \" + ($('Sujet de l\\'article').item.json['Notes ou points à inclure (optionnel)'] || \"aucune\")\n  }]\n}) }}"
+      }
+    },
+    {
+      "id": "code1",
+      "name": "Mise en forme",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [560, 120],
+      "parameters": {
+        "jsCode": "const form = $('Sujet de l\\'article').item.json\nconst raw = $input.item.json.content[0].text\nlet parsed\ntry { parsed = JSON.parse(raw) } catch (e) { throw new Error('Réponse Claude non-JSON : ' + raw.slice(0, 300)) }\nconst publishNow = /^oui/i.test(form['Publier immédiatement ? (oui / non)'] || '')\nreturn [{\n  json: {\n    title: parsed.title,\n    excerpt: parsed.excerpt,\n    body: parsed.body,\n    category: form['Catégorie (Acquisition / Pilotage IA / Web & applications / Stratégie)'],\n    tags: parsed.tags || [],\n    status: publishNow ? 'published' : 'draft'\n  }\n}]"
+      }
+    },
+    {
+      "id": "publish1",
+      "name": "Publication NovatrixAI",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [860, 120],
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $('Configuration').item.json.siteUrl }}/api/articles",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            { "name": "Authorization", "value": "=Bearer {{ $('Configuration').item.json.novatrixApiKey }}" },
+            { "name": "content-type", "value": "application/json" }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify($json) }}"
+      }
+    }
+  ],
+  "connections": {
+    "Sujet de l'article": { "main": [[{ "node": "Configuration", "type": "main", "index": 0 }]] },
+    "Configuration": { "main": [[{ "node": "Rédaction (Claude)", "type": "main", "index": 0 }]] },
+    "Rédaction (Claude)": { "main": [[{ "node": "Mise en forme", "type": "main", "index": 0 }]] },
+    "Mise en forme": { "main": [[{ "node": "Publication NovatrixAI", "type": "main", "index": 0 }]] }
+  },
+  "active": false,
+  "settings": { "executionOrder": "v1" }
+}

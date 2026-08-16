@@ -1,12 +1,16 @@
 export function useCountUp(target: number, duration = 1300) {
-  const value = ref(0)
+  // La valeur finale est le rendu SSR par défaut : aucun flash à "0" avant hydratation
+  // (pour les robots, les connexions lentes ou prefers-reduced-motion). L'animation ne
+  // rejoue qu'après montage côté client, quand l'élément entre dans le viewport.
+  const value = ref(target)
   const element = ref<HTMLElement | null>(null)
   let frame = 0
 
   onMounted(() => {
     const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    if (reduced) return
     const run = () => {
-      if (reduced) { value.value = target; return }
+      value.value = 0
       const started = performance.now()
       const tick = (now: number) => {
         const progress = Math.min((now - started) / duration, 1)
