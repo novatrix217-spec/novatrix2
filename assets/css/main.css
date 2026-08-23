@@ -24,6 +24,26 @@
   --radius-sm: 10px;
   --radius: 14px;
   --radius-lg: 20px;
+
+  /* ============================================================
+     TOKENS J0 — nouvelle palette (refonte UI/UX, brief validé
+     REFONTE-UIUX-NOVATRIX-2026-08-23-01). Non appliqués aux
+     composants à ce stade : simples variables disponibles pour
+     les jalons suivants (J1+). Les tokens ci-dessus (--primary,
+     --gold, --surface, etc.) restent inchangés et actifs.
+     ============================================================ */
+  --bg-void: #0A0908;
+  --bg-surface: #17140F;
+  --bg-elevated: #211C15;
+  --text-primary: #F7F5F2;
+  --text-secondary: #948D7F;
+  --accent: #F5B419;
+  --accent-hover: #FFCA3D;
+  --accent-active: #D99E12;
+  --accent-soft: rgba(245, 180, 25, .12);
+  --ink-on-accent: #0A0908;
+  --border-subtle: rgba(247, 245, 242, .08);
+  --border-strong: #676259;
 }
 
 .dark {
