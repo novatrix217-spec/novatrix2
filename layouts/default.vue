@@ -1,5 +1,5 @@
 <template>
-  <div class="min-h-screen overflow-x-hidden">
+  <div class="min-h-screen overflow-x-hidden bg-[var(--bg-void)]">
     <a href="#contenu" class="skip-link">Aller au contenu</a>
     <div class="scroll-progress" aria-hidden="true" />
     <SiteHeader />

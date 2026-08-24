@@ -3,31 +3,43 @@
 import { BarChart3,MailCheck,MousePointerClick } from 'lucide-vue-next'
 const { locale } = useI18n()
 const seoMeta = computed(() => locale.value === 'en'
-  ? { title: 'Acquisition system that turns your clicks into clients', description: 'Creatives, ads, funnel, CRM and follow-ups connected in one system: every lead is captured, followed up and converted. Not one more sale lost between two tools.' }
-  : { title: 'Système d’acquisition qui transforme vos clics en clients', description: 'Créatifs, pub, tunnel, CRM et relances reliés en un seul système : chaque lead est capté, relancé et converti. Plus une seule vente perdue entre deux outils.' })
+  ? { title: 'Connected acquisition system', description: 'Connect creatives, campaigns, conversion pages, CRM, follow-up and sales handoff in one readable prospect journey.' }
+  : { title: 'Système d’acquisition connecté', description: 'Reliez créatifs, campagnes, pages de conversion, CRM, relances et passage aux ventes dans un parcours prospect lisible.' })
 useSeoMeta({ title: () => seoMeta.value.title, description: () => seoMeta.value.description })
 const titleHtml = computed(() => locale.value === 'en'
   ? 'Stop paying for clicks that <span class="text-gradient">end up in the trash.</span>'
   : 'Arrêtez de payer des clics qui <span class="text-gradient">finissent à la poubelle.</span>')
 const content = computed(() => locale.value === 'en' ? {
   kicker: 'offer a · acquisition', title: 'Acquisition System',
-  description: 'You generate clicks, but how many become clients? We connect attention to sales: creatives, ads, funnel, CRM and follow-ups in a single system. Every lead captured, followed up, converted.',
-  systemTitle: 'From the first click to the signed client, no leaks.',
-  systemText: 'Your ad can be a hit: if the after-click is patched together, you burn budget. We connect the five blocks into one system. Result: no lead gets lost, every dollar works toward the sale.',
-  modules: ['Creatives and ad angles', 'Meta, TikTok and Google campaigns', 'Conversion funnel and tracking', 'Automatic email, SMS and WhatsApp follow-ups: every lead recontacted at the right time, scored and tracked, without you thinking about it', 'Closing, or qualified leads delivered ready to sign to your team'],
-  capabilitiesTitle: 'What turns your clicks into revenue.',
-  capabilities: [{icon:MousePointerClick,title:'Attract',text:'Ads that speak to your prospects’ real pain, and trigger clicks from the right ones.'},{icon:MailCheck,title:'Follow up',text:'No prospect forgotten: each one is followed up at the right time, until they reply or buy.'},{icon:BarChart3,title:'Optimize',text:'We cut what costs, we scale what sells: your cost per client drops month after month.'}],
+  description: 'We connect attention to the sales conversation: creatives, campaigns, conversion pages, CRM and follow-up in one system with explicit handoffs.',
+  systemTitle: 'From the first click to the sales conversation, one readable journey.',
+  systemText: 'Your ad can perform while the post-click journey still breaks. We connect the five blocks into one system so every lead has an owner, context and a next step.',
+  modules: ['Creatives and campaign angles', 'Selected acquisition channels', 'Conversion journey and tracking plan', 'Email, SMS or WhatsApp follow-up rules configured for the agreed cases', 'Sales handoff with the context collected upstream'],
+  capabilitiesTitle: 'What makes the prospect journey readable.',
+  capabilities: [{icon:MousePointerClick,title:'Attract',text:'Align campaign messages with the problem and audience defined during scoping.'},{icon:MailCheck,title:'Follow up',text:'Define who follows up, on which channel and with which context.'},{icon:BarChart3,title:'Observe',text:'Connect useful events so the team can compare stages without inventing performance.'}],
   steps: [{step:'01',title:'Scoping',text:'We start from your sales goal and your real numbers.',outcome:'a priced sales target and the metrics that matter.'},{step:'02',title:'Architecture',text:'We map the path from click to purchase.',outcome:'the full path from click to purchase, mapped.'},{step:'03',title:'Build',text:'We build ads, funnel, CRM and follow-ups, connected end to end.',outcome:'a system connected end to end, ready to test.'},{step:'04',title:'Launch',text:'We launch, measure against your sales, and optimize relentlessly.',outcome:'live campaigns and numbers to track in real time.'}],
-  ctaTitle: 'How many clients have you already lost between two tools? Let’s talk.',
+  faqs: [
+    { question: 'How is the system priced?', answer: 'It depends on the selected channels, existing assets, data and integrations. The free audit defines the useful starting scope before a proposal is prepared.' },
+    { question: 'How is the delivery timeline set?', answer: 'It depends on the channels, existing data and integrations. The scope and checkpoints are agreed after the audit, before implementation starts.' },
+    { question: 'What if my current campaigns are already running?', answer: 'We integrate them rather than rebuild everything — we map what already works and connect the rest.' },
+    { question: 'Is there a minimum ad budget?', answer: 'Yes, a test budget is needed so the system has data to optimize on. We set it together based on your sector.' },
+  ],
+  ctaTitle: 'Identify the first break in your acquisition journey.',
 } : {
   kicker: 'offre a · acquisition', title: 'Système d’acquisition',
-  description: 'Vous générez des clics, mais combien deviennent des clients ? Nous relions l’attention à la vente : créatifs, pub, tunnel, CRM et relances dans un seul système. Chaque lead capté, relancé, converti.',
-  systemTitle: 'Du premier clic au client signé, sans fuite.',
-  systemText: 'Votre pub peut cartonner : si l’après-clic est bricolé, vous brûlez du budget. Nous relions les cinq blocs en un seul système. Résultat : aucun lead ne se perd, chaque euro travaille jusqu’à la vente.',
-  modules: ['Créatifs et angles publicitaires', 'Campagnes Meta, TikTok et Google', 'Tunnel de conversion et tracking', 'Relances automatiques email, SMS et WhatsApp : chaque lead recontacté au bon moment, scoré et suivi, sans que vous y pensiez', 'Closing ou leads qualifiés livrés prêts à signer à votre équipe'],
-  capabilitiesTitle: 'Ce qui transforme vos clics en chiffre d’affaires.',
-  capabilities: [{icon:MousePointerClick,title:'Attirer',text:'Des pubs qui parlent à la vraie douleur de vos prospects, et déclenchent le clic des bons.'},{icon:MailCheck,title:'Relancer',text:'Aucun prospect oublié : chacun est relancé au bon moment, jusqu’à ce qu’il réponde ou achète.'},{icon:BarChart3,title:'Optimiser',text:'On coupe ce qui coûte, on amplifie ce qui vend : votre coût par client baisse mois après mois.'}],
+  description: 'Nous relions l’attention à l’échange commercial : créatifs, campagnes, pages de conversion, CRM et relances dans un système aux passages de relais explicites.',
+  systemTitle: 'Du premier clic à l’échange commercial, un parcours lisible.',
+  systemText: 'Votre publicité peut fonctionner pendant que le parcours après-clic se casse. Nous relions les cinq blocs dans un système pour que chaque lead ait un responsable, un contexte et une prochaine étape.',
+  modules: ['Créatifs et angles de campagne', 'Canaux d’acquisition sélectionnés', 'Parcours de conversion et plan de mesure', 'Règles de relance email, SMS ou WhatsApp pour les cas convenus', 'Passage aux ventes avec le contexte recueilli en amont'],
+  capabilitiesTitle: 'Ce qui rend le parcours prospect lisible.',
+  capabilities: [{icon:MousePointerClick,title:'Attirer',text:'Aligner les messages de campagne sur le problème et l’audience définis au cadrage.'},{icon:MailCheck,title:'Relancer',text:'Définir qui relance, sur quel canal et avec quel contexte.'},{icon:BarChart3,title:'Observer',text:'Relier les événements utiles pour comparer les étapes sans inventer de performance.'}],
   steps: [{step:'01',title:'Cadrage',text:'On part de votre objectif de ventes et de vos vrais chiffres.',outcome:'un objectif de ventes chiffré et les indicateurs qui comptent.'},{step:'02',title:'Architecture',text:'On dessine le parcours qui mène le clic jusqu’à l’achat.',outcome:'le parcours complet du clic à l’achat, cartographié.'},{step:'03',title:'Construction',text:'On monte pubs, tunnel, CRM et relances, reliés bout à bout.',outcome:'un système connecté de bout en bout, prêt à tester.'},{step:'04',title:'Lancement',text:'On lance, on mesure sur vos ventes, on optimise sans relâche.',outcome:'des campagnes actives et des chiffres à suivre en direct.'}],
-  ctaTitle: 'Combien de clients avez-vous déjà perdus entre deux outils ? Parlons-en.',
+  faqs: [
+    { question: 'Comment le système est-il chiffré ?', answer: 'Cela dépend des canaux sélectionnés, des actifs existants, des données et des intégrations. L’audit gratuit définit le point de départ utile avant la préparation d’une proposition.' },
+    { question: 'Comment le délai de livraison est-il fixé ?', answer: 'Il dépend des canaux, des données disponibles et des intégrations. Le périmètre et les jalons sont convenus après l’audit, avant le début de l’implémentation.' },
+    { question: 'Et si mes campagnes actuelles tournent déjà ?', answer: 'On les intègre plutôt que de tout reconstruire — on cartographie ce qui marche et on connecte le reste.' },
+    { question: 'Faut-il un budget pub minimum ?', answer: 'Oui, un budget test est nécessaire pour que le système ait des données à optimiser. On le définit ensemble selon votre secteur.' },
+  ],
+  ctaTitle: 'Identifiez la première rupture de votre parcours d’acquisition.',
 })
 </script>

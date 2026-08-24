@@ -1,8 +1,9 @@
 import { ArticleModel } from '../../models/Article'
 import { ProjectModel } from '../../models/Project'
 import { ResourceModel } from '../../models/Resource'
+import { hasCompleteArticleEnglish, hasCompleteProjectEnglish, hasCompleteResourceEnglish } from '../../../shared/english-content'
 
-const fixed = ['/', '/offres', '/offres/acquisition', '/offres/pilotage-ia', '/offres/creation-web-apps', '/solutions/agent-whatsapp-ia', '/solutions/automatisation-n8n', '/solutions/relance-panier-abandonne', '/agence-ia-cotonou', '/realisations', '/avis', '/ressources', '/blog', '/a-propos', '/contact', '/confidentialite']
+const fixed = ['/', '/offres', '/offres/acquisition', '/offres/pilotage-ia', '/offres/creation-web-apps', '/solutions', '/solutions/agent-whatsapp-ia', '/solutions/automatisation-n8n', '/solutions/relance-panier-abandonne', '/agence-ia-cotonou', '/realisations', '/avis', '/ressources', '/blog', '/formation', '/a-propos', '/contact', '/confidentialite']
 
 // Émet chaque route en français (racine) et en anglais (préfixe /en), avec les alternates
 // hreflang qui pointent l'une vers l'autre — évite le piège du faux bilingue (même contenu
@@ -16,19 +17,24 @@ function withLocales(path: string, lastmod?: Date) {
   ]
 }
 
+function withOptionalEnglish(path: string, lastmod: Date | undefined, englishComplete: boolean) {
+  if (englishComplete) return withLocales(path, lastmod)
+  return [{ loc: path, lastmod, alternatives: [{ hreflang: 'fr', href: path }, { hreflang: 'x-default', href: path }] }]
+}
+
 export default defineSitemapEventHandler(async () => {
   try {
     await connectDb()
     const [articles, resources, projects] = await Promise.all([
-      ArticleModel.find({ status: 'published' }).select('slug updatedAt').lean(),
-      ResourceModel.find({ published: true }).select('slug updatedAt').lean(),
-      ProjectModel.find({ status: 'published' }).select('slug updatedAt').lean(),
+      ArticleModel.find({ status: 'published' }).select('slug updatedAt titleEn excerptEn bodyEn categoryEn tags tagsEn readingTimeEn').lean(),
+      ResourceModel.find({ published: true }).select('slug updatedAt titleEn descriptionEn sectorEn').lean(),
+      ProjectModel.find({ status: 'published' }).select('slug updatedAt titleEn categoryEn summaryEn challenge challengeEn solution solutionEn features featuresEn quoteBefore quoteBeforeEn quoteAfter quoteAfterEn').lean(),
     ])
     return [
       ...fixed.flatMap(loc => withLocales(loc)),
-      ...articles.flatMap(a => withLocales(`/blog/${a.slug}`, a.updatedAt)),
-      ...resources.flatMap(r => withLocales(`/ressources/${r.slug}`, r.updatedAt)),
-      ...projects.flatMap(p => withLocales(`/realisations/${p.slug}`, p.updatedAt)),
+      ...articles.flatMap(a => withOptionalEnglish(`/blog/${a.slug}`, a.updatedAt, hasCompleteArticleEnglish(a))),
+      ...resources.flatMap(r => withOptionalEnglish(`/ressources/${r.slug}`, r.updatedAt, hasCompleteResourceEnglish(r))),
+      ...projects.flatMap(p => withOptionalEnglish(`/realisations/${p.slug}`, p.updatedAt, hasCompleteProjectEnglish(p))),
     ]
   } catch {
     return fixed.flatMap(loc => withLocales(loc))

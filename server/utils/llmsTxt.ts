@@ -83,7 +83,7 @@ export async function buildLlmsTxt(locale: 'fr' | 'en') {
   if (testimonials.length) {
     lines.push(en ? '## Client reviews' : '## Avis clients')
     lines.push('')
-    lines.push(en ? `Verified reviews, published at ${prefix}/avis:` : `Avis vérifiés, publiés sur ${prefix}/avis :`)
+    lines.push(en ? `Reviews moderated before publication at ${prefix}/avis:` : `Avis modérés avant publication sur ${prefix}/avis :`)
     lines.push('')
     for (const t of testimonials) {
       const role = pick(t.role, t.roleEn)

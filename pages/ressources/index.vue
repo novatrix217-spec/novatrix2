@@ -2,6 +2,7 @@
   <section class="section-pad"><div class="container-shell"><div class="flex flex-wrap gap-2"><button v-for="filter in filters" :key="filter.value" class="rounded-full border px-4 py-2 text-xs font-semibold transition" :class="active===filter.value?'gradient-action border-transparent text-white':'hover:border-violet-400'" @click="active=filter.value">{{ filter.label }}</button></div><div class="mt-10 grid gap-6 md:grid-cols-2 lg:grid-cols-3"><ResourceCard v-for="item in shown" :key="item.slug" :resource="item"/></div><p v-if="!shown.length" class="py-16 text-center text-[var(--muted)]">{{ $t('resourcesList.empty') }}</p></div></section><CtaBand :title="t.ctaTitle"/></div></template>
 <script setup lang="ts">
 import { demoResources } from '~/shared/demo'
+import { hasCompleteResourceEnglish } from '~/shared/english-content'
 import type { PublicResource } from '~/shared/types'
 const { locale } = useI18n()
 const t = computed(() => locale.value === 'en' ? {
@@ -19,10 +20,14 @@ const seoMeta = computed(() => locale.value === 'en'
 useSeoMeta({ title: () => seoMeta.value.title, description: () => seoMeta.value.description })
 const {data}=await useFetch<{items:PublicResource[]}>('/api/resources',{default:()=>({items:demoResources})})
 const active=ref('Toutes')
+const localizedItems=computed(()=>{
+  const items=data.value?.items||[]
+  return locale.value==='en'?items.filter(hasCompleteResourceEnglish):items
+})
 const filters=computed(()=>{
-  const sectors=[...new Set((data.value?.items||[]).map(r=>r.sector))]
-  const enMap=new Map((data.value?.items||[]).map(r=>[r.sector,r.sectorEn||r.sector]))
+  const sectors=[...new Set(localizedItems.value.map(r=>r.sector))]
+  const enMap=new Map(localizedItems.value.map(r=>[r.sector,r.sectorEn||r.sector]))
   return [{value:'Toutes',label:locale.value==='en'?'All':'Toutes'},...sectors.map(s=>({value:s,label:locale.value==='en'?enMap.get(s):s}))]
 })
-const shown=computed(()=>active.value==='Toutes'?data.value?.items||[]:(data.value?.items||[]).filter(r=>r.sector===active.value))
+const shown=computed(()=>active.value==='Toutes'?localizedItems.value:localizedItems.value.filter(r=>r.sector===active.value))
 </script>

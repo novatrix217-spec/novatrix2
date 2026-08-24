@@ -4,6 +4,7 @@
 <script setup lang="ts">
 import { ArrowRight,Check,LockKeyhole } from 'lucide-vue-next'
 import { demoResources } from '~/shared/demo'
+import { hasCompleteResourceEnglish } from '~/shared/english-content'
 import type { PublicResource } from '~/shared/types'
 const { locale } = useI18n()
 const localePath = useLocalePath()
@@ -11,6 +12,9 @@ const lf = useLocaleField()
 const route=useRoute(),fallback=demoResources.find(r=>r.slug===route.params.slug)
 const {data:resource}=await useFetch<PublicResource>(`/api/resources/${route.params.slug}`,{default:()=>fallback as PublicResource})
 if(!resource.value)throw createError({statusCode:404,statusMessage:locale.value==='en'?'Resource not found':'Ressource introuvable'})
+const resourceHasCompleteEnglish=hasCompleteResourceEnglish(resource.value)
+useEnglishAlternateAvailability().setEnglishAlternateAvailable(resourceHasCompleteEnglish)
+if(locale.value==='en'&&!resourceHasCompleteEnglish)await navigateTo(`/ressources/${resource.value.slug}`,{redirectCode:302,replace:true})
 const cld=useCloudinaryUrl()
 const coverUrl=computed(()=>cld(resource.value?.coverImageKey,'w_1200,h_500,c_fill'))
 const seoMeta=computed(()=>({title:lf(resource.value!.title,resource.value!.titleEn),description:lf(resource.value!.description,resource.value!.descriptionEn)}))

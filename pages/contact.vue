@@ -1,34 +1,64 @@
-<template><div><PageHero :kicker="t.kicker" :description="t.description"><span v-html="t.heroTitle"/></PageHero>
-  <section class="section-pad"><div class="container-shell grid gap-10 lg:grid-cols-2"><div class="card !p-7 sm:!p-9"><h2 class="text-2xl font-bold">{{ t.formTitle }}</h2><form class="mt-7 grid gap-4 sm:grid-cols-2" @submit.prevent="submit"><label class="text-xs font-semibold">{{ t.firstName }} *<input v-model.trim="form.firstName" class="field mt-2" required/></label><label class="text-xs font-semibold">{{ t.email }} *<input v-model.trim="form.email" class="field mt-2" type="email" required/></label><label class="text-xs font-semibold">{{ t.phone }} *<input v-model.trim="form.phone" class="field mt-2" type="tel" required/></label><label class="text-xs font-semibold">{{ t.company }} *<input v-model.trim="form.domain" class="field mt-2" required/></label><label class="col-span-full text-xs font-semibold">{{ t.messageLabel }}<textarea v-model.trim="form.message" class="field mt-2 min-h-32 py-3"/></label><input v-model="form.website" tabindex="-1" class="absolute -left-[9999px]" autocomplete="off"/><label class="col-span-full flex items-start gap-3 text-xs leading-5 text-[var(--muted)]"><input v-model="form.consent" class="mt-1 accent-violet-600" type="checkbox" required/>{{ t.consent }} <NuxtLink :to="localePath('/confidentialite')" class="text-violet-700 underline">{{ t.privacy }}</NuxtLink></label><p v-if="feedback" class="col-span-full rounded-xl p-3 text-sm" :class="success?'bg-emerald-500/10 text-emerald-700':'bg-red-500/10 text-red-700'">{{ feedback }}</p><button class="btn-primary col-span-full" :disabled="pending"><LoaderCircle v-if="pending" class="h-4 w-4 animate-spin"/>{{ t.send }}</button></form></div>
-    <div><div class="card !p-7"><p class="kicker">{{ t.callKicker }}</p><h2 class="mt-4 text-2xl font-bold">{{ t.callTitle }}</h2><p class="mt-3 text-sm leading-6 text-[var(--muted)]">{{ t.callText }}</p><a :href="calendarUrl" target="_blank" rel="noopener noreferrer" class="btn-primary mt-6">{{ $t('cta.button') }} <ExternalLink class="h-4 w-4"/></a></div><a :href="whatsappUrl" target="_blank" rel="noopener noreferrer" class="mt-5 flex items-center gap-4 rounded-2xl border bg-[#075E54] p-6 text-white transition hover:-translate-y-1"><MessageCircle class="h-7 w-7"/><span><strong class="block">{{ t.waTitle }}</strong><small class="text-white/65">{{ t.waText }}</small></span></a></div></div></section></div></template>
+<template>
+  <div>
+    <PageHero :kicker="t.kicker" :description="t.description"><span v-html="t.heroTitle"/></PageHero>
+
+    <section class="section-pad">
+      <div class="container-shell grid items-start gap-10 lg:grid-cols-[.7fr_1.3fr]">
+        <div class="lg:sticky lg:top-28">
+          <p class="kicker">{{ t.bookingKicker }}</p><h2 class="mt-4 text-3xl font-bold">{{ t.bookingTitle }}</h2><p class="mt-4 leading-7 text-[var(--muted)]">{{ t.bookingText }}</p>
+          <ul class="mt-7 space-y-4"><li v-for="item in t.bookingPoints" :key="item" class="flex gap-3 text-sm leading-6"><Check class="mt-1 h-4 w-4 shrink-0 text-emerald-600"/>{{ item }}</li></ul>
+        </div>
+        <div id="calendly" class="scroll-mt-24"><BookingWidget/></div>
+      </div>
+    </section>
+
+    <section id="contact-form" class="section-pad scroll-mt-24 border-y bg-[var(--surface)]">
+      <div class="container-shell grid gap-10 lg:grid-cols-[.72fr_1.28fr]">
+        <div><SectionHeading :kicker="t.formKicker" :description="t.formDescription">{{ t.formTitle }}</SectionHeading></div>
+        <form class="card grid gap-4 sm:grid-cols-2" @submit.prevent="submit">
+          <label class="text-xs font-semibold">{{ t.firstName }} *<input v-model.trim="form.firstName" class="field mt-2" required autocomplete="given-name"/></label>
+          <label class="text-xs font-semibold">{{ t.email }} *<input v-model.trim="form.email" class="field mt-2" type="email" required autocomplete="email"/></label>
+          <label class="text-xs font-semibold">{{ t.phone }} *<input v-model.trim="form.phone" class="field mt-2" type="tel" required autocomplete="tel"/></label>
+          <label class="text-xs font-semibold">{{ t.company }} *<input v-model.trim="form.domain" class="field mt-2" required autocomplete="organization"/></label>
+          <label class="col-span-full text-xs font-semibold">{{ t.messageLabel }}<textarea v-model.trim="form.message" class="field mt-2 min-h-32 py-3"/></label>
+          <input v-model="form.website" tabindex="-1" class="absolute -left-[9999px]" autocomplete="off" aria-hidden="true"/>
+          <label class="col-span-full flex items-start gap-3 text-xs leading-5 text-[var(--muted)]"><input v-model="form.consent" class="mt-1 accent-violet-600" type="checkbox" required/>{{ t.consent }} <NuxtLink :to="localePath('/confidentialite')" class="text-violet-700 underline">{{ t.privacy }}</NuxtLink></label>
+          <p v-if="feedback" class="col-span-full rounded-xl p-3 text-sm" :class="success ? 'bg-emerald-500/10 text-emerald-700' : 'bg-red-500/10 text-red-700'" role="status">{{ feedback }}</p>
+          <button class="btn-primary col-span-full" :disabled="pending"><LoaderCircle v-if="pending" class="h-4 w-4 animate-spin"/>{{ t.send }}</button>
+        </form>
+      </div>
+    </section>
+  </div>
+</template>
+
 <script setup lang="ts">
-import { ExternalLink,LoaderCircle,MessageCircle } from 'lucide-vue-next'
+import { Check, LoaderCircle } from 'lucide-vue-next'
 const { locale } = useI18n()
 const localePath = useLocalePath()
-const seoMeta = computed(() => locale.value === 'en'
-  ? { title: 'Book a call', description: 'Tell us what’s holding you back and walk away with a concrete plan. Book your free call with NovatrixAI.' }
-  : { title: 'Réserver un appel', description: 'Parlez-nous de ce qui vous freine et repartez avec un plan concret. Réservez votre appel offert avec NovatrixAI.' })
-useSeoMeta({ title: () => seoMeta.value.title, description: () => seoMeta.value.description })
-const config=useRuntimeConfig(),calendarUrl=config.public.calendarUrl,whatsappUrl=config.public.whatsappUrl
-const t=computed(()=>locale.value==='en'?{
-  kicker:'contact', description:'Tell us where you’re losing time, leads or money today. We’ll show you exactly the chain to connect to make it stop.',
-  heroTitle:'Your next growth starts with <span class="text-gradient">a single conversation.</span>',
-  formTitle:'Tell us what’s holding you back.', firstName:'First name', email:'Email', phone:'Phone', company:'Company',
-  messageLabel:'What do you want to stop losing?', consent:'Yes, contact me back to talk about it.', privacy:'Privacy policy',
-  send:'I want help', callKicker:'your free call', callTitle:'Book your slot now.',
-  callText:'20 minutes to spot what’s costing you the most, and walk away with a concrete plan to fix it. No commitment.',
-  waTitle:'A question? Write to us', waText:'Fast reply, even before you book.',
-  sent:'Got it. We’ll get back to you very soon to talk about it.', failed:'The message didn’t go through. Try again, we don’t want to miss you.',
-}:{
-  kicker:'contact', description:'Dites-nous où vous perdez du temps, des leads ou de l’argent aujourd’hui. On vous montre exactement la chaîne à relier pour que ça s’arrête.',
-  heroTitle:'Votre prochaine croissance commence par <span class="text-gradient">un seul échange.</span>',
-  formTitle:'Dites-nous ce qui vous freine.', firstName:'Prénom', email:'Email', phone:'Téléphone', company:'Entreprise',
-  messageLabel:'Qu’est-ce que vous voulez arrêter de perdre ?', consent:'Oui, recontactez-moi pour en parler.', privacy:'Politique de confidentialité',
-  send:'Je veux qu’on m’aide', callKicker:'votre appel offert', callTitle:'Réservez votre créneau maintenant.',
-  callText:'20 minutes pour repérer ce qui vous coûte le plus cher, et repartir avec le plan concret pour le régler. Sans engagement.',
-  waTitle:'Une question ? Écrivez-nous', waText:'Réponse rapide, avant même de réserver.',
-  sent:'C’est noté. On revient vers vous très vite pour en parler.', failed:'L’envoi n’a pas abouti. Réessayez, on ne veut pas vous rater.',
+const seo = computed(() => locale.value === 'en' ? {
+  title: 'Book your free project audit', description: 'Choose your audit slot directly on NovatrixAI. We map your current system and identify the most useful next project decision.',
+} : {
+  title: 'Réserver votre audit projet gratuit', description: 'Choisissez votre créneau directement sur NovatrixAI. Nous cartographions votre système actuel et identifions la prochaine décision utile pour votre projet.',
 })
-const form=reactive({firstName:'',email:'',phone:'',domain:'',message:'',consent:false,website:'',source:'contact'}),pending=ref(false),feedback=ref(''),success=ref(false)
-async function submit(){pending.value=true;feedback.value='';try{await $fetch('/api/leads',{method:'POST',body:form});success.value=true;feedback.value=t.value.sent}catch(e:any){success.value=false;feedback.value=e?.data?.statusMessage||t.value.failed}finally{pending.value=false}}
+useSeoMeta({ title: () => seo.value.title, description: () => seo.value.description })
+const t = computed(() => locale.value === 'en' ? {
+  kicker: 'free project audit', description: 'Choose your slot directly here. We review your current system and the outcome you want, whether the scope concerns web, applications, AI, automation or training.',
+  heroTitle: 'Turn your current context into <span class="text-gradient">a useful next decision.</span>', bookingKicker: 'book without leaving the site', bookingTitle: 'Pick the slot that works for you.', bookingText: 'The conversation focuses on your objective, current tools or process, constraints and the first decision worth making.', bookingPoints: ['A map of the current context', 'The first issue or opportunity to investigate', 'A concrete next decision, with no commitment'],
+  formKicker: 'local fallback', formTitle: 'No suitable slot or calendar unavailable?', formDescription: 'Send the minimum useful context. We will contact you to arrange the conversation.', firstName: 'First name', email: 'Work email', phone: 'Phone', company: 'Company', messageLabel: 'What project or process would you like to review?', consent: 'I agree to be contacted about this request.', privacy: 'Privacy policy', send: 'Send my request', sent: 'Your request has been received. We will contact you shortly.', failed: 'The request could not be sent. Please try again.',
+} : {
+  kicker: 'audit projet offert', description: 'Choisissez votre créneau directement ici. Nous examinons votre système actuel et le résultat recherché, qu’il s’agisse de web, d’applications, d’IA, d’automatisation ou de formation.',
+  heroTitle: 'Transformez votre contexte actuel en <span class="text-gradient">prochaine décision utile.</span>', bookingKicker: 'réserver sans quitter le site', bookingTitle: 'Choisissez le créneau qui vous convient.', bookingText: 'L’échange se concentre sur votre objectif, vos outils ou processus actuels, vos contraintes et la première décision utile.', bookingPoints: ['La carte du contexte actuel', 'Le premier problème ou levier à examiner', 'Une prochaine décision concrète, sans engagement'],
+  formKicker: 'solution de secours locale', formTitle: 'Aucun créneau adapté ou calendrier indisponible ?', formDescription: 'Envoyez le contexte minimum utile. Nous vous recontactons pour organiser l’échange.', firstName: 'Prénom', email: 'Email professionnel', phone: 'Téléphone', company: 'Entreprise', messageLabel: 'Quel projet ou processus souhaitez-vous examiner ?', consent: 'J’accepte d’être recontacté au sujet de cette demande.', privacy: 'Politique de confidentialité', send: 'Envoyer ma demande', sent: 'Votre demande est bien reçue. Nous vous recontactons rapidement.', failed: 'La demande n’a pas pu être envoyée. Merci de réessayer.',
+})
+const form = reactive({ firstName: '', email: '', phone: '', domain: '', message: '', consent: false, website: '', source: 'contact' })
+const pending = ref(false), feedback = ref(''), success = ref(false)
+async function submit() {
+  pending.value = true; feedback.value = ''
+  try {
+    await $fetch('/api/leads', { method: 'POST', body: form })
+    success.value = true; feedback.value = t.value.sent
+  } catch (error: any) {
+    success.value = false; feedback.value = locale.value === 'fr' && error?.data?.statusMessage ? error.data.statusMessage : t.value.failed
+  } finally { pending.value = false }
+}
 </script>

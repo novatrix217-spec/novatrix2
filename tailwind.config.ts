@@ -7,7 +7,7 @@ export default <Partial<Config>>{
         // Corps de texte par défaut
         sans: ['DM Sans', 'ui-sans-serif', 'system-ui', 'sans-serif'],
         // Titres & gros chiffres (utilisé via `font-heading`)
-        heading: ['Space Grotesk', 'ui-sans-serif', 'system-ui', 'sans-serif'],
+        heading: ['Bricolage Grotesque', 'ui-sans-serif', 'system-ui', 'sans-serif'],
         // Kickers, badges, labels techniques (utilisé via `font-mono`)
         mono: ['JetBrains Mono', 'ui-monospace', 'SFMono-Regular', 'monospace'],
       },

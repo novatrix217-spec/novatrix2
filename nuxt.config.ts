@@ -16,9 +16,12 @@ export default defineNuxtConfig({
   i18n: {
     restructureDir: false,
     baseUrl: process.env.SITE_URL || 'http://localhost:3000',
+    bundle: {
+      optimizeTranslationDirective: false,
+    },
     locales: [
-      { code: 'fr', iso: 'fr-FR', name: 'Français' },
-      { code: 'en', iso: 'en-US', name: 'English' },
+      { code: 'fr', language: 'fr-FR', name: 'Français' },
+      { code: 'en', language: 'en-US', name: 'English' },
     ],
     defaultLocale: 'fr',
     strategy: 'prefix_except_default',
@@ -37,7 +40,9 @@ export default defineNuxtConfig({
     subsets: ['latin', 'latin-ext'],
     families: {
       'DM Sans': [400, 500, 600, 700],
-      'Space Grotesk': [500, 600, 700],
+      // Police variable (axes wght 200..800, opsz 12..96) — un seul fichier
+      // par sous-ensemble de caractères au lieu de 3 graisses statiques.
+      'Bricolage Grotesque': { wght: '200..800', opsz: '12..96' },
       'JetBrains Mono': [400, 500, 600],
     },
   },
@@ -65,7 +70,7 @@ export default defineNuxtConfig({
     allowDemoDownloads: process.env.ALLOW_DEMO_DOWNLOADS === 'true',
     public: {
       siteUrl: process.env.SITE_URL || 'http://localhost:3000',
-      calendarUrl: process.env.NUXT_PUBLIC_CALENDAR_URL || 'https://calendly.com/novatrixai',
+      calendarUrl: process.env.NUXT_PUBLIC_CALENDAR_URL || 'https://calendly.com/novatrix217/audit-gratuit',
       whatsappUrl: process.env.NUXT_PUBLIC_WHATSAPP_URL || 'https://wa.me/22900000000',
       cloudinaryCloudName: process.env.NUXT_CLOUDINARY_CLOUD_NAME || '',
     },
@@ -89,10 +94,11 @@ export default defineNuxtConfig({
   },
   sitemap: {
     sources: ['/api/__sitemap__/urls'],
+    exclude: ['/merci', '/en/merci'],
   },
   robots: {
     groups: [{ userAgent: '*', allow: '/', disallow: ['/admin', '/api/admin', '/en/admin'] }],
-    sitemap: ['/sitemap.xml'],
+    sitemap: ['/sitemap_index.xml'],
   },
   nitro: {
     // Sur Vercel, le preset est auto-détecté (VERCEL=1). Override possible via NITRO_PRESET.

@@ -1,6 +1,6 @@
 <template>
   <div ref="revealRoot">
-    <PageHero :kicker="kicker" :description="description"><slot name="title">{{ title }}</slot><template #actions><a :href="calendarUrl" target="_blank" rel="noopener noreferrer" class="btn-primary">{{ $t('header.bookCall') }} <ArrowRight class="h-4 w-4"/></a><NuxtLink :to="localePath(relatedOfferTo||'/offres')" class="btn-secondary">{{ t.viewSystem }}</NuxtLink></template></PageHero>
+    <PageHero :kicker="kicker" :description="description"><slot name="title">{{ title }}</slot><template #actions><button type="button" class="btn-primary" @click="openCalendly">{{ $t('header.bookCall') }} <ArrowRight class="h-4 w-4"/></button><NuxtLink :to="localePath(relatedOfferTo||'/offres')" class="btn-secondary">{{ t.viewSystem }}</NuxtLink></template></PageHero>
 
     <section class="section-pad">
       <div class="container-shell"><div class="reveal"><SectionHeading :kicker="t.painKicker" center>{{ painTitle }}</SectionHeading></div>
@@ -63,15 +63,15 @@ defineProps<{
 }>()
 const { locale } = useI18n()
 const localePath = useLocalePath()
-const calendarUrl=useRuntimeConfig().public.calendarUrl
+const { openCalendly } = useCalendly()
 const revealRoot=useScrollReveal()
 const t=computed(()=>locale.value==='en'?{
   viewSystem:'View the full system', painKicker:'what’s blocking you today', installKicker:'what we install',
-  faqKicker:'frequently asked questions', faqTitle1:'Clear before you', faqTitle2:'call us.',
+  faqKicker:'frequently asked questions', faqTitle1:'Clear before your', faqTitle2:'free audit.',
   seeAlsoKicker:'see also', seeAlsoTitle1:'You might also be interested', seeAlsoTitle2:'in this.', discover:'Discover',
 }:{
   viewSystem:'Voir le système complet', painKicker:'ce qui bloque aujourd’hui', installKicker:'ce qu’on installe',
-  faqKicker:'questions fréquentes', faqTitle1:'Clair avant de', faqTitle2:'nous appeler.',
+  faqKicker:'questions fréquentes', faqTitle1:'Clair avant votre', faqTitle2:'audit gratuit.',
   seeAlsoKicker:'voir aussi', seeAlsoTitle1:'Vous pourriez aussi être intéressé', seeAlsoTitle2:'par.', discover:'Découvrir',
 })
 </script>

@@ -7,5 +7,5 @@
 <script setup lang="ts">
 import { ChevronDown } from 'lucide-vue-next'
 const props=defineProps<{items:{question:string;answer:string}[]}>();const open=ref(0)
-useHead({script:[{type:'application/ld+json',children:JSON.stringify({'@context':'https://schema.org','@type':'FAQPage',mainEntity:props.items.map(i=>({'@type':'Question',name:i.question,acceptedAnswer:{'@type':'Answer',text:i.answer}}))})}]})
+useHead(() => ({script:[{type:'application/ld+json',innerHTML:JSON.stringify({'@context':'https://schema.org','@type':'FAQPage',mainEntity:props.items.map(i=>({'@type':'Question',name:i.question,acceptedAnswer:{'@type':'Answer',text:i.answer}}))})}]}))
 </script>

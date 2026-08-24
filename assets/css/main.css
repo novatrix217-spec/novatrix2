@@ -26,24 +26,25 @@
   --radius-lg: 20px;
 
   /* ============================================================
-     TOKENS J0 — nouvelle palette (refonte UI/UX, brief validé
-     REFONTE-UIUX-NOVATRIX-2026-08-23-01). Non appliqués aux
-     composants à ce stade : simples variables disponibles pour
-     les jalons suivants (J1+). Les tokens ci-dessus (--primary,
-     --gold, --surface, etc.) restent inchangés et actifs.
+     TOKENS J1 — identité visuelle globale (brief validé
+     REFONTE-UIUX-NOVATRIX-2026-08-23-01). Valeurs CLAIRES par
+     défaut (mode clair). Les valeurs SOMBRES correspondantes sont
+     déclarées dans le bloc .dark ci-dessous (ne pas dupliquer ici).
+     Les tokens legacy ci-dessus (--primary, --gold, --surface,
+     etc.) restent inchangés et actifs.
      ============================================================ */
-  --bg-void: #0A0908;
-  --bg-surface: #17140F;
-  --bg-elevated: #211C15;
-  --text-primary: #F7F5F2;
-  --text-secondary: #948D7F;
-  --accent: #F5B419;
-  --accent-hover: #FFCA3D;
-  --accent-active: #D99E12;
-  --accent-soft: rgba(245, 180, 25, .12);
-  --ink-on-accent: #0A0908;
-  --border-subtle: rgba(247, 245, 242, .08);
-  --border-strong: #676259;
+  --bg-void: #F3F0EA;
+  --bg-surface: #FBF9F5;
+  --bg-elevated: #FFFEFB;
+  --text-primary: #211C15;
+  --text-secondary: #72674F;
+  --accent: #885D07;
+  --accent-hover: #6F4C06;
+  --accent-active: #583C04;
+  --accent-soft: rgba(245, 180, 25, .14);
+  --ink-on-accent: #FFFDF8;
+  --border-subtle: rgba(33, 28, 21, .08);
+  --border-strong: #867A65;
 }
 
 .dark {
@@ -62,6 +63,22 @@
   --elev-2: 0 1px 2px rgba(0, 0, 0, .5), 0 8px 24px rgba(0, 0, 0, .4);
   --elev-3: 0 2px 4px rgba(0, 0, 0, .5), 0 18px 48px rgba(0, 0, 0, .45);
   color-scheme: dark;
+
+  /* ============================================================
+     TOKENS J1 — valeurs SOMBRES (déplacées depuis :root, ne pas dupliquer)
+     ============================================================ */
+  --bg-void: #0A0908;
+  --bg-surface: #17140F;
+  --bg-elevated: #211C15;
+  --text-primary: #F7F5F2;
+  --text-secondary: #948D7F;
+  --accent: #F5B419;
+  --accent-hover: #FFCA3D;
+  --accent-active: #D99E12;
+  --accent-soft: rgba(245, 180, 25, .12);
+  --ink-on-accent: #0A0908;
+  --border-subtle: rgba(247, 245, 242, .08);
+  --border-strong: #676259;
 }
 
 * { border-color: var(--border); }
@@ -74,7 +91,7 @@ body {
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
 }
-h1, h2, h3, h4, h5, h6 { font-family: 'Space Grotesk', sans-serif; }
+h1, h2, h3, h4, h5, h6 { font-family: 'Bricolage Grotesque', sans-serif; }
 button, a, input, textarea, select { font: inherit; }
 button, a { -webkit-tap-highlight-color: transparent; }
 /* Stroke d'icônes Lucide calibré (le stroke par défaut 2 est le tell n°1 du template) */
@@ -109,7 +126,9 @@ svg.lucide { stroke-width: 1.6; }
     -webkit-background-clip: text; background-clip: text; color: transparent;
   }
   .gradient-action { background: linear-gradient(135deg, #6d28d9, #c026d3); }
-  .btn-primary { @apply gradient-action inline-flex min-h-12 items-center justify-center gap-2 rounded-xl px-6 py-3 text-sm font-bold text-white shadow-lg shadow-violet-950/20 transition duration-300 hover:-translate-y-0.5 hover:shadow-xl disabled:cursor-not-allowed disabled:opacity-60; }
+  /* CTA principal partagé — tokens J0/J1 : fond --accent, texte --ink-on-accent
+     (jamais de blanc pur sur --accent, contrainte AA du designer). */
+  .btn-primary { @apply inline-flex min-h-12 items-center justify-center gap-2 rounded-xl bg-[var(--accent)] px-6 py-3 text-sm font-bold text-[var(--ink-on-accent)] shadow-lg shadow-black/20 transition duration-300 hover:-translate-y-0.5 hover:bg-[var(--accent-hover)] hover:shadow-xl active:bg-[var(--accent-active)] disabled:cursor-not-allowed disabled:opacity-60; }
   .btn-secondary { @apply inline-flex min-h-12 items-center justify-center gap-2 rounded-xl border px-6 py-3 text-sm font-bold text-violet-700 transition duration-300 hover:-translate-y-0.5 hover:border-violet-400 hover:bg-violet-50 dark:text-violet-200 dark:hover:bg-white/5; }
   .card { @apply rounded-2xl border bg-white p-6 transition duration-300 dark:bg-[#160630]; box-shadow: var(--elev-2); }
   .card-hover { @apply hover:-translate-y-1.5 hover:border-violet-300; }
