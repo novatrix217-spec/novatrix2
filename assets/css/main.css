@@ -301,6 +301,122 @@ svg.lucide { stroke-width: 1.6; }
 .glow-soft { box-shadow: 0 0 0 0 rgba(124, 58, 237, .4); animation: glow-pulse 3s ease-in-out infinite; }
 @keyframes glow-pulse { 0%,100% { box-shadow: 0 0 0 0 rgba(124, 58, 237, .35); } 50% { box-shadow: 0 0 30px 4px rgba(124, 58, 237, .28); } }
 
+/* ============================================================
+   SECTION "PROBLÈMES RECONNUS" — ligne de progression scrub (J3,
+   brief REFONTE-UIUX-NOVATRIX-2026-08-23-01). Un seul ScrollTrigger
+   (scrub) écrit --progress (0→1) sur .problems-track depuis
+   pages/index.vue ; la ligne consomme cette variable via
+   scaleX/scaleY uniquement (jamais width/height). Nœuds et cartes
+   togglent .is-active au même onUpdate (cohérence ligne/points).
+   Positionnement 100% CSS Grid (pas de getBoundingClientRect) :
+   même grille accueille la ligne (ligne/colonne 1), les 3 nœuds et
+   les 3 cartes, garantissant l'alignement sans mesure JS fragile.
+   ============================================================ */
+.problems-track {
+  display: grid;
+  grid-template-columns: 20px 1fr;
+  column-gap: 1rem;
+  row-gap: 1.25rem;
+}
+.problems-line {
+  position: relative;
+  grid-column: 1;
+  grid-row: 1 / -1;
+  width: 2px;
+  justify-self: center;
+  align-self: stretch;
+  border-radius: 9999px;
+  background: var(--border-subtle);
+}
+.problems-line-fill {
+  position: absolute;
+  inset: 0;
+  border-radius: 9999px;
+  background: var(--accent);
+  transform-origin: top;
+  transform: scaleY(var(--progress, 0));
+  will-change: transform;
+}
+.problems-node {
+  position: relative;
+  grid-column: 1;
+  justify-self: center;
+  align-self: center;
+  width: 12px;
+  height: 12px;
+  border-radius: 9999px;
+  border: 1px solid var(--border-strong);
+  background: var(--bg-surface);
+  transition: border-color .35s cubic-bezier(.22,1,.36,1), box-shadow .35s cubic-bezier(.22,1,.36,1);
+}
+.problems-node:nth-of-type(1) { grid-row: 1; }
+.problems-node:nth-of-type(2) { grid-row: 2; }
+.problems-node:nth-of-type(3) { grid-row: 3; }
+.problems-node-fill {
+  position: absolute;
+  inset: 0;
+  border-radius: 9999px;
+  background: var(--accent);
+  opacity: 0;
+  transform: scale(.4);
+  transition: opacity .35s cubic-bezier(.22,1,.36,1), transform .35s cubic-bezier(.22,1,.36,1);
+}
+.problems-node.is-active { border-color: var(--accent); box-shadow: 0 0 0 6px var(--accent-soft); }
+.problems-node.is-active .problems-node-fill { opacity: 1; transform: scale(1); }
+
+.problems-card {
+  grid-column: 2;
+  border-left-width: 2px;
+  border-left-color: var(--border);
+  transition: border-color .35s cubic-bezier(.22,1,.36,1), box-shadow .35s cubic-bezier(.22,1,.36,1);
+}
+.problems-card:nth-of-type(1) { grid-row: 1; }
+.problems-card:nth-of-type(2) { grid-row: 2; }
+.problems-card:nth-of-type(3) { grid-row: 3; }
+.problems-card.is-active { border-left-color: var(--accent); box-shadow: var(--elev-3); }
+.problems-card-icon {
+  color: var(--text-secondary);
+  transition: color .35s cubic-bezier(.22,1,.36,1);
+}
+.problems-card.is-active .problems-card-icon { color: var(--accent); }
+
+@media (min-width: 768px) {
+  .problems-track {
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: 24px auto;
+    column-gap: 1.25rem;
+    row-gap: 1.25rem;
+  }
+  .problems-line {
+    grid-column: 1 / -1;
+    grid-row: 1;
+    width: 100%;
+    height: 2px;
+    justify-self: stretch;
+    align-self: center;
+  }
+  .problems-line-fill { transform-origin: left; transform: scaleX(var(--progress, 0)); }
+  /* Sélecteurs :nth-of-type (et non `.problems-node`/`.problems-card` seuls) pour égaler
+     la spécificité des règles mobiles ci-dessus (lignes 352-354 / 373-375) : à spécificité
+     égale, ces règles desktop l'emportent par ordre de source. Avec un simple `.problems-node
+     { grid-row: 1 }` (spécificité inférieure à `.problems-node:nth-of-type(2)`), les nœuds/
+     cartes 2 et 3 restaient sur grid-row 2/3 (valeurs mobiles) au lieu de rejoindre la ligne
+     (row 1) / la rangée des cartes (row 2), d'où le chevauchement observé avec le texte. */
+  .problems-node:nth-of-type(1) { grid-row: 1; grid-column: 1; }
+  .problems-node:nth-of-type(2) { grid-row: 1; grid-column: 2; }
+  .problems-node:nth-of-type(3) { grid-row: 1; grid-column: 3; }
+  .problems-card {
+    border-left-width: 1px;
+    border-left-color: var(--border);
+    border-top-width: 2px;
+    border-top-color: var(--border);
+  }
+  .problems-card:nth-of-type(1) { grid-row: 2; grid-column: 1; }
+  .problems-card:nth-of-type(2) { grid-row: 2; grid-column: 2; }
+  .problems-card:nth-of-type(3) { grid-row: 2; grid-column: 3; }
+  .problems-card.is-active { border-left-color: var(--border); border-top-color: var(--accent); }
+}
+
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
   *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }

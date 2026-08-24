@@ -18,12 +18,25 @@
     </section>
 
     <!-- 2. Problèmes reconnus -->
-    <section class="section-pad">
+    <section ref="problemsSectionEl" class="section-pad">
       <div class="container-shell">
         <SectionHeading :kicker="t.problemsKicker" center :description="t.problemsDescription">{{ t.problemsTitle1 }} <span class="text-gradient">{{ t.problemsTitle2 }}</span></SectionHeading>
-        <div class="mt-12 grid gap-5 md:grid-cols-3">
-          <article v-for="item in problems" :key="item.title" class="card">
-            <component :is="item.icon" class="h-6 w-6 text-violet-700"/><h2 class="mt-5 text-xl font-bold">{{ item.title }}</h2><p class="mt-3 text-sm leading-6 text-[var(--muted)]">{{ item.text }}</p>
+        <div ref="problemsTrackEl" class="problems-track mt-12">
+          <div class="problems-line" aria-hidden="true"><span class="problems-line-fill"/></div>
+          <span
+            v-for="(item, index) in problems"
+            :key="`problem-node-${index}`"
+            :ref="(el) => setProblemNodeRef(el, index)"
+            class="problems-node"
+            aria-hidden="true"
+          ><span class="problems-node-fill"/></span>
+          <article
+            v-for="(item, index) in problems"
+            :key="item.title"
+            :ref="(el) => setProblemCardRef(el, index)"
+            class="card problems-card"
+          >
+            <component :is="item.icon" class="problems-card-icon h-6 w-6"/><h2 class="mt-5 text-xl font-bold">{{ item.title }}</h2><p class="mt-3 text-sm leading-6 text-[var(--muted)]">{{ item.text }}</p>
           </article>
         </div>
       </div>
@@ -94,8 +107,10 @@
 
 <script setup lang="ts">
 import { ArrowRight, Bot, Code2, MessageCircle, ShoppingCart, TimerOff, UserRoundX, Waypoints, Workflow } from 'lucide-vue-next'
+import type { ComponentPublicInstance } from 'vue'
 import gsap from 'gsap'
 import { CustomEase } from 'gsap/CustomEase'
+import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { demoProjects, demoTestimonials } from '~/shared/demo'
 import { hasCompleteProjectEnglish } from '~/shared/english-content'
 import type { PublicProject, PublicTestimonial } from '~/shared/types'
@@ -161,6 +176,72 @@ onMounted(() => {
   if (ctaLink) tl.to(ctaLink, { opacity: 1, y: 0, duration: 0.45, ease }, 0.73)
   if (auditNote) tl.to(auditNote, { opacity: 1, duration: 0.4, ease }, 0.85)
 })
+
+// Section "Problèmes reconnus" : ligne de progression scrub + 3 nœuds (cf. brief J3).
+// Un seul ScrollTrigger par section (scrub) écrit --progress sur .problems-track ; la ligne
+// consomme cette variable en CSS (scaleX desktop / scaleY mobile), jamais width/height.
+// Positionnement des nœuds/cartes en CSS Grid pur (cf. main.css), pas de mesure DOM ici.
+const problemsSectionEl = ref<HTMLElement | null>(null)
+const problemsTrackEl = ref<HTMLElement | null>(null)
+const problemNodeRefs = ref<(HTMLElement | null)[]>([null, null, null])
+const problemCardRefs = ref<(HTMLElement | null)[]>([null, null, null])
+const problemsReducedMotion = useReducedMotion()
+
+function setProblemNodeRef(el: Element | ComponentPublicInstance | null, index: number) {
+  problemNodeRefs.value[index] = el instanceof HTMLElement ? el : null
+}
+function setProblemCardRef(el: Element | ComponentPublicInstance | null, index: number) {
+  problemCardRefs.value[index] = el instanceof HTMLElement ? el : null
+}
+
+let problemsMatchMedia: gsap.MatchMedia | null = null
+
+onMounted(() => {
+  if (!import.meta.client) return
+  const section = problemsSectionEl.value
+  const track = problemsTrackEl.value
+  const nodes = problemNodeRefs.value
+  const cards = problemCardRefs.value
+  if (!section || !track || nodes.some(el => !el) || cards.some(el => !el)) return
+  const nodeEls = nodes as HTMLElement[]
+  const cardEls = cards as HTMLElement[]
+  // Seuils bon marché, à ajuster visuellement — mêmes points pour la ligne et les nœuds/cartes.
+  const thresholds = [0.15, 0.5, 0.85]
+
+  if (problemsReducedMotion.value) {
+    gsap.set(track, { '--progress': 1 })
+    nodeEls.forEach(el => el.classList.add('is-active'))
+    cardEls.forEach(el => el.classList.add('is-active'))
+    return
+  }
+
+  gsap.registerPlugin(ScrollTrigger)
+
+  problemsMatchMedia = gsap.matchMedia()
+  problemsMatchMedia.add({ isDesktop: '(min-width: 768px)', isMobile: '(max-width: 767.98px)' }, () => {
+    const st = ScrollTrigger.create({
+      trigger: section,
+      start: 'top 70%',
+      end: 'bottom 55%',
+      scrub: 0.4,
+      onUpdate: (self) => {
+        track.style.setProperty('--progress', String(self.progress))
+        thresholds.forEach((threshold, i) => {
+          const active = self.progress >= threshold
+          nodeEls[i]?.classList.toggle('is-active', active)
+          cardEls[i]?.classList.toggle('is-active', active)
+        })
+      },
+    })
+    return () => st.kill()
+  })
+})
+
+onBeforeUnmount(() => {
+  problemsMatchMedia?.revert()
+  problemsMatchMedia = null
+})
+
 const { data: projectsData } = await useFetch<{ items: PublicProject[] }>('/api/projects', { default: () => ({ items: demoProjects }) })
 const { data: testimonialsData } = await useFetch<{ items: PublicTestimonial[] }>('/api/testimonials', { default: () => ({ items: demoTestimonials }) })
 const featuredProjects = computed(() => {
