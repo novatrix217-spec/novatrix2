@@ -417,6 +417,114 @@ svg.lucide { stroke-width: 1.6; }
   .problems-card.is-active { border-left-color: var(--border); border-top-color: var(--accent); }
 }
 
+/* ============================================================
+   SECTION "OFFRE LOCOMOTIVE" (système d'acquisition) — panneau des
+   5 étapes + chemin graphique pinné en desktop (J4, brief
+   REFONTE-UIUX-NOVATRIX-2026-08-23-01). Même philosophie que J3
+   (.problems-*) : positionnement 100% CSS Grid, ligne consommée via
+   scaleY (jamais width/height), nœuds/étapes togglés par un seul
+   ScrollTrigger onUpdate qui écrit --progress sur .acquisition-track.
+   Layout identique en mobile et desktop (colonne ligne/nœuds étroite
+   + colonne étapes large) : seul le pin (desktop) diffère, pas la
+   structure de grille — contrairement à J3 qui bascule horizontal.
+   Hauteur fixe volontaire (anti-CLS pin) : les 5 lignes de la grille
+   se partagent --acq-track-h à parts égales ; le dot calcule sa
+   translation à partir de cette même variable (jamais de mesure DOM).
+   Valeurs à valider visuellement (cf. brief J4).
+   ============================================================ */
+.acquisition-track {
+  --acq-track-h: 32rem;
+  position: relative;
+  display: grid;
+  grid-template-columns: 32px 1fr;
+  grid-template-rows: repeat(5, 1fr);
+  column-gap: 1.1rem;
+  row-gap: 1rem;
+  align-items: stretch;
+  height: var(--acq-track-h);
+}
+.acquisition-line {
+  position: relative;
+  grid-column: 1;
+  grid-row: 1 / -1;
+  width: 2px;
+  height: 100%;
+  justify-self: center;
+  align-self: stretch;
+  border-radius: 9999px;
+  background: var(--border-subtle);
+}
+.acquisition-line-fill {
+  position: absolute;
+  inset: 0;
+  border-radius: 9999px;
+  background: var(--accent);
+  transform-origin: top;
+  transform: scaleY(var(--progress, 0));
+  will-change: transform;
+}
+.acquisition-dot {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: 11px;
+  height: 11px;
+  margin-left: -5.5px;
+  border-radius: 9999px;
+  background: var(--accent);
+  box-shadow: 0 0 12px 2px var(--accent-soft);
+  transform: translateY(calc(var(--progress, 0) * (var(--acq-track-h) - 11px)));
+  will-change: transform;
+}
+.acquisition-node {
+  position: relative;
+  grid-column: 1;
+  justify-self: center;
+  align-self: center;
+  display: grid;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 9999px;
+  border: 1px solid var(--border-strong);
+  background: var(--bg-surface);
+  color: var(--text-secondary);
+  transition: border-color .35s cubic-bezier(.22,1,.36,1), box-shadow .35s cubic-bezier(.22,1,.36,1), color .35s cubic-bezier(.22,1,.36,1);
+}
+.acquisition-node:nth-of-type(1) { grid-row: 1; }
+.acquisition-node:nth-of-type(2) { grid-row: 2; }
+.acquisition-node:nth-of-type(3) { grid-row: 3; }
+.acquisition-node:nth-of-type(4) { grid-row: 4; }
+.acquisition-node:nth-of-type(5) { grid-row: 5; }
+.acquisition-node.is-active { border-color: var(--accent); box-shadow: 0 0 0 6px var(--accent-soft); color: var(--accent); }
+
+/* Badge numéroté — correctif J4 : tokens J0/J1 (remplace bg-violet-600/10 text-violet-700 legacy) */
+.acquisition-step-index {
+  background: var(--accent-soft);
+  color: var(--accent);
+}
+
+.acquisition-step {
+  grid-column: 2;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  border-left-width: 2px;
+  border-left-color: var(--border);
+  background: var(--bg-elevated);
+  padding: 1rem 1.25rem;
+  opacity: .5;
+  transition: opacity .35s cubic-bezier(.22,1,.36,1), border-color .35s cubic-bezier(.22,1,.36,1), transform .35s cubic-bezier(.22,1,.36,1), box-shadow .35s cubic-bezier(.22,1,.36,1);
+}
+.acquisition-step:nth-of-type(1) { grid-row: 1; }
+.acquisition-step:nth-of-type(2) { grid-row: 2; }
+.acquisition-step:nth-of-type(3) { grid-row: 3; }
+.acquisition-step:nth-of-type(4) { grid-row: 4; }
+.acquisition-step:nth-of-type(5) { grid-row: 5; }
+.acquisition-step.is-active { opacity: 1; border-left-color: var(--accent); transform: translateX(4px); box-shadow: var(--elev-2); }
+
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
   *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }

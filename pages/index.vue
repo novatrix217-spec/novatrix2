@@ -43,18 +43,31 @@
     </section>
 
     <!-- 3. Offre locomotive -->
-    <section class="section-pad border-y bg-[var(--surface)]">
+    <section ref="acquisitionSectionEl" class="section-pad border-y bg-[var(--surface)]">
       <div class="container-shell grid items-center gap-12 lg:grid-cols-[.9fr_1.1fr]">
         <div>
           <SectionHeading :kicker="t.acquisitionKicker" :description="t.acquisitionDescription">{{ t.acquisitionTitle1 }} <span class="text-gradient">{{ t.acquisitionTitle2 }}</span></SectionHeading>
           <NuxtLink :to="localePath('/offres/acquisition')" class="btn-primary mt-8">{{ t.viewAcquisition }} <ArrowRight class="h-4 w-4"/></NuxtLink>
         </div>
-        <ol class="card !p-7 sm:!p-9">
-          <li v-for="(step,index) in acquisitionChain" :key="step.title" class="flex gap-4 border-b py-5 first:pt-0 last:border-0 last:pb-0">
-            <span class="grid h-9 w-9 shrink-0 place-items-center rounded-full bg-violet-600/10 font-mono text-xs font-bold text-violet-700">{{ index + 1 }}</span>
+        <div ref="acquisitionTrackEl" class="acquisition-track">
+          <div class="acquisition-line" aria-hidden="true"><span class="acquisition-line-fill"/><span class="acquisition-dot"/></div>
+          <span
+            v-for="(step, index) in acquisitionChain"
+            :key="`acquisition-node-${index}`"
+            :ref="(el) => setAcquisitionNodeRef(el, index)"
+            class="acquisition-node"
+            aria-hidden="true"
+          ><component :is="acquisitionIcons[index]" class="h-3.5 w-3.5"/></span>
+          <article
+            v-for="(step, index) in acquisitionChain"
+            :key="step.title"
+            :ref="(el) => setAcquisitionStepRef(el, index)"
+            class="acquisition-step"
+          >
+            <span class="acquisition-step-index grid h-9 w-9 shrink-0 place-items-center rounded-full font-mono text-xs font-bold">{{ index + 1 }}</span>
             <div><h2 class="font-bold">{{ step.title }}</h2><p class="mt-1 text-sm leading-6 text-[var(--muted)]">{{ step.text }}</p></div>
-          </li>
-        </ol>
+          </article>
+        </div>
       </div>
     </section>
 
@@ -106,7 +119,7 @@
 </template>
 
 <script setup lang="ts">
-import { ArrowRight, Bot, Code2, MessageCircle, ShoppingCart, TimerOff, UserRoundX, Waypoints, Workflow } from 'lucide-vue-next'
+import { ArrowRight, Bell, Bot, Code2, Database, MessageCircle, MousePointerClick, ShoppingCart, Target, TimerOff, TrendingUp, UserRoundX, Waypoints, Workflow } from 'lucide-vue-next'
 import type { ComponentPublicInstance } from 'vue'
 import gsap from 'gsap'
 import { CustomEase } from 'gsap/CustomEase'
@@ -240,6 +253,91 @@ onMounted(() => {
 onBeforeUnmount(() => {
   problemsMatchMedia?.revert()
   problemsMatchMedia = null
+})
+
+// Section "Offre locomotive" (système d'acquisition) : panneau des 5 étapes toujours visibles
+// + chemin graphique (ligne/nœuds/dot), avec pin desktop (cf. brief J4). Desktop (≥1024px) :
+// un seul ScrollTrigger pin:true — la colonne gauche (texte/CTA) n'est pas touchée par ce
+// timeline, reste cliquable pendant tout le pin. Mobile/tablette (<1024px) : même logique
+// (--progress + seuils sur les 5 nœuds/étapes) sans pin, pattern scrub de J3. Dispatch
+// isDesktop/isMobile via gsap.matchMedia(context.conditions), même pattern que HeroFlowViz.vue.
+const acquisitionSectionEl = ref<HTMLElement | null>(null)
+const acquisitionTrackEl = ref<HTMLElement | null>(null)
+const acquisitionNodeRefs = ref<(HTMLElement | null)[]>([null, null, null, null, null])
+const acquisitionStepRefs = ref<(HTMLElement | null)[]>([null, null, null, null, null])
+const acquisitionReducedMotion = useReducedMotion()
+const acquisitionIcons = [Target, MousePointerClick, Database, Bell, TrendingUp]
+
+function setAcquisitionNodeRef(el: Element | ComponentPublicInstance | null, index: number) {
+  acquisitionNodeRefs.value[index] = el instanceof HTMLElement ? el : null
+}
+function setAcquisitionStepRef(el: Element | ComponentPublicInstance | null, index: number) {
+  acquisitionStepRefs.value[index] = el instanceof HTMLElement ? el : null
+}
+
+let acquisitionMatchMedia: gsap.MatchMedia | null = null
+
+onMounted(() => {
+  if (!import.meta.client) return
+  const section = acquisitionSectionEl.value
+  const track = acquisitionTrackEl.value
+  const nodes = acquisitionNodeRefs.value
+  const steps = acquisitionStepRefs.value
+  if (!section || !track || nodes.some(el => !el) || steps.some(el => !el)) return
+  const nodeEls = nodes as HTMLElement[]
+  const stepEls = steps as HTMLElement[]
+  // Seuils identiques à J3 (adaptés à 5 items), répartis également.
+  const thresholds = [0.1, 0.3, 0.5, 0.7, 0.9]
+
+  if (acquisitionReducedMotion.value) {
+    gsap.set(track, { '--progress': 1 })
+    nodeEls.forEach(el => el.classList.add('is-active'))
+    stepEls.forEach(el => el.classList.add('is-active'))
+    return
+  }
+
+  gsap.registerPlugin(ScrollTrigger)
+
+  const applyProgress = (progress: number) => {
+    track.style.setProperty('--progress', String(progress))
+    thresholds.forEach((threshold, i) => {
+      const active = progress >= threshold
+      nodeEls[i]?.classList.toggle('is-active', active)
+      stepEls[i]?.classList.toggle('is-active', active)
+    })
+  }
+
+  acquisitionMatchMedia = gsap.matchMedia()
+  acquisitionMatchMedia.add({ isDesktop: '(min-width: 1024px)', isMobile: '(max-width: 1023.98px)' }, (context) => {
+    const conditions = context.conditions as { isDesktop: boolean; isMobile: boolean } | undefined
+    if (conditions?.isDesktop) {
+      // start: 'top top+=80' — 80px = hauteur du header fixe desktop (h-20, cf. SiteHeader.vue),
+      // pour que le panneau pinné ne parte pas sous le header. end: '+=350%' ~ 3.5 hauteurs
+      // d'écran, à valider visuellement (cf. brief J4).
+      const st = ScrollTrigger.create({
+        trigger: section,
+        pin: true,
+        start: 'top top+=80',
+        end: '+=350%',
+        scrub: 0.4,
+        onUpdate: (self) => applyProgress(self.progress),
+      })
+      return () => st.kill()
+    }
+    const st = ScrollTrigger.create({
+      trigger: section,
+      start: 'top 75%',
+      end: 'bottom 60%',
+      scrub: 0.4,
+      onUpdate: (self) => applyProgress(self.progress),
+    })
+    return () => st.kill()
+  })
+})
+
+onBeforeUnmount(() => {
+  acquisitionMatchMedia?.revert()
+  acquisitionMatchMedia = null
 })
 
 const { data: projectsData } = await useFetch<{ items: PublicProject[] }>('/api/projects', { default: () => ({ items: demoProjects }) })
