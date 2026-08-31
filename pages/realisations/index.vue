@@ -1,6 +1,18 @@
 <template><div><PageHero :kicker="t.kicker" :description="t.description">{{ t.title1 }} <span class="text-gradient">{{ t.title2 }}</span><template #actions><button type="button" class="btn-primary" @click="openCalendly">{{ $t('header.bookCall') }} <ArrowRight class="h-4 w-4"/></button></template></PageHero>
   <section class="section-pad"><div class="container-shell"><div class="flex flex-wrap gap-2"><button v-for="filter in filters" :key="filter.value" class="rounded-full border px-4 py-2 text-xs font-semibold transition" :class="active===filter.value?'gradient-action border-transparent text-white':'hover:border-violet-400'" @click="active=filter.value">{{ filter.label }}</button></div><div class="mt-10 grid gap-6 md:grid-cols-2 lg:grid-cols-3"><ProjectCard v-for="item in shown" :key="item.slug" :project="item"/></div><p v-if="!shown.length" class="py-16 text-center text-[var(--muted)]">{{ $t('realisations.empty') }}</p></div></section>
   <section class="section-pad border-t bg-[var(--surface)]"><div class="container-shell"><div class="reveal"><SectionHeading :kicker="t.testimonialsKicker" center :description="t.testimonialsDescription">{{ t.testimonialsTitle1 }} <span class="text-gradient">{{ t.testimonialsTitle2 }}</span></SectionHeading></div><div class="mt-12"><TestimonialWall :items="testimonials?.items||[]" :limit="6"/></div><p class="mt-8 text-center"><NuxtLink :to="localePath('/avis')" class="btn-secondary">{{ t.seeAll }} <ArrowRight class="h-4 w-4"/></NuxtLink></p></div></section>
+
+  <!-- Preuves d'acquisition chiffrées (tunnels de vente, dashboards) : placeholder explicite
+       tant qu'aucune donnée réelle publiable n'est disponible (cf. brief — pas d'invention). -->
+  <section class="section-pad">
+    <div class="container-shell">
+      <div class="mx-auto max-w-2xl rounded-2xl border border-dashed border-[var(--border-strong)] p-8 text-center">
+        <p class="text-xs font-semibold uppercase tracking-wide text-[var(--text-secondary)]">{{ t.moreProofLabel }}</p>
+        <p class="mt-3 text-sm leading-6 text-[var(--muted)]">{{ t.moreProofText }}</p>
+      </div>
+    </div>
+  </section>
+
   <CtaBand/></div></template>
 <script setup lang="ts">
 import { ArrowRight } from 'lucide-vue-next'
@@ -16,12 +28,14 @@ const t = computed(() => locale.value === 'en' ? {
   testimonialsKicker: 'client reviews', testimonialsTitle1: 'What they', testimonialsTitle2: 'say.',
   testimonialsDescription: 'Real feedback from clients we’ve worked with — imported from our ComeUp profile.',
   seeAll: 'See all reviews',
+  moreProofLabel: 'More proof to be added', moreProofText: 'Additional acquisition proof — sales funnels and dashboards — is being documented and will be added here as it becomes available.',
 } : {
   kicker: 'réalisations', title1: 'Ce qu’on a', title2: 'déjà construit.',
   description: 'Des systèmes réellement livrés — automatisations, agents IA et applications. Chaque fiche indique ce qui est confirmé et ce qui reste à documenter.',
   testimonialsKicker: 'avis clients', testimonialsTitle1: 'Ce qu’ils en', testimonialsTitle2: 'disent.',
   testimonialsDescription: 'Des retours réels de clients accompagnés — importés depuis notre profil ComeUp.',
   seeAll: 'Voir tous les avis',
+  moreProofLabel: 'D’autres preuves à venir', moreProofText: 'D’autres preuves d’acquisition — tunnels de vente et tableaux de bord — sont en cours de documentation et seront ajoutées ici dès qu’elles seront disponibles.',
 })
 const seoMeta = computed(() => locale.value === 'en'
   ? { title: 'Case studies', description: 'Automations, AI agents and applications delivered by NovatrixAI — real systems, not mockups.' }
