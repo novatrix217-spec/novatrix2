@@ -13,7 +13,7 @@
   </div>
 </template>
 <script setup lang="ts">
-const nodes=[{x:10,y:20,label:'Campagnes'},{x:10,y:50,label:'Leads'},{x:10,y:80,label:'Outils'},{x:34,y:17,label:'Tunnel'},{x:34,y:40,label:'Scoring'},{x:34,y:65,label:'Agents IA'},{x:34,y:87,label:'CRM'},{x:58,y:50,label:'Novatrix Core',core:true},{x:84,y:20,label:'Clients',out:true},{x:84,y:44,label:'Temps gagné',out:true},{x:84,y:69,label:'Croissance',out:true},{x:84,y:90,label:'Pilotage',out:true}]
+const nodes=[{x:10,y:20,label:'Campagnes'},{x:10,y:50,label:'Leads'},{x:10,y:80,label:'Outils'},{x:34,y:17,label:'Tunnel'},{x:34,y:40,label:'Scoring'},{x:34,y:65,label:'Agents IA'},{x:34,y:87,label:'CRM'},{x:58,y:50,label:'NovatrixAI',core:true},{x:84,y:20,label:'Clients',out:true},{x:84,y:44,label:'Temps gagné',out:true},{x:84,y:69,label:'Croissance',out:true},{x:84,y:90,label:'Pilotage',out:true}]
 const edges=[[10,20,34,17],[10,20,34,40],[10,50,34,40],[10,50,34,65],[10,80,34,65],[10,80,34,87],[34,17,58,50],[34,40,58,50],[34,65,58,50],[34,87,58,50],[58,50,84,20],[58,50,84,44],[58,50,84,69],[58,50,84,90]]
 const active=ref(0),box=ref<HTMLElement|null>(null),offset=ref({x:0,y:0}); let frame=0,last=0
 function loop(now:number){if(now-last>520){active.value=(active.value+1)%edges.length;last=now}frame=requestAnimationFrame(loop)}

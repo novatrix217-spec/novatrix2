@@ -55,6 +55,7 @@ const links = computed(() => [
   { label: t('nav.solutions'), to: '/offres' },
   { label: t('nav.useCases'), to: '/solutions' },
   { label: t('nav.realisations'), to: '/realisations' },
+  { label: t('nav.videoLab'), to: '/video-lab' },
   { label: t('nav.resources'), to: '/ressources' },
   { label: t('nav.about'), to: '/a-propos' },
 ])

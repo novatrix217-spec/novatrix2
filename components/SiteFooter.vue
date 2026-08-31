@@ -13,7 +13,10 @@
           <ul class="mt-5 space-y-3 text-sm">
             <li><NuxtLink :to="localePath('/offres/acquisition')" class="hover:text-[var(--accent)]">{{ $t('footer.acquisition') }}</NuxtLink></li>
             <li><NuxtLink :to="localePath('/offres/pilotage-ia')" class="hover:text-[var(--accent)]">{{ $t('footer.agentsIa') }}</NuxtLink></li>
+            <li><NuxtLink :to="localePath('/offres/novatrix-launch')" class="hover:text-[var(--accent)]">{{ $t('footer.novatrixLaunch') }}</NuxtLink></li>
+            <li><NuxtLink :to="localePath('/offres/retention-ecommerce')" class="hover:text-[var(--accent)]">{{ $t('footer.retentionEcommerce') }}</NuxtLink></li>
             <li><NuxtLink :to="localePath('/offres/creation-web-apps')" class="hover:text-[var(--accent)]">{{ $t('footer.webApps') }}</NuxtLink></li>
+            <li><NuxtLink :to="localePath('/video-lab')" class="hover:text-[var(--accent)]">{{ $t('footer.videoLab') }}</NuxtLink></li>
             <li><NuxtLink :to="localePath('/realisations')" class="hover:text-[var(--accent)]">{{ $t('footer.realisations') }}</NuxtLink></li>
             <li><NuxtLink :to="localePath('/avis')" class="hover:text-[var(--accent)]">{{ $t('footer.avis') }}</NuxtLink></li>
             <li><NuxtLink :to="localePath('/ressources')" class="hover:text-[var(--accent)]">{{ $t('footer.resources') }}</NuxtLink></li>
