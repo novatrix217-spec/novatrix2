@@ -3,7 +3,7 @@ import { ProjectModel } from '../../models/Project'
 import { ResourceModel } from '../../models/Resource'
 import { hasCompleteArticleEnglish, hasCompleteProjectEnglish, hasCompleteResourceEnglish } from '../../../shared/english-content'
 
-const fixed = ['/', '/offres', '/offres/acquisition', '/offres/pilotage-ia', '/offres/creation-web-apps', '/solutions', '/solutions/agent-whatsapp-ia', '/solutions/automatisation-n8n', '/solutions/relance-panier-abandonne', '/agence-ia-cotonou', '/realisations', '/avis', '/ressources', '/blog', '/formation', '/a-propos', '/contact', '/confidentialite']
+const fixed = ['/', '/offres', '/offres/acquisition', '/offres/pilotage-ia', '/offres/novatrix-launch', '/offres/retention-ecommerce', '/offres/creation-web-apps', '/solutions', '/solutions/agent-whatsapp-ia', '/solutions/automatisation-n8n', '/solutions/relance-panier-abandonne', '/agence-ia-cotonou', '/realisations', '/video-lab', '/avis', '/ressources', '/blog', '/formation', '/a-propos', '/contact', '/confidentialite']
 
 // Émet chaque route en français (racine) et en anglais (préfixe /en), avec les alternates
 // hreflang qui pointent l'une vers l'autre — évite le piège du faux bilingue (même contenu
@@ -28,7 +28,7 @@ export default defineSitemapEventHandler(async () => {
     const [articles, resources, projects] = await Promise.all([
       ArticleModel.find({ status: 'published' }).select('slug updatedAt titleEn excerptEn bodyEn categoryEn tags tagsEn readingTimeEn').lean(),
       ResourceModel.find({ published: true }).select('slug updatedAt titleEn descriptionEn sectorEn').lean(),
-      ProjectModel.find({ status: 'published' }).select('slug updatedAt titleEn categoryEn summaryEn challenge challengeEn solution solutionEn features featuresEn quoteBefore quoteBeforeEn quoteAfter quoteAfterEn').lean(),
+      ProjectModel.find({ status: 'published' }).select('slug updatedAt titleEn categoryEn summaryEn challenge challengeEn solution solutionEn features featuresEn results resultsEn quoteBefore quoteBeforeEn quoteAfter quoteAfterEn').lean(),
     ])
     return [
       ...fixed.flatMap(loc => withLocales(loc)),

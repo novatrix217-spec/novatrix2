@@ -23,13 +23,14 @@ export function hasCompleteResourceEnglish(input: unknown) {
 }
 
 export function hasCompleteProjectEnglish(input: unknown) {
-  const project = input as Partial<Pick<PublicProject, 'titleEn' | 'categoryEn' | 'summaryEn' | 'challenge' | 'challengeEn' | 'solution' | 'solutionEn' | 'features' | 'featuresEn' | 'quoteBefore' | 'quoteBeforeEn' | 'quoteAfter' | 'quoteAfterEn'>>
+  const project = input as Partial<Pick<PublicProject, 'titleEn' | 'categoryEn' | 'summaryEn' | 'challenge' | 'challengeEn' | 'solution' | 'solutionEn' | 'features' | 'featuresEn' | 'results' | 'resultsEn' | 'quoteBefore' | 'quoteBeforeEn' | 'quoteAfter' | 'quoteAfterEn'>>
   return hasText(project.titleEn)
     && hasText(project.categoryEn)
     && hasText(project.summaryEn)
     && (!hasText(project.challenge) || hasText(project.challengeEn))
     && (!hasText(project.solution) || hasText(project.solutionEn))
     && translatedListIsComplete(project.features, project.featuresEn)
+    && translatedListIsComplete(project.results, project.resultsEn)
     && (!hasText(project.quoteBefore?.text) || hasText(project.quoteBeforeEn?.text))
     && (!hasText(project.quoteAfter?.text) || hasText(project.quoteAfterEn?.text))
 }

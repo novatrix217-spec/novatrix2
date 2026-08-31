@@ -1,16 +1,31 @@
 <template><div v-if="project"><PageHero :kicker="lf(project.category,project.categoryEn)" :description="lf(project.summary,project.summaryEn)">{{ lf(project.title,project.titleEn) }}<template #actions><button type="button" class="btn-primary" @click="openCalendly">{{ t.similar }} <ArrowRight class="h-4 w-4"/></button><NuxtLink :to="localePath('/realisations')" class="btn-secondary">{{ t.back }}</NuxtLink></template></PageHero>
   <div v-if="coverUrl" class="container-shell"><img :src="coverUrl" :alt="lf(project.title,project.titleEn)" width="1200" height="675" class="-mt-10 mb-2 aspect-video w-full rounded-2xl object-cover shadow-[var(--elev-3)]" loading="lazy" decoding="async"/></div>
 
-  <section v-if="lf(project.challenge,project.challengeEn) || lf(project.solution,project.solutionEn)" class="section-pad">
+  <section class="section-pad">
     <div class="container-shell grid gap-10 lg:grid-cols-2">
-      <div v-if="lf(project.challenge,project.challengeEn)"><SectionHeading :kicker="t.challengeKicker">{{ t.challengeTitle1 }} <span class="text-gradient">{{ t.challengeTitle2 }}</span></SectionHeading><p class="mt-6 text-base leading-7 text-[var(--muted)]">{{ lf(project.challenge,project.challengeEn) }}</p><blockquote v-if="project.quoteBefore" class="mt-6 rounded-xl border-l-4 border-violet-500 bg-[var(--surface)] p-5 text-sm italic leading-6 text-[var(--muted)]">« {{ lf(project.quoteBefore.text, project.quoteBeforeEn?.text) }} »<footer v-if="project.quoteBefore.author" class="mt-2 text-xs font-semibold not-italic text-[var(--ink)]">— {{ project.quoteBefore.author }}</footer></blockquote></div>
-      <div v-if="lf(project.solution,project.solutionEn)"><SectionHeading :kicker="t.solutionKicker">{{ t.solutionTitle1 }} <span class="text-gradient">{{ t.solutionTitle2 }}</span></SectionHeading><p class="mt-6 text-base leading-7 text-[var(--muted)]">{{ lf(project.solution,project.solutionEn) }}</p><blockquote v-if="project.quoteAfter" class="mt-6 rounded-xl border-l-4 border-[var(--teal)] bg-[var(--surface)] p-5 text-sm italic leading-6 text-[var(--muted)]">« {{ lf(project.quoteAfter.text, project.quoteAfterEn?.text) }} »<footer v-if="project.quoteAfter.author" class="mt-2 text-xs font-semibold not-italic text-[var(--ink)]">— {{ project.quoteAfter.author }}</footer></blockquote></div>
+      <div><SectionHeading :kicker="t.challengeKicker">{{ t.challengeTitle1 }} <span class="text-gradient">{{ t.challengeTitle2 }}</span></SectionHeading><p class="mt-6 text-base leading-7 text-[var(--muted)]">{{ lf(project.challenge,project.challengeEn) || lf(project.summary,project.summaryEn) }}</p><blockquote v-if="project.quoteBefore" class="mt-6 rounded-xl border-l-4 border-violet-500 bg-[var(--surface)] p-5 text-sm italic leading-6 text-[var(--muted)]">« {{ lf(project.quoteBefore.text, project.quoteBeforeEn?.text) }} »<footer v-if="project.quoteBefore.author" class="mt-2 text-xs font-semibold not-italic text-[var(--ink)]">— {{ project.quoteBefore.author }}</footer></blockquote></div>
+      <div><SectionHeading :kicker="t.solutionKicker">{{ t.solutionTitle1 }} <span class="text-gradient">{{ t.solutionTitle2 }}</span></SectionHeading><p class="mt-6 text-base leading-7 text-[var(--muted)]">{{ lf(project.solution,project.solutionEn) || lf(project.summary,project.summaryEn) }}</p><blockquote v-if="project.quoteAfter" class="mt-6 rounded-xl border-l-4 border-[var(--teal)] bg-[var(--surface)] p-5 text-sm italic leading-6 text-[var(--muted)]">« {{ lf(project.quoteAfter.text, project.quoteAfterEn?.text) }} »<footer v-if="project.quoteAfter.author" class="mt-2 text-xs font-semibold not-italic text-[var(--ink)]">— {{ project.quoteAfter.author }}</footer></blockquote></div>
     </div>
   </section>
 
   <section v-if="localizedFeatures.length" class="section-pad border-y bg-[var(--surface)]">
     <div class="container-shell"><SectionHeading :kicker="t.featuresKicker" center>{{ t.featuresTitle1 }} <span class="text-gradient">{{ t.featuresTitle2 }}</span></SectionHeading>
       <div class="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3"><div v-for="feature in localizedFeatures" :key="feature" class="card flex items-start gap-3"><Check class="mt-0.5 h-5 w-5 shrink-0 text-[var(--teal)]"/><span class="text-sm">{{ feature }}</span></div></div>
+    </div>
+  </section>
+
+  <section v-if="localizedResults.length || project.resultsMetrics?.length" class="section-pad">
+    <div class="container-shell">
+      <SectionHeading :kicker="t.resultsKicker" center>{{ t.resultsTitle1 }} <span class="text-gradient">{{ t.resultsTitle2 }}</span></SectionHeading>
+      <div v-if="project.resultsMetrics?.length" class="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+        <div v-for="metric in project.resultsMetrics" :key="metric.label" class="card text-center">
+          <p class="font-heading text-3xl font-bold text-violet-700 dark:text-violet-300">{{ metric.value }}</p>
+          <p class="mt-2 text-sm text-[var(--muted)]">{{ metric.label }}</p>
+        </div>
+      </div>
+      <ul v-if="localizedResults.length" class="mx-auto mt-10 max-w-2xl space-y-3">
+        <li v-for="item in localizedResults" :key="item" class="flex items-start gap-3 text-sm leading-6"><Check class="mt-1 h-4 w-4 shrink-0 text-[var(--teal)]"/>{{ item }}</li>
+      </ul>
     </div>
   </section>
 
@@ -40,6 +55,7 @@ const seoMeta=computed(()=>({title:lf(project.value!.title,project.value!.titleE
 useSeoMeta({ title: () => seoMeta.value.title, description: () => seoMeta.value.description, ogImage: () => coverUrl.value||undefined })
 const { openCalendly } = useCalendly()
 const localizedFeatures=computed(()=>lf(project.value?.features,project.value?.featuresEn)||[])
+const localizedResults=computed(()=>lf(project.value?.results,project.value?.resultsEn)||[])
 const t=computed(()=>locale.value==='en'?{
   similar:'Book my free audit', back:'Back to case studies',
   challengeKicker:'the challenge', challengeTitle1:'What was', challengeTitle2:'the problem.',

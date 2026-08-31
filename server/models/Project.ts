@@ -21,6 +21,8 @@ const ProjectSchema=new Schema({
   quoteAfter:QuoteSchema,
   quoteAfterEn:QuoteSchema,
   resultsMetrics:{type:[MetricSchema],default:[]},
+  results:{type:[String],default:[]},
+  resultsEn:{type:[String],default:[]},
   tools:{type:[String],default:[]},
   deliveryDays:Number,
   coverImageKey:String,
