@@ -12,6 +12,10 @@
       <div class="grid grid-cols-2 gap-3"><input v-model="form.quoteBeforeText" class="field" placeholder="Citation « avant » (optionnel)"/><input v-model="form.quoteBeforeAuthor" class="field" placeholder="Auteur"/></div>
       <div class="grid grid-cols-2 gap-3"><input v-model="form.quoteAfterText" class="field" placeholder="Citation « après » (optionnel)"/><input v-model="form.quoteAfterAuthor" class="field" placeholder="Auteur"/></div>
       <textarea v-model="form.metricsRaw" class="field min-h-16 py-3" placeholder="Résultats chiffrés : une ligne par métrique, format « valeur | libellé »"/>
+      <div class="grid grid-cols-2 gap-3">
+        <textarea v-model="form.resultsRaw" class="field min-h-20 py-3" placeholder="Résultats (FR), une ligne par résultat"/>
+        <textarea v-model="form.resultsEnRaw" class="field min-h-20 py-3" placeholder="Résultats (EN), une ligne par résultat"/>
+      </div>
       <input v-model="form.toolsRaw" class="field" placeholder="Outils, séparés par des virgules"/>
       <div class="flex items-center gap-4"><select v-model="form.status" class="field"><option value="draft">Brouillon</option><option value="published">Publié</option></select><label class="flex items-center gap-2 text-sm"><input v-model="form.featured" type="checkbox"/>Mettre en avant</label></div>
       <p v-if="notice" class="text-sm text-violet-700">{{ notice }}</p>
@@ -32,19 +36,21 @@ definePageMeta({middleware:'admin',layout:'admin',i18n:{locales:['fr']}})
 useSeoMeta({title:'Réalisations',robots:'noindex,nofollow'})
 const {data,refresh}=await useFetch<any>('/api/admin/projects')
 const notice=ref(''),editingId=ref('')
-const blank=()=>({title:'',category:'Acquisition',deliveryDays:'',summary:'',challenge:'',solution:'',featuresRaw:'',quoteBeforeText:'',quoteBeforeAuthor:'',quoteAfterText:'',quoteAfterAuthor:'',metricsRaw:'',toolsRaw:'',status:'draft',featured:false,coverImageKey:''})
+const blank=()=>({title:'',category:'Acquisition',deliveryDays:'',summary:'',challenge:'',solution:'',featuresRaw:'',quoteBeforeText:'',quoteBeforeAuthor:'',quoteAfterText:'',quoteAfterAuthor:'',metricsRaw:'',resultsRaw:'',resultsEnRaw:'',toolsRaw:'',status:'draft',featured:false,coverImageKey:''})
 const form=reactive(blank())
 const cld=useCloudinaryUrl()
 const coverUrl=computed(()=>cld(form.coverImageKey,'w_240,h_160,c_fill'))
 const coverNotice=ref('')
 async function uploadCover(e:Event){const file=(e.target as HTMLInputElement).files?.[0];if(!file)return;const body=new FormData();body.append('file',file);coverNotice.value='Téléversement…';try{const r=await $fetch<any>('/api/admin/upload?folder=projects',{method:'POST',body});form.coverImageKey=r.key;coverNotice.value='Image envoyée.'}catch(err:any){coverNotice.value=err?.data?.statusMessage||'Échec du téléversement'}}
 function resetForm(){editingId.value='';Object.assign(form,blank());notice.value='';coverNotice.value=''}
-function edit(item:any){editingId.value=item._id;Object.assign(form,{title:item.title,category:item.category,deliveryDays:item.deliveryDays||'',summary:item.summary,challenge:item.challenge||'',solution:item.solution||'',featuresRaw:(item.features||[]).join('\n'),quoteBeforeText:item.quoteBefore?.text||'',quoteBeforeAuthor:item.quoteBefore?.author||'',quoteAfterText:item.quoteAfter?.text||'',quoteAfterAuthor:item.quoteAfter?.author||'',metricsRaw:(item.resultsMetrics||[]).map((m:any)=>`${m.value} | ${m.label}`).join('\n'),toolsRaw:(item.tools||[]).join(', '),status:item.status,featured:!!item.featured,coverImageKey:item.coverImageKey||''})}
+function edit(item:any){editingId.value=item._id;Object.assign(form,{title:item.title,category:item.category,deliveryDays:item.deliveryDays||'',summary:item.summary,challenge:item.challenge||'',solution:item.solution||'',featuresRaw:(item.features||[]).join('\n'),quoteBeforeText:item.quoteBefore?.text||'',quoteBeforeAuthor:item.quoteBefore?.author||'',quoteAfterText:item.quoteAfter?.text||'',quoteAfterAuthor:item.quoteAfter?.author||'',metricsRaw:(item.resultsMetrics||[]).map((m:any)=>`${m.value} | ${m.label}`).join('\n'),resultsRaw:(item.results||[]).join('\n'),resultsEnRaw:(item.resultsEn||[]).join('\n'),toolsRaw:(item.tools||[]).join(', '),status:item.status,featured:!!item.featured,coverImageKey:item.coverImageKey||''})}
 function payload(){
   const features=form.featuresRaw.split('\n').map(s=>s.trim()).filter(Boolean)
   const tools=form.toolsRaw.split(',').map(s=>s.trim()).filter(Boolean)
   const resultsMetrics=form.metricsRaw.split('\n').map(s=>s.trim()).filter(Boolean).map(line=>{const [value,...rest]=line.split('|');return {value:(value||'').trim(),label:rest.join('|').trim()}}).filter(m=>m.value&&m.label)
-  const body:any={title:form.title,category:form.category,summary:form.summary,features,tools,resultsMetrics,status:form.status,featured:form.featured,coverImageKey:form.coverImageKey||undefined}
+  const results=form.resultsRaw.split('\n').map(s=>s.trim()).filter(Boolean)
+  const resultsEn=form.resultsEnRaw.split('\n').map(s=>s.trim()).filter(Boolean)
+  const body:any={title:form.title,category:form.category,summary:form.summary,features,tools,resultsMetrics,results,resultsEn,status:form.status,featured:form.featured,coverImageKey:form.coverImageKey||undefined}
   if(form.deliveryDays)body.deliveryDays=Number(form.deliveryDays)
   if(form.challenge)body.challenge=form.challenge
   if(form.solution)body.solution=form.solution
