@@ -4,7 +4,7 @@ export default defineI18nConfig(() => ({
   fallbackLocale: 'fr',
   messages: {
     fr: {
-      nav: { home: 'Accueil', offers: 'Offres', solutions: 'Solutions', useCases: 'Cas d’usage', realisations: 'Réalisations', resources: 'Ressources', blog: 'Blog', formation: 'Formation', about: 'Agence', contact: 'Contact', avis: 'Avis clients' },
+      nav: { home: 'Accueil', offers: 'Offres', solutions: 'Solutions', useCases: 'Cas d’usage', realisations: 'Réalisations', resources: 'Ressources', blog: 'Blog', formation: 'Formation', about: 'Agence', contact: 'Contact', avis: 'Avis clients', videoLab: 'Vidéo Lab' },
       header: { bookCall: 'Réserver mon audit gratuit', openMenu: 'Ouvrir le menu', closeMenu: 'Fermer le menu', mobileNav: 'Navigation mobile', darkMode: 'Activer le mode sombre', lightMode: 'Activer le mode clair', changeTheme: 'Changer de thème', switchLang: 'Switch to English' },
       footer: {
         tagline: "Des systèmes complets pour acquérir des clients, piloter l'activité et créer les produits numériques qui font avancer l'entreprise.",
@@ -13,7 +13,7 @@ export default defineI18nConfig(() => ({
         startText: 'Un audit pour cartographier le vrai problème et la chaîne à construire.',
         bookCall: 'Réserver mon audit gratuit', privacy: 'Confidentialité', contact: 'Contact',
         rights: 'Tous droits réservés.',
-        acquisition: 'Acquisition', agentsIa: 'Agents IA', webApps: 'Web & applications',
+        acquisition: 'Acquisition', agentsIa: 'Agents IA', webApps: 'Web & applications', videoLab: 'Vidéo Lab', novatrixLaunch: 'Novatrix Launch', retentionEcommerce: 'Rétention e-commerce',
         realisations: 'Réalisations', avis: 'Avis clients', resources: 'Ressources', blog: 'Blog', formation: 'Formation',
         agentWhatsapp: 'Agent IA WhatsApp', automationN8n: 'Automatisation n8n', cartRecovery: 'Relance panier abandonné', cotonouAgency: 'Agence IA à Cotonou',
       },
@@ -22,11 +22,11 @@ export default defineI18nConfig(() => ({
       blogList: { empty: 'Aucun article publié pour le moment.' },
       resourcesList: { all: 'Toutes', empty: 'Aucune ressource dans cette catégorie.' },
       avisPage: { empty: 'Les avis arrivent bientôt.' },
-      cta: { kicker: '// prochaine étape', button: 'Réserver mon audit gratuit', disclaimer: 'Sans engagement et sans outil imposé.', defaultTitle: 'Repérez la première rupture de votre parcours prospect.', defaultText: 'L’audit cartographie le parcours actuel et clarifie la prochaine décision utile.' },
+      cta: { kicker: '// prochaine étape', button: 'Réserver mon audit gratuit', whatsapp: 'Nous écrire sur WhatsApp', disclaimer: 'Sans engagement et sans outil imposé.', defaultTitle: 'Repérez la première rupture de votre parcours prospect.', defaultText: 'L’audit cartographie le parcours actuel et clarifie la prochaine décision utile.' },
       heroFlow: { lead: 'Lead entrant', agent: 'Agent IA', meeting: 'RDV confirmé' },
     },
     en: {
-      nav: { home: 'Home', offers: 'Services', solutions: 'Solutions', useCases: 'Use cases', realisations: 'Case studies', resources: 'Resources', blog: 'Blog', formation: 'Workshop', about: 'Agency', contact: 'Contact', avis: 'Reviews' },
+      nav: { home: 'Home', offers: 'Services', solutions: 'Solutions', useCases: 'Use cases', realisations: 'Case studies', resources: 'Resources', blog: 'Blog', formation: 'Workshop', about: 'Agency', contact: 'Contact', avis: 'Reviews', videoLab: 'Video Lab' },
       header: { bookCall: 'Book my free audit', openMenu: 'Open menu', closeMenu: 'Close menu', mobileNav: 'Mobile navigation', darkMode: 'Switch to dark mode', lightMode: 'Switch to light mode', changeTheme: 'Change theme', switchLang: 'Voir en français' },
       footer: {
         tagline: 'Complete systems to acquire clients, run the business, and build the digital products that move it forward.',
@@ -35,7 +35,7 @@ export default defineI18nConfig(() => ({
         startText: 'An audit to map the real problem and the system to build.',
         bookCall: 'Book my free audit', privacy: 'Privacy', contact: 'Contact',
         rights: 'All rights reserved.',
-        acquisition: 'Acquisition', agentsIa: 'AI agents', webApps: 'Web & apps',
+        acquisition: 'Acquisition', agentsIa: 'AI agents', webApps: 'Web & apps', videoLab: 'Video Lab', novatrixLaunch: 'Novatrix Launch', retentionEcommerce: 'E-commerce retention',
         realisations: 'Case studies', avis: 'Reviews', resources: 'Resources', blog: 'Blog', formation: 'Workshop',
         agentWhatsapp: 'WhatsApp AI agent', automationN8n: 'n8n automation', cartRecovery: 'Cart recovery', cotonouAgency: 'AI agency in Cotonou',
       },
@@ -44,7 +44,7 @@ export default defineI18nConfig(() => ({
       blogList: { empty: 'No article published yet.' },
       resourcesList: { all: 'All', empty: 'No resource in this category yet.' },
       avisPage: { empty: 'Reviews are coming soon.' },
-      cta: { kicker: '// next step', button: 'Book my free audit', disclaimer: 'No commitment and no tool imposed.', defaultTitle: 'Find the first break in your prospect journey.', defaultText: 'The audit maps the current journey and clarifies the next useful decision.' },
+      cta: { kicker: '// next step', button: 'Book my free audit', whatsapp: 'Message us on WhatsApp', disclaimer: 'No commitment and no tool imposed.', defaultTitle: 'Find the first break in your prospect journey.', defaultText: 'The audit maps the current journey and clarifies the next useful decision.' },
       heroFlow: { lead: 'Incoming lead', agent: 'AI Agent', meeting: 'Meeting booked' },
     },
   },
