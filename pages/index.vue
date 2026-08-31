@@ -11,6 +11,10 @@
             <button ref="heroCtaBtnEl" type="button" class="btn-primary !px-7 !py-4" @click="openCalendly">{{ $t('header.bookCall') }} <ArrowRight class="h-4 w-4"/></button>
             <NuxtLink ref="heroCtaLinkEl" :to="localePath('/realisations')" class="inline-flex min-h-12 items-center justify-center rounded-xl border border-white/20 px-6 py-3 text-sm font-bold text-white transition hover:bg-white/10">{{ t.seeProof }}</NuxtLink>
           </div>
+          <div class="mt-4 flex flex-col gap-2 sm:flex-row sm:items-center sm:gap-4">
+            <a href="#reservation" class="inline-flex items-center gap-2 text-sm font-bold text-white underline decoration-white/40 underline-offset-4 transition hover:decoration-white">{{ t.contactUs }} <ArrowRight class="h-3.5 w-3.5"/></a>
+            <a :href="whatsappUrl" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 text-sm font-semibold text-white/70 transition hover:text-white"><SvgWhatsappSVG class="h-4 w-4 shrink-0"/>{{ t.whatsappUs }}</a>
+          </div>
           <p ref="heroAuditNoteEl" class="mt-5 max-w-xl text-xs leading-5 text-white/55">{{ t.auditNote }}</p>
         </div>
         <HeroFlowViz class="mt-6 lg:mt-0 lg:h-[480px]" />
@@ -119,11 +123,10 @@
 </template>
 
 <script setup lang="ts">
-import { ArrowRight, Bell, Bot, Code2, Database, MessageCircle, MousePointerClick, ShoppingCart, Target, TimerOff, TrendingUp, UserRoundX, Waypoints, Workflow } from 'lucide-vue-next'
+import { ArrowRight, Bell, Bot, Clapperboard, Code2, Database, MessageCircle, MousePointerClick, Rocket, ShoppingCart, Target, TimerOff, TrendingUp, UserRoundX, Waypoints, Workflow } from 'lucide-vue-next'
 import type { ComponentPublicInstance } from 'vue'
 import gsap from 'gsap'
 import { CustomEase } from 'gsap/CustomEase'
-import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { demoProjects, demoTestimonials } from '~/shared/demo'
 import { hasCompleteProjectEnglish } from '~/shared/english-content'
 import type { PublicProject, PublicTestimonial } from '~/shared/types'
@@ -131,6 +134,7 @@ import type { PublicProject, PublicTestimonial } from '~/shared/types'
 const { locale } = useI18n()
 const localePath = useLocalePath()
 const { openCalendly } = useCalendly()
+const { whatsappUrl } = useWhatsapp()
 const revealRoot = useScrollReveal()
 
 // Révélation séquencée du bloc texte hero à l'arrivée (one-shot, cf. brief J2 Hero).
@@ -190,9 +194,11 @@ onMounted(() => {
   if (auditNote) tl.to(auditNote, { opacity: 1, duration: 0.4, ease }, 0.85)
 })
 
-// Section "Problèmes reconnus" : ligne de progression scrub + 3 nœuds (cf. brief J3).
-// Un seul ScrollTrigger par section (scrub) écrit --progress sur .problems-track ; la ligne
-// consomme cette variable en CSS (scaleX desktop / scaleY mobile), jamais width/height.
+// Section "Problèmes reconnus" : ligne de progression + 3 nœuds, activés par paliers au
+// scroll normal (IntersectionObserver, remplace l'ancien ScrollTrigger scrub qui figeait le
+// molette/trackpad — cf. diagnostic performance). --progress est écrit par palier (0, .5, 1)
+// sur .problems-track ; la ligne consomme cette variable en CSS (scaleX desktop / scaleY
+// mobile) avec une transition CSS douce pour garder la fluidité visuelle du remplissage.
 // Positionnement des nœuds/cartes en CSS Grid pur (cf. main.css), pas de mesure DOM ici.
 const problemsSectionEl = ref<HTMLElement | null>(null)
 const problemsTrackEl = ref<HTMLElement | null>(null)
@@ -207,7 +213,7 @@ function setProblemCardRef(el: Element | ComponentPublicInstance | null, index: 
   problemCardRefs.value[index] = el instanceof HTMLElement ? el : null
 }
 
-let problemsMatchMedia: gsap.MatchMedia | null = null
+let problemsObserver: IntersectionObserver | null = null
 
 onMounted(() => {
   if (!import.meta.client) return
@@ -218,49 +224,43 @@ onMounted(() => {
   if (!section || !track || nodes.some(el => !el) || cards.some(el => !el)) return
   const nodeEls = nodes as HTMLElement[]
   const cardEls = cards as HTMLElement[]
-  // Seuils bon marché, à ajuster visuellement — mêmes points pour la ligne et les nœuds/cartes.
-  const thresholds = [0.15, 0.5, 0.85]
 
-  if (problemsReducedMotion.value) {
-    gsap.set(track, { '--progress': 1 })
+  const activateUpTo = (index: number) => {
+    track.style.setProperty('--progress', String((index + 1) / nodeEls.length))
+    nodeEls.forEach((el, i) => el.classList.toggle('is-active', i <= index))
+    cardEls.forEach((el, i) => el.classList.toggle('is-active', i <= index))
+  }
+
+  if (problemsReducedMotion.value || window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    track.style.setProperty('--progress', '1')
     nodeEls.forEach(el => el.classList.add('is-active'))
     cardEls.forEach(el => el.classList.add('is-active'))
     return
   }
 
-  gsap.registerPlugin(ScrollTrigger)
+  problemsObserver = new IntersectionObserver((entries) => {
+    for (const entry of entries) {
+      if (!entry.isIntersecting) continue
+      const index = cardEls.indexOf(entry.target as HTMLElement)
+      if (index === -1) continue
+      activateUpTo(index)
+      problemsObserver?.unobserve(entry.target)
+    }
+  }, { threshold: 0.5, rootMargin: '0px 0px -10% 0px' })
 
-  problemsMatchMedia = gsap.matchMedia()
-  problemsMatchMedia.add({ isDesktop: '(min-width: 768px)', isMobile: '(max-width: 767.98px)' }, () => {
-    const st = ScrollTrigger.create({
-      trigger: section,
-      start: 'top 70%',
-      end: 'bottom 55%',
-      scrub: 0.4,
-      onUpdate: (self) => {
-        track.style.setProperty('--progress', String(self.progress))
-        thresholds.forEach((threshold, i) => {
-          const active = self.progress >= threshold
-          nodeEls[i]?.classList.toggle('is-active', active)
-          cardEls[i]?.classList.toggle('is-active', active)
-        })
-      },
-    })
-    return () => st.kill()
-  })
+  cardEls.forEach(el => problemsObserver!.observe(el))
 })
 
 onBeforeUnmount(() => {
-  problemsMatchMedia?.revert()
-  problemsMatchMedia = null
+  problemsObserver?.disconnect()
+  problemsObserver = null
 })
 
-// Section "Offre locomotive" (système d'acquisition) : panneau des 5 étapes toujours visibles
-// + chemin graphique (ligne/nœuds/dot), avec pin desktop (cf. brief J4). Desktop (≥1024px) :
-// un seul ScrollTrigger pin:true — la colonne gauche (texte/CTA) n'est pas touchée par ce
-// timeline, reste cliquable pendant tout le pin. Mobile/tablette (<1024px) : même logique
-// (--progress + seuils sur les 5 nœuds/étapes) sans pin, pattern scrub de J3. Dispatch
-// isDesktop/isMobile via gsap.matchMedia(context.conditions), même pattern que HeroFlowViz.vue.
+// Section "Offre locomotive" (système d'acquisition) : liste verticale simple des 5 étapes,
+// jamais de blocage de défilement (le pin desktop qui figeait 3.5 hauteurs d'écran a été
+// retiré — cf. diagnostic performance). Desktop et mobile partagent désormais la même logique :
+// chaque étape/nœud s'active à son tour au scroll normal via IntersectionObserver, comme le
+// faisait déjà la version mobile avant migration.
 const acquisitionSectionEl = ref<HTMLElement | null>(null)
 const acquisitionTrackEl = ref<HTMLElement | null>(null)
 const acquisitionNodeRefs = ref<(HTMLElement | null)[]>([null, null, null, null, null])
@@ -275,7 +275,7 @@ function setAcquisitionStepRef(el: Element | ComponentPublicInstance | null, ind
   acquisitionStepRefs.value[index] = el instanceof HTMLElement ? el : null
 }
 
-let acquisitionMatchMedia: gsap.MatchMedia | null = null
+let acquisitionObserver: IntersectionObserver | null = null
 
 onMounted(() => {
   if (!import.meta.client) return
@@ -286,58 +286,36 @@ onMounted(() => {
   if (!section || !track || nodes.some(el => !el) || steps.some(el => !el)) return
   const nodeEls = nodes as HTMLElement[]
   const stepEls = steps as HTMLElement[]
-  // Seuils identiques à J3 (adaptés à 5 items), répartis également.
-  const thresholds = [0.1, 0.3, 0.5, 0.7, 0.9]
 
-  if (acquisitionReducedMotion.value) {
-    gsap.set(track, { '--progress': 1 })
+  const activateUpTo = (index: number) => {
+    track.style.setProperty('--progress', String((index + 1) / nodeEls.length))
+    nodeEls.forEach((el, i) => el.classList.toggle('is-active', i <= index))
+    stepEls.forEach((el, i) => el.classList.toggle('is-active', i <= index))
+  }
+
+  if (acquisitionReducedMotion.value || window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    track.style.setProperty('--progress', '1')
     nodeEls.forEach(el => el.classList.add('is-active'))
     stepEls.forEach(el => el.classList.add('is-active'))
     return
   }
 
-  gsap.registerPlugin(ScrollTrigger)
-
-  const applyProgress = (progress: number) => {
-    track.style.setProperty('--progress', String(progress))
-    thresholds.forEach((threshold, i) => {
-      const active = progress >= threshold
-      nodeEls[i]?.classList.toggle('is-active', active)
-      stepEls[i]?.classList.toggle('is-active', active)
-    })
-  }
-
-  acquisitionMatchMedia = gsap.matchMedia()
-  acquisitionMatchMedia.add({ isDesktop: '(min-width: 1024px)', isMobile: '(max-width: 1023.98px)' }, (context) => {
-    const conditions = context.conditions as { isDesktop: boolean; isMobile: boolean } | undefined
-    if (conditions?.isDesktop) {
-      // start: 'top top+=80' — 80px = hauteur du header fixe desktop (h-20, cf. SiteHeader.vue),
-      // pour que le panneau pinné ne parte pas sous le header. end: '+=350%' ~ 3.5 hauteurs
-      // d'écran, à valider visuellement (cf. brief J4).
-      const st = ScrollTrigger.create({
-        trigger: section,
-        pin: true,
-        start: 'top top+=80',
-        end: '+=350%',
-        scrub: 0.4,
-        onUpdate: (self) => applyProgress(self.progress),
-      })
-      return () => st.kill()
+  acquisitionObserver = new IntersectionObserver((entries) => {
+    for (const entry of entries) {
+      if (!entry.isIntersecting) continue
+      const index = stepEls.indexOf(entry.target as HTMLElement)
+      if (index === -1) continue
+      activateUpTo(index)
+      acquisitionObserver?.unobserve(entry.target)
     }
-    const st = ScrollTrigger.create({
-      trigger: section,
-      start: 'top 75%',
-      end: 'bottom 60%',
-      scrub: 0.4,
-      onUpdate: (self) => applyProgress(self.progress),
-    })
-    return () => st.kill()
-  })
+  }, { threshold: 0.5, rootMargin: '0px 0px -10% 0px' })
+
+  stepEls.forEach(el => acquisitionObserver!.observe(el))
 })
 
 onBeforeUnmount(() => {
-  acquisitionMatchMedia?.revert()
-  acquisitionMatchMedia = null
+  acquisitionObserver?.disconnect()
+  acquisitionObserver = null
 })
 
 const { data: projectsData } = await useFetch<{ items: PublicProject[] }>('/api/projects', { default: () => ({ items: demoProjects }) })
@@ -357,20 +335,20 @@ const seo = computed(() => locale.value === 'en' ? {
 useSeoMeta({ title: () => seo.value.title, description: () => seo.value.description })
 
 const t = computed(() => locale.value === 'en' ? {
-  heroKicker: 'connected acquisition system', heroTitle: 'Turn more of your prospects into meetings — <span class="text-gradient-flow">without losing them between your tools.</span>', heroDescription: 'We connect campaigns, conversion pages, CRM and follow-up into one sales system, with defined next steps and ownership.', seeProof: 'See delivered work', auditNote: 'The audit identifies the first break in your journey. No commitment and no tool imposed.',
+  heroKicker: 'connected acquisition system', heroTitle: 'Turn more of your prospects into meetings — <span class="text-gradient-flow">without losing them between your tools.</span>', heroDescription: 'We connect campaigns, conversion pages, CRM and follow-up into one sales system, with defined next steps and ownership.', seeProof: 'See delivered work', auditNote: 'The audit identifies the first break in your journey. No commitment and no tool imposed.', contactUs: 'Contact us directly', whatsappUs: 'Or message us on WhatsApp',
   problemsKicker: 'where sales stall', problemsTitle1: 'Your leads are there.', problemsTitle2: 'The handoffs fail.', problemsDescription: 'The loss often happens after the click: between a form, a message, a spreadsheet and the next follow-up.',
   acquisitionKicker: 'flagship solution', acquisitionTitle1: 'One acquisition system,', acquisitionTitle2: 'from attention to sales.', acquisitionDescription: 'We connect the five links that move a prospect forward. The scope adapts to what already exists and what is actually broken.', viewAcquisition: 'Explore the acquisition system',
   useCasesKicker: 'start from a concrete leak', useCasesTitle1: 'A use case your team', useCasesTitle2: 'recognizes immediately.', useCasesDescription: 'Each use case solves a visible break and can connect to the complete acquisition system.', allUseCases: 'All use cases', discover: 'See the use case',
-  secondaryKicker: 'other complete systems', secondaryTitle1: 'Automate operations or build', secondaryTitle2: 'the right product.', secondaryDescription: 'When the bottleneck is no longer acquisition, we connect the work behind the sale.',
+  secondaryKicker: 'four more connected systems', secondaryTitle1: 'Pilot operations, grow, retain', secondaryTitle2: 'or produce video content.', secondaryDescription: 'When the bottleneck is no longer acquisition, we connect the systems that run behind the sale.',
   methodKicker: 'a controlled path', methodTitle1: 'Understand first.', methodTitle2: 'Connect what matters.', methodDescription: 'Every phase has a decision, an explicit scope and a usable output.',
   proofKicker: 'delivered, not invented', proofTitle1: 'Systems that have already', proofTitle2: 'run in real conditions.', proofDescription: 'The evidence below comes from published project records and client feedback available on the site.', allProof: 'All case studies', testimonialsKicker: 'client feedback',
   faqKicker: 'before you book', faqTitle1: 'Clear answers, then', faqTitle2: 'a useful audit.', bookingDescription: 'Check the main objections, then choose a slot directly here.', bookingKicker: 'book inside the site', bookingTitle: 'Choose your free audit slot.', bookingText: 'The calendar loads only after you choose to display the slots. If it is unavailable, the local contact form takes over.',
 } : {
-  heroKicker: 'système d’acquisition connecté', heroTitle: 'Transformez plus de vos prospects en rendez-vous — <span class="text-gradient-flow">sans les perdre entre vos outils.</span>', heroDescription: 'On relie campagnes, pages de conversion, CRM et relances dans un seul système commercial, avec des prochaines étapes et responsabilités définies.', seeProof: 'Voir les réalisations', auditNote: 'L’audit identifie la première rupture de votre parcours. Sans engagement et sans outil imposé.',
+  heroKicker: 'système d’acquisition connecté', heroTitle: 'Transformez plus de vos prospects en rendez-vous — <span class="text-gradient-flow">sans les perdre entre vos outils.</span>', heroDescription: 'On relie campagnes, pages de conversion, CRM et relances dans un seul système commercial, avec des prochaines étapes et responsabilités définies.', seeProof: 'Voir les réalisations', auditNote: 'L’audit identifie la première rupture de votre parcours. Sans engagement et sans outil imposé.', contactUs: 'Nous contacter directement', whatsappUs: 'Ou écrivez-nous sur WhatsApp',
   problemsKicker: 'là où les ventes se bloquent', problemsTitle1: 'Vos leads sont là.', problemsTitle2: 'Les passages de relais cassent.', problemsDescription: 'La perte arrive souvent après le clic : entre un formulaire, un message, un tableur et la prochaine relance.',
   acquisitionKicker: 'solution locomotive', acquisitionTitle1: 'Un système d’acquisition,', acquisitionTitle2: 'de l’attention à la vente.', acquisitionDescription: 'On relie les cinq maillons qui font avancer un prospect. Le périmètre s’adapte à l’existant et à ce qui bloque réellement.', viewAcquisition: 'Découvrir le système d’acquisition',
   useCasesKicker: 'partir d’une fuite concrète', useCasesTitle1: 'Un cas d’usage que votre équipe', useCasesTitle2: 'reconnaît tout de suite.', useCasesDescription: 'Chaque cas règle une rupture visible et peut se connecter au système d’acquisition complet.', allUseCases: 'Tous les cas d’usage', discover: 'Voir le cas d’usage',
-  secondaryKicker: 'autres systèmes complets', secondaryTitle1: 'Automatiser les opérations ou construire', secondaryTitle2: 'le bon produit.', secondaryDescription: 'Quand le blocage n’est plus l’acquisition, on relie le travail qui se déroule derrière la vente.',
+  secondaryKicker: 'quatre autres systèmes connectés', secondaryTitle1: 'Piloter les opérations, grandir, fidéliser', secondaryTitle2: 'ou produire du contenu vidéo.', secondaryDescription: 'Quand le blocage n’est plus l’acquisition, on relie les systèmes qui tournent derrière la vente.',
   methodKicker: 'un parcours maîtrisé', methodTitle1: 'Comprendre d’abord.', methodTitle2: 'Relier ce qui compte.', methodDescription: 'Chaque phase produit une décision, un périmètre explicite et un livrable utilisable.',
   proofKicker: 'livré, pas inventé', proofTitle1: 'Des systèmes déjà', proofTitle2: 'mis en situation réelle.', proofDescription: 'Les preuves ci-dessous viennent des fiches projets publiées et des retours clients disponibles sur le site.', allProof: 'Toutes les réalisations', testimonialsKicker: 'retours clients',
   faqKicker: 'avant de réserver', faqTitle1: 'Des réponses claires, puis', faqTitle2: 'un audit utile.', bookingDescription: 'Vérifiez les principales objections, puis choisissez votre créneau directement ici.', bookingKicker: 'réservation sur le site', bookingTitle: 'Choisissez votre créneau d’audit gratuit.', bookingText: 'Le calendrier ne charge qu’après votre choix d’afficher les créneaux. S’il est indisponible, le formulaire local prend le relais.',
@@ -400,11 +378,15 @@ const useCases = computed(() => locale.value === 'en' ? [
   { to: '/solutions/relance-panier-abandonne', icon: ShoppingCart, title: 'Relancer les paniers abandonnés', text: 'Détecter l’abandon et déclencher une relance calibrée sur le canal choisi.' },
 ])
 const secondaryOffers = computed(() => locale.value === 'en' ? [
-  { tag: 'B', title: 'AI Piloting Agents', description: 'Connect repetitive operational work to controlled AI agents, with validation rules for sensitive actions.', result: 'a controlled operating system', features: ['Tasks mapped before automation', 'Connections to existing tools', 'Human validation where needed'], to: '/offres/pilotage-ia', icon: Bot },
-  { tag: 'C', title: 'Web & Applications', description: 'Build a site, application or integration around the real flow your team needs to run.', result: 'a product built around usage', features: ['Product and UX scoping', 'Web and mobile development', 'Business integrations'], to: '/offres/creation-web-apps', icon: Code2 },
+  { tag: '2', title: 'AI Piloting Agents', description: 'Connect repetitive operational work to controlled AI agents on WhatsApp or Telegram, with validation rules for sensitive actions.', result: 'a controlled operating system', features: ['Tasks mapped before automation', 'Connections to existing tools', 'Human validation where needed'], to: '/offres/pilotage-ia', icon: Bot },
+  { tag: '3', title: 'Novatrix Launch', description: 'A staged support program — Start, Growth, Scale — that adapts to where your system stands today.', result: 'a progressive path to a scaled system', features: ['Start: first system live', 'Growth: follow-up and CRM connected', 'Scale: channels expanded'], to: '/offres/novatrix-launch', icon: Rocket },
+  { tag: '4', title: 'E-commerce Retention & Conversion', description: 'Email/SMS abandoned-cart recovery, segmentation and AI CRM built to bring customers back.', result: 'more recovered carts, customers who return', features: ['Abandoned-cart detection and recovery', 'Email and SMS sequences', 'Behavior-based segmentation'], to: '/offres/retention-ecommerce', icon: ShoppingCart },
+  { tag: '5', title: 'AI Creative & Video Content', description: 'AI avatar UGC, multilingual dubbing, automatic cutdown and performance prediction.', result: 'video content at a steady pace', features: ['AI avatar UGC', 'Multilingual dubbing', 'Automatic cutdown'], to: '/video-lab', icon: Clapperboard },
 ] : [
-  { tag: 'B', title: 'Agents IA de pilotage', description: 'Relier le travail opérationnel répétitif à des agents IA contrôlés, avec des règles de validation pour les actions sensibles.', result: 'un système d’opérations maîtrisé', features: ['Tâches cartographiées avant automatisation', 'Connexion aux outils existants', 'Validation humaine quand elle compte'], to: '/offres/pilotage-ia', icon: Bot },
-  { tag: 'C', title: 'Web & applications', description: 'Construire un site, une application ou une intégration autour du flux réel dont votre équipe a besoin.', result: 'un produit conçu autour de l’usage', features: ['Cadrage produit et UX', 'Développement web et mobile', 'Intégrations métier'], to: '/offres/creation-web-apps', icon: Code2 },
+  { tag: '2', title: 'Agents IA de pilotage interne', description: 'Relier le travail opérationnel répétitif à des agents IA contrôlés sur WhatsApp ou Telegram, avec des règles de validation pour les actions sensibles.', result: 'un système d’opérations maîtrisé', features: ['Tâches cartographiées avant automatisation', 'Connexion aux outils existants', 'Validation humaine quand elle compte'], to: '/offres/pilotage-ia', icon: Bot },
+  { tag: '3', title: 'Novatrix Launch', description: 'Un accompagnement progressif — Start, Growth, Scale — qui s’adapte à l’état actuel de votre système.', result: 'un parcours progressif vers un système à l’échelle', features: ['Start : premier système opérationnel', 'Growth : relances et CRM connectés', 'Scale : canaux étendus'], to: '/offres/novatrix-launch', icon: Rocket },
+  { tag: '4', title: 'Rétention & conversion e-commerce', description: 'Relance email/SMS des paniers abandonnés, segmentation et CRM IA pensés pour faire revenir vos clients.', result: 'plus de paniers récupérés, des clients qui reviennent', features: ['Détection et relance des paniers abandonnés', 'Séquences email et SMS', 'Segmentation comportementale'], to: '/offres/retention-ecommerce', icon: ShoppingCart },
+  { tag: '5', title: 'Créatifs & contenu vidéo IA', description: 'UGC IA avatar, doublage multilingue, découpage automatique et prédiction de performance.', result: 'du contenu vidéo à un rythme régulier', features: ['UGC IA avatar', 'Doublage multilingue', 'Découpage automatique'], to: '/video-lab', icon: Clapperboard },
 ])
 const method = computed(() => locale.value === 'en' ? [
   { step: '01', title: 'Audit', text: 'Map the journey, existing tools and first commercial break.' }, { step: '02', title: 'Design', text: 'Define the target flow, responsibilities and useful signals.' }, { step: '03', title: 'Connect and test', text: 'Build the links and validate them with real scenarios.' }, { step: '04', title: 'Operate', text: 'Observe what happens and prioritize the next improvement.' },
