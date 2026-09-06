@@ -1,13 +1,17 @@
 <template>
   <div ref="revealRoot">
     <!-- 1. Promesse et action principale -->
-    <section class="hero-rich relative overflow-hidden pt-24 text-white">
-      <div class="container-shell grid min-h-[620px] items-center gap-8 py-14 sm:min-h-[680px] lg:grid-cols-[1.12fr_.88fr] lg:py-20">
+    <!-- Hero plein écran : la hauteur du header fixe est retirée du calcul (au lieu d'être
+         ajoutée en padding), sinon la section dépasse le viewport au lieu de le remplir.
+         100svh suit la barre d'URL mobile, avec repli 100vh pour les navigateurs anciens. -->
+    <section class="hero-rich hero-screen relative flex overflow-hidden text-white">
+      <ClientOnly><HeroCanvas /></ClientOnly>
+      <div class="container-shell relative z-10 grid w-full items-center gap-8 py-10 lg:grid-cols-[1.12fr_.88fr]">
         <div class="relative z-10">
           <p ref="heroKickerEl" class="kicker !text-[#3DE0C5]">{{ t.heroKicker }}</p>
-          <h1 ref="heroTitleEl" class="mt-5 max-w-4xl text-[2.65rem] font-bold leading-[1.04] tracking-[-.045em] sm:text-6xl xl:text-7xl" v-html="t.heroTitle"/>
-          <p ref="heroDescEl" class="mt-6 max-w-2xl text-lg leading-8 text-white/75">{{ t.heroDescription }}</p>
-          <div class="mt-8 flex flex-col gap-3 sm:flex-row">
+          <h1 ref="heroTitleEl" class="mt-5 max-w-4xl text-[2.35rem] font-bold leading-[1.05] tracking-[-.04em] sm:text-5xl xl:text-6xl" v-html="t.heroTitle"/>
+          <p ref="heroDescEl" class="mt-5 max-w-2xl text-base leading-7 text-white/75 sm:text-lg sm:leading-8">{{ t.heroDescription }}</p>
+          <div class="mt-7 flex flex-col gap-3 sm:flex-row">
             <button ref="heroCtaBtnEl" type="button" class="btn-primary !px-7 !py-4" @click="openCalendly">{{ $t('header.bookCall') }} <ArrowRight class="h-4 w-4"/></button>
             <NuxtLink ref="heroCtaLinkEl" :to="localePath('/realisations')" class="inline-flex min-h-12 items-center justify-center rounded-xl border border-white/20 px-6 py-3 text-sm font-bold text-white transition hover:bg-white/10">{{ t.seeProof }}</NuxtLink>
           </div>
@@ -15,7 +19,7 @@
             <a href="#reservation" class="inline-flex items-center gap-2 text-sm font-bold text-white underline decoration-white/40 underline-offset-4 transition hover:decoration-white">{{ t.contactUs }} <ArrowRight class="h-3.5 w-3.5"/></a>
             <a v-if="hasWhatsapp" :href="whatsappUrl" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 text-sm font-semibold text-white/70 transition hover:text-white"><SvgWhatsappSVG class="h-4 w-4 shrink-0"/>{{ t.whatsappUs }}</a>
           </div>
-          <p ref="heroAuditNoteEl" class="mt-5 max-w-xl text-xs leading-5 text-white/55">{{ t.auditNote }}</p>
+          <p ref="heroAuditNoteEl" class="mt-4 max-w-xl text-xs leading-5 text-white/55">{{ t.auditNote }}</p>
         </div>
         <HeroFlowViz class="mt-6 lg:mt-0 lg:h-[480px]" />
       </div>

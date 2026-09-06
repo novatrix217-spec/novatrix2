@@ -648,3 +648,20 @@ svg.lucide { stroke-width: 1.6; }
 .dark .use-case-lead {
   background: linear-gradient(158deg, rgba(139, 92, 246, .12), transparent 62%), var(--surface);
 }
+
+/* Hero plein écran : occupe exactement la hauteur visible sous le header fixe (4.75rem
+   mobile / 5rem desktop, cf. SiteHeader). Le padding-top d'antan s'ajoutait à min-height
+   et faisait déborder la section au-delà du viewport. */
+.hero-screen {
+  min-height: calc(100vh - 4.75rem);
+  min-height: calc(100svh - 4.75rem);
+  margin-top: 4.75rem;
+}
+@media (min-width: 1024px) {
+  .hero-screen { min-height: calc(100vh - 5rem); min-height: calc(100svh - 5rem); margin-top: 5rem; }
+}
+/* Sous 700px de haut (paysage mobile, petits portables), on laisse le contenu
+   déterminer la hauteur plutôt que de comprimer le texte. */
+@media (max-height: 700px) {
+  .hero-screen { min-height: 0; padding-top: 2rem; padding-bottom: 3rem; }
+}

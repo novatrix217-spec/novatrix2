@@ -2,15 +2,15 @@
   <section class="section-pad"><div class="container-shell grid gap-12 lg:grid-cols-2"><div class="reveal-left"><SectionHeading :kicker="t.convictionKicker"><span v-html="t.convictionTitle"/></SectionHeading></div><div class="reveal-right space-y-5 text-lg leading-8 text-[var(--muted)]"><p>{{ t.p1 }}</p><p>{{ t.p2 }}</p></div></div></section>
   <section class="section-pad border-y bg-[var(--surface)]"><div class="container-shell"><div class="reveal"><SectionHeading :kicker="t.workKicker" center>{{ t.workTitle1 }} <span class="text-gradient">{{ t.workTitle2 }}</span></SectionHeading></div><div class="mt-12 grid gap-5 md:grid-cols-3"><div v-for="(item,i) in values" :key="item.title" class="card card-hover glass-sheen reveal-scale" :data-reveal-delay="i*90"><component :is="item.icon" class="h-6 w-6 text-violet-600"/><h3 class="mt-4 text-lg font-bold">{{ item.title }}</h3><p class="mt-2 text-sm leading-6 text-[var(--muted)]">{{ item.text }}</p></div></div></div></section>
 
-  <!-- Fondateur : photo réelle (bibliothèque personal branding Dane, cf. Drive), identité et corpulence préservées. -->
+  <!-- Équipe : photos réelles uniquement (aucune photo générée ni générique). -->
   <section class="section-pad">
     <div class="container-shell">
       <div class="reveal"><SectionHeading :kicker="t.teamKicker" center>{{ t.teamTitle1 }} <span class="text-gradient">{{ t.teamTitle2 }}</span></SectionHeading></div>
-      <div class="mx-auto mt-12 max-w-sm">
-        <div class="card flex flex-col items-center !p-8 text-center">
-          <img src="/img/founder-dane.jpg" :alt="t.founderPhotoAlt" width="112" height="112" class="h-28 w-28 rounded-full object-cover object-top" loading="lazy"/>
-          <p class="mt-5 font-bold">{{ t.founderName }}</p>
-          <p class="mt-1 text-xs font-semibold uppercase tracking-wide text-[var(--text-secondary)]">{{ t.founderRole }}</p>
+      <div class="mx-auto mt-12 grid max-w-3xl gap-6 sm:grid-cols-2">
+        <div v-for="(member, i) in team" :key="member.name" class="card card-hover reveal-scale flex flex-col items-center !p-8 text-center" :data-reveal-delay="i * 90">
+          <img :src="member.photo" :alt="member.alt" width="112" height="112" class="h-28 w-28 rounded-full object-cover object-top" loading="lazy"/>
+          <p class="mt-5 font-bold">{{ member.name }}</p>
+          <p class="mt-1 text-xs font-semibold uppercase tracking-wide text-[var(--text-secondary)]">{{ member.role }}</p>
         </div>
       </div>
     </div>
@@ -32,7 +32,7 @@ const t=computed(()=>locale.value==='en'?{
   p1:'A hit ad earns you nothing if the page lets the visitor slip away. A converting page earns you nothing if the lead waits three days without a reply. Every isolated link makes you pay for the others’ shortcomings.',
   p2:'We scope the whole chain, connect the agreed links and review each phase with your team. You keep a readable system and documented decisions.',
   workKicker:'how we work', workTitle1:'Clear scope.', workTitle2:'Visible decisions.',
-  teamKicker:'the team', teamTitle1:'Behind the', teamTitle2:'system.', founderName:'Raphaël Jacques-Dane Patrick Agbahungba', founderRole:'Founder & CEO', founderPhotoAlt:'Raphaël Jacques-Dane Patrick Agbahungba, founder and CEO of NovatrixAI',
+  teamKicker:'the team', teamTitle1:'Behind the', teamTitle2:'system.',
 }:{
   kicker:'novatrixai', description:'Basés à Cotonou, nous reprenons en main la chaîne qui vous fait perdre des clients : de la première pub jusqu’au rendez-vous signé.',
   heroTitle:'Vous n’avez pas besoin d’un outil de plus.<br><span class="text-gradient">Vous avez besoin que tout se parle.</span>',
@@ -40,8 +40,15 @@ const t=computed(()=>locale.value==='en'?{
   p1:'Une pub qui cartonne ne vous rapporte rien si la page laisse filer le visiteur. Une page qui convertit ne vous rapporte rien si le lead attend trois jours sans réponse. Chaque maillon isolé vous fait payer les efforts des autres.',
   p2:'Nous cadrons la chaîne complète, relions les maillons convenus et revoyons chaque phase avec votre équipe. Vous gardez un système lisible et des décisions documentées.',
   workKicker:'façon de travailler', workTitle1:'Un périmètre clair.', workTitle2:'Des décisions visibles.',
-  teamKicker:'l’équipe', teamTitle1:'Derrière le', teamTitle2:'système.', founderName:'Raphaël Jacques-Dane Patrick Agbahungba', founderRole:'Fondateur & CEO', founderPhotoAlt:'Raphaël Jacques-Dane Patrick Agbahungba, fondateur et CEO de NovatrixAI',
+  teamKicker:'l’équipe', teamTitle1:'Derrière le', teamTitle2:'système.',
 })
+const team=computed(()=>locale.value==='en'?[
+  { name:'Raphaël Jacques-Dane Patrick Agbahungba', role:'Founder & CEO', photo:'/img/founder-dane.jpg', alt:'Raphaël Jacques-Dane Patrick Agbahungba, founder and CEO of NovatrixAI' },
+  { name:'Mériadeck Amoussou', role:'CTO', photo:'/img/cto-meriadeck.jpg', alt:'Mériadeck Amoussou, CTO of NovatrixAI' },
+]:[
+  { name:'Raphaël Jacques-Dane Patrick Agbahungba', role:'Fondateur & CEO', photo:'/img/founder-dane.jpg', alt:'Raphaël Jacques-Dane Patrick Agbahungba, fondateur et CEO de NovatrixAI' },
+  { name:'Mériadeck Amoussou', role:'Directeur technique (CTO)', photo:'/img/cto-meriadeck.jpg', alt:'Mériadeck Amoussou, directeur technique de NovatrixAI' },
+])
 const values=computed(()=>locale.value==='en'?[
   {icon:FileText,title:'You keep control',text:'You understand what’s running and why. No black box, no forced dependency.'},
   {icon:TimerReset,title:'Visible checkpoints',text:'The delivery sequence and review points are explicit from the scoping phase.'},
