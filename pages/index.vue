@@ -121,9 +121,10 @@
     <!-- 6. Méthode — rupture sombre à mi-page : casse la répétition des sections claires
          et donne un deuxième temps fort après le hero. Parallax au scroll sur le fond. -->
     <section ref="methodSectionEl" class="method-band grain relative overflow-hidden py-24 text-white lg:py-32">
+      <BrandRibbon id="ribbon-method" on-dark/>
       <div class="scroll-parallax pointer-events-none absolute -right-24 -top-24 h-[420px] w-[420px] rounded-full bg-violet-600/20 blur-[110px]" style="--depth: 60" aria-hidden="true"/>
       <div class="scroll-parallax pointer-events-none absolute -bottom-32 -left-20 h-[380px] w-[380px] rounded-full bg-[#3DE0C5]/10 blur-[110px]" style="--depth: -45" aria-hidden="true"/>
-      <div class="container-shell relative">
+      <div class="container-shell relative z-10">
         <div class="max-w-3xl">
           <p class="kicker !text-[#3DE0C5]">{{ t.methodKicker }}</p>
           <h2 class="mt-5 text-3xl font-bold leading-[1.1] tracking-[-.03em] sm:text-5xl">{{ t.methodTitle1 }} <span class="text-gradient-flow">{{ t.methodTitle2 }}</span></h2>

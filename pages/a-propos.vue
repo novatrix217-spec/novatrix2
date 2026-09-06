@@ -49,10 +49,10 @@ const t=computed(()=>locale.value==='en'?{
 })
 const team=computed(()=>locale.value==='en'?[
   { name:'Raphaël Jacques-Dane Patrick Agbahungba', role:'Founder & CEO', initials:'RA', photo:'/img/founder-dane.jpg', alt:'Raphaël Jacques-Dane Patrick Agbahungba, founder and CEO of NovatrixAI' },
-  { name:'Mériadeck Amoussou', role:'CTO', initials:'MA', photo:'', alt:'Mériadeck Amoussou, CTO of NovatrixAI' },
+  { name:'Mériadeck Amoussou', role:'Co-founder & CTO', initials:'MA', photo:'', alt:'Mériadeck Amoussou, co-founder and CTO of NovatrixAI' },
 ]:[
   { name:'Raphaël Jacques-Dane Patrick Agbahungba', role:'Fondateur & CEO', initials:'RA', photo:'/img/founder-dane.jpg', alt:'Raphaël Jacques-Dane Patrick Agbahungba, fondateur et CEO de NovatrixAI' },
-  { name:'Mériadeck Amoussou', role:'Directeur technique (CTO)', initials:'MA', photo:'', alt:'Mériadeck Amoussou, directeur technique de NovatrixAI' },
+  { name:'Mériadeck Amoussou', role:'Cofondateur & directeur technique (CTO)', initials:'MA', photo:'', alt:'Mériadeck Amoussou, cofondateur et directeur technique de NovatrixAI' },
 ])
 const values=computed(()=>locale.value==='en'?[
   {icon:FileText,title:'You keep control',text:'You understand what’s running and why. No black box, no forced dependency.'},
