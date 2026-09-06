@@ -41,7 +41,7 @@
       </div>
       <div class="mt-14 flex flex-col gap-3 border-t border-[var(--border-subtle)] pt-6 text-xs sm:flex-row sm:items-center sm:justify-between">
         <span>© {{ new Date().getFullYear() }} NovatrixAI. {{ $t('footer.rights') }}</span>
-        <div class="flex gap-4"><NuxtLink :to="localePath('/confidentialite')" class="hover:text-[var(--text-primary)]">{{ $t('footer.privacy') }}</NuxtLink><NuxtLink :to="localePath('/contact')" class="hover:text-[var(--text-primary)]">{{ $t('footer.contact') }}</NuxtLink></div>
+        <div class="flex gap-4"><NuxtLink :to="localePath('/confidentialite')" class="hover:text-[var(--text-primary)]">{{ $t('footer.privacy') }}</NuxtLink><NuxtLink :to="localePath('/mentions-legales')" class="hover:text-[var(--text-primary)]">{{ $t('footer.legal') }}</NuxtLink><NuxtLink :to="localePath('/contact')" class="hover:text-[var(--text-primary)]">{{ $t('footer.contact') }}</NuxtLink></div>
       </div>
     </div>
   </footer>

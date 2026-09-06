@@ -11,7 +11,7 @@ const titleHtml = computed(() => locale.value === 'en'
   : 'Une agence IA à Cotonou, centrée sur <span class="text-gradient">votre parcours commercial.</span>')
 const site = String(useRuntimeConfig().public.siteUrl).replace(/\/$/, '')
 useHead(() => ({ script: [
-  { type: 'application/ld+json', innerHTML: JSON.stringify({ '@context': 'https://schema.org', '@type': 'LocalBusiness', name: 'NovatrixAI', image: `${site}/favicon-192x192.png`, address: { '@type': 'PostalAddress', addressLocality: 'Cotonou', addressCountry: 'BJ' }, areaServed: 'BJ', url: site, email: 'contact@novatrixai.com', inLanguage: locale.value }) },
+  { type: 'application/ld+json', innerHTML: JSON.stringify({ '@context': 'https://schema.org', '@type': 'LocalBusiness', name: 'NovatrixAI', legalName: 'NOVATRIXAI SARL', image: `${site}/favicon-192x192.png`, address: { '@type': 'PostalAddress', streetAddress: 'Maison Véronique Noélie Hinson, Parcelle C, Îlot 1574, Quartier Aïbatin Kpota, 13ᵉ arrondissement', addressLocality: 'Cotonou', addressRegion: 'Littoral', addressCountry: 'BJ' }, areaServed: 'BJ', url: site, email: 'contact@novatrixai.com', telephone: '+2290163774295', inLanguage: locale.value }) },
   { type: 'application/ld+json', innerHTML: JSON.stringify({ '@context': 'https://schema.org', '@type': 'BreadcrumbList', itemListElement: [{ '@type': 'ListItem', position: 1, name: locale.value==='en'?'Home':'Accueil', item: locale.value==='en'?`${site}/en`:site }, { '@type': 'ListItem', position: 2, name: locale.value==='en'?'AI Agency Cotonou':'Agence IA Cotonou', item: `${site}${locale.value==='en'?'/en':''}/agence-ia-cotonou` }] }) },
 ] }))
 const content = computed(() => locale.value === 'en' ? {

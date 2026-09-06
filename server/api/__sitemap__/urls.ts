@@ -3,7 +3,7 @@ import { ProjectModel } from '../../models/Project'
 import { ResourceModel } from '../../models/Resource'
 import { hasCompleteArticleEnglish, hasCompleteProjectEnglish, hasCompleteResourceEnglish } from '../../../shared/english-content'
 
-const fixed = ['/', '/offres', '/offres/acquisition', '/offres/pilotage-ia', '/offres/novatrix-launch', '/offres/retention-ecommerce', '/offres/creation-web-apps', '/solutions', '/solutions/agent-whatsapp-ia', '/solutions/automatisation-n8n', '/solutions/relance-panier-abandonne', '/agence-ia-cotonou', '/realisations', '/video-lab', '/avis', '/ressources', '/blog', '/formation', '/a-propos', '/contact', '/confidentialite']
+const fixed = ['/', '/offres', '/offres/acquisition', '/offres/pilotage-ia', '/offres/novatrix-launch', '/offres/retention-ecommerce', '/offres/creation-web-apps', '/solutions', '/solutions/agent-whatsapp-ia', '/solutions/automatisation-n8n', '/solutions/relance-panier-abandonne', '/agence-ia-cotonou', '/realisations', '/video-lab', '/avis', '/ressources', '/blog', '/formation', '/a-propos', '/contact', '/confidentialite', '/mentions-legales']
 
 // Émet chaque route en français (racine) et en anglais (préfixe /en), avec les alternates
 // hreflang qui pointent l'une vers l'autre — évite le piège du faux bilingue (même contenu

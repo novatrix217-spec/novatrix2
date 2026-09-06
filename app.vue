@@ -27,8 +27,10 @@ useHead(() => ({
         {
           '@type': 'Organization', '@id': `${site}#organization`, name: 'NovatrixAI', url: site,
           logo: { '@type': 'ImageObject', url: `${site}/favicon-192x192.png` },
-          address: { '@type': 'PostalAddress', addressLocality: 'Cotonou', addressCountry: 'BJ' },
+          legalName: 'NOVATRIXAI SARL',
+          address: { '@type': 'PostalAddress', streetAddress: 'Maison Véronique Noélie Hinson, Parcelle C, Îlot 1574, Quartier Aïbatin Kpota, 13ᵉ arrondissement', addressLocality: 'Cotonou', addressRegion: 'Littoral', addressCountry: 'BJ' },
           email: 'contact@novatrixai.com',
+          telephone: '+2290163774295',
           description: locale.value === 'en'
             ? 'NovatrixAI connects acquisition, AI-assisted operations and custom digital products from Cotonou for local and remote teams.'
             : 'NovatrixAI relie acquisition, opérations assistées par IA et produits numériques sur mesure depuis Cotonou, sur place et à distance.',
