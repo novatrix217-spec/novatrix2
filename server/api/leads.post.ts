@@ -4,8 +4,9 @@ import { ResourceModel } from '../models/Resource'
 import { demoResources } from '../../shared/demo'
 import { dispatchLeadWebhooks } from '../utils/webhooks'
 import { createDownloadToken } from '../utils/storage'
-import { sendResourceMail } from '../utils/mail'
-const schema=z.object({firstName:z.string().trim().min(2).max(80),email:z.string().trim().email().max(320).transform(v=>v.toLowerCase()),phone:z.string().trim().min(6).max(30),domain:z.string().trim().min(2).max(120),message:z.string().trim().max(3000).optional(),consent:z.literal(true),website:z.string().max(0).optional().default(''),resourceSlug:z.string().trim().max(120).optional(),source:z.enum(['resource','contact','newsletter']).default('contact'),utm:z.object({source:z.any().optional(),medium:z.any().optional(),campaign:z.any().optional()}).optional()})
+import { sendResourceMail, sendLeadNotificationMail } from '../utils/mail'
+import { SettingModel } from '../models/Setting'
+const schema=z.object({firstName:z.string().trim().min(2).max(80),email:z.string().trim().email().max(320).transform(v=>v.toLowerCase()),phone:z.string().trim().min(6).max(30),domain:z.string().trim().min(2).max(120),message:z.string().trim().max(3000).optional(),consent:z.literal(true),website:z.string().max(0).optional().default(''),resourceSlug:z.string().trim().max(120).optional(),source:z.enum(['resource','contact','newsletter']).default('contact'),locale:z.enum(['fr','en']).default('fr'),utm:z.object({source:z.any().optional(),medium:z.any().optional(),campaign:z.any().optional()}).optional()})
 export default defineEventHandler(async event=>{
   assertRateLimit(event,'lead',5,15*60*1000);const parsed=schema.safeParse(await readBody(event));if(!parsed.success)throw createError({statusCode:400,statusMessage:'Vérifiez les champs et le consentement.'});const input=parsed.data
   await connectDb();let resource:any=null
@@ -15,6 +16,16 @@ export default defineEventHandler(async event=>{
   let downloadUrl=''
   if(resource){const token=await createDownloadToken(String(resource._id),resource.slug);downloadUrl=`/api/resources/${resource._id}/download?token=${encodeURIComponent(token)}`}
   const site=String(useRuntimeConfig().public.siteUrl).replace(/\/$/,'')
-  if(created){const payload={leadId:String(lead._id),firstName:lead.firstName,email:lead.email,phone:lead.phone,domain:lead.domain,source:lead.source,resourceSlug:resource?.slug||null,timestamp:new Date().toISOString()};await dispatchLeadWebhooks(payload);if(resource&&downloadUrl)sendResourceMail(lead.email,lead.firstName,resource.title,`${site}${downloadUrl}`).catch(console.error)}
+  if(created){
+    const payload={leadId:String(lead._id),firstName:lead.firstName,email:lead.email,phone:lead.phone,domain:lead.domain,source:lead.source,resourceSlug:resource?.slug||null,timestamp:new Date().toISOString()}
+    await dispatchLeadWebhooks(payload)
+    if(resource&&downloadUrl)sendResourceMail(lead.email,lead.firstName,resource.title,`${site}${downloadUrl}`,input.locale).catch(console.error)
+    // Alerte interne : sans elle, un lead reste en base sans que personne ne soit prevenu
+    // lorsque aucun webhook n8n/GHL n est configure.
+    const cfg=useRuntimeConfig()
+    const notify=await SettingModel.findOne({key:'lead_notification_email'}).lean().catch(()=>null)
+    const notifyTo=String((notify as any)?.value||cfg.mailToInternal||cfg.mailFrom||'').trim()
+    if(notifyTo)sendLeadNotificationMail(notifyTo,{firstName:lead.firstName,email:lead.email,phone:lead.phone,domain:lead.domain,source:lead.source,message:lead.message,resourceSlug:resource?.slug||null},`${site}/admin/leads`).catch(console.error)
+  }
   return {success:true,downloadUrl}
 })

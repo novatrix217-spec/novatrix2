@@ -128,7 +128,7 @@ async function submit() {
   }
   pending.value = true
   try {
-    await $fetch('/api/leads', { method: 'POST', body: form })
+    await $fetch('/api/leads', { method: 'POST', body: { ...form, locale: locale.value } })
     success.value = true; feedback.value = t.value.sent
   } catch (error: any) {
     success.value = false; feedback.value = locale.value === 'fr' && error?.data?.statusMessage ? error.data.statusMessage : t.value.failed

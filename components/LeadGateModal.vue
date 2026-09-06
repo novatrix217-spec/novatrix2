@@ -45,6 +45,6 @@ const t=computed(()=>locale.value==='en'?{
 const form=reactive({firstName:'',email:'',phone:'',domain:'',consent:false,website:'',resourceSlug:props.resource.slug,source:'resource'})
 const pending=ref(false),errorMessage=ref('')
 function close(){if(!pending.value)emit('close')}
-async function submit(){pending.value=true;errorMessage.value='';try{const data=await $fetch<{downloadUrl:string}>('/api/leads',{method:'POST',body:{...form,resourceSlug:props.resource.slug,utm:{source:useRoute().query.utm_source,medium:useRoute().query.utm_medium,campaign:useRoute().query.utm_campaign}}});await navigateTo({path:localePath('/merci'),query:{download:data.downloadUrl,title:lf(props.resource.title,props.resource.titleEn)}})}catch(e:any){errorMessage.value=e?.data?.statusMessage||t.value.failed}finally{pending.value=false}}
+async function submit(){pending.value=true;errorMessage.value='';try{const data=await $fetch<{downloadUrl:string}>('/api/leads',{method:'POST',body:{...form,resourceSlug:props.resource.slug,locale:locale.value,utm:{source:useRoute().query.utm_source,medium:useRoute().query.utm_medium,campaign:useRoute().query.utm_campaign}}});await navigateTo({path:localePath('/merci'),query:{download:data.downloadUrl,title:lf(props.resource.title,props.resource.titleEn)}})}catch(e:any){errorMessage.value=e?.data?.statusMessage||t.value.failed}finally{pending.value=false}}
 watch(()=>props.open,v=>{if(import.meta.client)document.body.style.overflow=v?'hidden':''});onBeforeUnmount(()=>{if(import.meta.client)document.body.style.overflow=''})
 </script>
