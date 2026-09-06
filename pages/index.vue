@@ -13,7 +13,7 @@
           </div>
           <div class="mt-4 flex flex-col gap-2 sm:flex-row sm:items-center sm:gap-4">
             <a href="#reservation" class="inline-flex items-center gap-2 text-sm font-bold text-white underline decoration-white/40 underline-offset-4 transition hover:decoration-white">{{ t.contactUs }} <ArrowRight class="h-3.5 w-3.5"/></a>
-            <a :href="whatsappUrl" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 text-sm font-semibold text-white/70 transition hover:text-white"><SvgWhatsappSVG class="h-4 w-4 shrink-0"/>{{ t.whatsappUs }}</a>
+            <a v-if="hasWhatsapp" :href="whatsappUrl" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 text-sm font-semibold text-white/70 transition hover:text-white"><SvgWhatsappSVG class="h-4 w-4 shrink-0"/>{{ t.whatsappUs }}</a>
           </div>
           <p ref="heroAuditNoteEl" class="mt-5 max-w-xl text-xs leading-5 text-white/55">{{ t.auditNote }}</p>
         </div>
@@ -134,7 +134,7 @@ import type { PublicProject, PublicTestimonial } from '~/shared/types'
 const { locale } = useI18n()
 const localePath = useLocalePath()
 const { openCalendly } = useCalendly()
-const { whatsappUrl } = useWhatsapp()
+const { whatsappUrl, hasWhatsapp } = useWhatsapp()
 const revealRoot = useScrollReveal()
 
 // Révélation séquencée du bloc texte hero à l'arrivée (one-shot, cf. brief J2 Hero).
