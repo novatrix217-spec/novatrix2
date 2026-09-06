@@ -21,6 +21,9 @@
       </div>
     </section>
 
+    <!-- 1 bis. Preuve chiffrée immédiate, juste sous la promesse -->
+    <MetricsStrip :projects-count="projectsCount" :testimonials-count="testimonialsCount" />
+
     <!-- 2. Problèmes reconnus -->
     <section ref="problemsSectionEl" class="section-pad">
       <div class="container-shell">
@@ -79,9 +82,25 @@
     <section class="section-pad">
       <div class="container-shell">
         <div class="flex flex-col justify-between gap-6 sm:flex-row sm:items-end"><SectionHeading :kicker="t.useCasesKicker" :description="t.useCasesDescription">{{ t.useCasesTitle1 }} <span class="text-gradient">{{ t.useCasesTitle2 }}</span></SectionHeading><NuxtLink :to="localePath('/solutions')" class="btn-secondary">{{ t.allUseCases }} <ArrowRight class="h-4 w-4"/></NuxtLink></div>
-        <div class="mt-12 grid gap-5 md:grid-cols-3">
-          <NuxtLink v-for="item in useCases" :key="item.to" :to="localePath(item.to)" class="card card-hover flex flex-col">
-            <component :is="item.icon" class="h-7 w-7 text-violet-700"/><h2 class="mt-5 text-xl font-bold">{{ item.title }}</h2><p class="mt-3 flex-1 text-sm leading-6 text-[var(--muted)]">{{ item.text }}</p><span class="mt-5 inline-flex items-center gap-2 text-sm font-bold text-violet-700">{{ t.discover }} <ArrowRight class="h-4 w-4"/></span>
+        <!-- Le premier cas est mis en avant (colonne large, fond appuyé) : les trois cartes
+             n'ont pas le même poids commercial, la mise en page le reflète. -->
+        <div class="use-case-grid mt-12 grid gap-5">
+          <NuxtLink
+            v-for="(item, i) in useCases"
+            :key="item.to"
+            :to="localePath(item.to)"
+            class="use-case card card-hover flex flex-col"
+            :class="i === 0 ? 'use-case-lead' : ''"
+          >
+            <component :is="item.icon" class="shrink-0 text-violet-700" :class="i === 0 ? 'h-9 w-9' : 'h-7 w-7'"/>
+            <h2 class="mt-5 font-bold" :class="i === 0 ? 'text-2xl' : 'text-xl'">{{ item.title }}</h2>
+            <p class="mt-3 leading-6 text-[var(--muted)]" :class="i === 0 ? 'text-base' : 'text-sm'">{{ item.text }}</p>
+            <!-- Le cas mis en avant détaille sa chaîne : la carte gagne en substance au lieu
+                 d'être un simple agrandissement des deux autres. -->
+            <ul v-if="i === 0" class="mt-6 flex-1 space-y-2.5 border-t pt-5 text-sm text-[var(--muted)]">
+              <li v-for="point in leadUseCasePoints" :key="point" class="flex gap-2.5"><Check class="mt-0.5 h-4 w-4 shrink-0 text-violet-600"/>{{ point }}</li>
+            </ul>
+            <span class="mt-6 inline-flex items-center gap-2 text-sm font-bold text-violet-700" :class="i === 0 ? '' : 'flex-1 items-end'">{{ t.discover }} <ArrowRight class="h-4 w-4"/></span>
           </NuxtLink>
         </div>
       </div>
@@ -95,11 +114,24 @@
       </div>
     </section>
 
-    <!-- 6. Méthode -->
-    <section class="section-pad">
-      <div class="container-shell">
-        <SectionHeading :kicker="t.methodKicker" center :description="t.methodDescription">{{ t.methodTitle1 }} <span class="text-gradient">{{ t.methodTitle2 }}</span></SectionHeading>
-        <ol class="mt-12 grid gap-5 md:grid-cols-2 lg:grid-cols-4"><li v-for="item in method" :key="item.step" class="card"><span class="font-mono text-xs font-bold text-violet-700">{{ item.step }}</span><h2 class="mt-4 text-lg font-bold">{{ item.title }}</h2><p class="mt-3 text-sm leading-6 text-[var(--muted)]">{{ item.text }}</p></li></ol>
+    <!-- 6. Méthode — rupture sombre à mi-page : casse la répétition des sections claires
+         et donne un deuxième temps fort après le hero. Parallax au scroll sur le fond. -->
+    <section ref="methodSectionEl" class="method-band grain relative overflow-hidden py-24 text-white lg:py-32">
+      <div class="scroll-parallax pointer-events-none absolute -right-24 -top-24 h-[420px] w-[420px] rounded-full bg-violet-600/20 blur-[110px]" style="--depth: 60" aria-hidden="true"/>
+      <div class="scroll-parallax pointer-events-none absolute -bottom-32 -left-20 h-[380px] w-[380px] rounded-full bg-[#3DE0C5]/10 blur-[110px]" style="--depth: -45" aria-hidden="true"/>
+      <div class="container-shell relative">
+        <div class="max-w-3xl">
+          <p class="kicker !text-[#3DE0C5]">{{ t.methodKicker }}</p>
+          <h2 class="mt-5 text-3xl font-bold leading-[1.1] tracking-[-.03em] sm:text-5xl">{{ t.methodTitle1 }} <span class="text-gradient-flow">{{ t.methodTitle2 }}</span></h2>
+          <p class="mt-5 text-lg leading-8 text-white/70">{{ t.methodDescription }}</p>
+        </div>
+        <ol class="method-steps mt-14">
+          <li v-for="(item, i) in method" :key="item.step" class="method-step reveal" :data-reveal-delay="i * 80">
+            <span class="method-step-num">{{ item.step }}</span>
+            <h3 class="mt-5 text-lg font-bold">{{ item.title }}</h3>
+            <p class="mt-3 text-sm leading-6 text-white/60">{{ item.text }}</p>
+          </li>
+        </ol>
       </div>
     </section>
 
@@ -112,18 +144,31 @@
       </div>
     </section>
 
-    <!-- 8. Objections et réservation intégrée -->
-    <section class="section-pad">
-      <div class="container-shell grid gap-12 lg:grid-cols-[.78fr_1.22fr]">
-        <div><SectionHeading :kicker="t.faqKicker" :description="t.bookingDescription">{{ t.faqTitle1 }} <span class="text-gradient">{{ t.faqTitle2 }}</span></SectionHeading><div class="mt-8"><FaqAccordion :items="faqs"/></div></div>
-        <div id="reservation" class="scroll-mt-24"><p class="kicker">{{ t.bookingKicker }}</p><h2 class="mt-4 text-3xl font-bold">{{ t.bookingTitle }}</h2><p class="mt-3 text-sm leading-6 text-[var(--muted)]">{{ t.bookingText }}</p><BookingWidget class="mt-6"/></div>
+    <!-- 8. Objections et réservation — dernière étape du parcours : les objections se lèvent
+         à gauche, la réservation est mise en avant à droite dans un panneau surélevé. -->
+    <section class="section-pad bg-[var(--surface)]">
+      <div class="container-shell">
+        <div class="mx-auto max-w-2xl text-center">
+          <p class="kicker">{{ t.faqKicker }}</p>
+          <h2 class="mt-4 text-3xl font-bold leading-[1.12] tracking-[-.03em] sm:text-4xl">{{ t.faqTitle1 }} <span class="text-gradient">{{ t.faqTitle2 }}</span></h2>
+          <p class="mt-4 text-base leading-7 text-[var(--muted)]">{{ t.bookingDescription }}</p>
+        </div>
+        <div class="mt-14 grid items-start gap-10 lg:grid-cols-[1fr_1.05fr] lg:gap-14">
+          <div class="reveal-left"><FaqAccordion :items="faqs"/></div>
+          <div id="reservation" class="booking-panel reveal-right scroll-mt-24">
+            <p class="kicker">{{ t.bookingKicker }}</p>
+            <h3 class="mt-3 text-2xl font-bold leading-snug">{{ t.bookingTitle }}</h3>
+            <p class="mt-3 text-sm leading-6 text-[var(--muted)]">{{ t.bookingText }}</p>
+            <BookingWidget class="mt-6"/>
+          </div>
+        </div>
       </div>
     </section>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ArrowRight, Bell, Bot, Clapperboard, Code2, Database, MessageCircle, MousePointerClick, Rocket, ShoppingCart, Target, TimerOff, TrendingUp, UserRoundX, Waypoints, Workflow } from 'lucide-vue-next'
+import { ArrowRight, Bell, Bot, Check, Clapperboard, Code2, Database, MessageCircle, MousePointerClick, Rocket, ShoppingCart, Target, TimerOff, TrendingUp, UserRoundX, Waypoints, Workflow } from 'lucide-vue-next'
 import type { ComponentPublicInstance } from 'vue'
 import gsap from 'gsap'
 import { CustomEase } from 'gsap/CustomEase'
@@ -136,6 +181,8 @@ const localePath = useLocalePath()
 const { openCalendly } = useCalendly()
 const { whatsappUrl, hasWhatsapp } = useWhatsapp()
 const revealRoot = useScrollReveal()
+// Parallax au scroll des halos de la bande "méthode" (inerte si prefers-reduced-motion).
+const methodSectionEl = useScrollParallax()
 
 // Révélation séquencée du bloc texte hero à l'arrivée (one-shot, cf. brief J2 Hero).
 type ComponentWithEl = { $el?: unknown }
@@ -326,6 +373,9 @@ const featuredProjects = computed(() => {
   return (items.some(project => project.featured) ? items.filter(project => project.featured) : items).slice(0, 3)
 })
 const testimonials = computed(() => (testimonialsData.value?.items?.length ? testimonialsData.value.items : demoTestimonials).slice(0, 3))
+// Compteurs de la bande de preuve : volumes réels publiés, jamais de chiffre inventé.
+const projectsCount = computed(() => projectsData.value?.items?.length || demoProjects.length)
+const testimonialsCount = computed(() => testimonialsData.value?.items?.length || demoTestimonials.length)
 
 const seo = computed(() => locale.value === 'en' ? {
   title: 'Turn more prospects into booked meetings', description: 'NovatrixAI connects acquisition, CRM and follow-up so prospects stop leaking between your tools. Explore the system and book a free audit.',
@@ -342,7 +392,7 @@ const t = computed(() => locale.value === 'en' ? {
   secondaryKicker: 'four more connected systems', secondaryTitle1: 'Pilot operations, grow, retain', secondaryTitle2: 'or produce video content.', secondaryDescription: 'When the bottleneck is no longer acquisition, we connect the systems that run behind the sale.',
   methodKicker: 'a controlled path', methodTitle1: 'Understand first.', methodTitle2: 'Connect what matters.', methodDescription: 'Every phase has a decision, an explicit scope and a usable output.',
   proofKicker: 'delivered, not invented', proofTitle1: 'Systems that have already', proofTitle2: 'run in real conditions.', proofDescription: 'The evidence below comes from published project records and client feedback available on the site.', allProof: 'All case studies', testimonialsKicker: 'client feedback',
-  faqKicker: 'before you book', faqTitle1: 'Clear answers, then', faqTitle2: 'a useful audit.', bookingDescription: 'Check the main objections, then choose a slot directly here.', bookingKicker: 'book inside the site', bookingTitle: 'Choose your free audit slot.', bookingText: 'The calendar loads only after you choose to display the slots. If it is unavailable, the local contact form takes over.',
+  faqKicker: 'before you book', faqTitle1: 'Clear answers, then', faqTitle2: 'a useful audit.', bookingDescription: 'Check the main objections, then choose a slot directly here.', bookingKicker: 'book inside the site', bookingTitle: 'Choose your free audit slot.', bookingText: 'The calendar opens directly below. If it is unavailable, the local contact form takes over.',
 } : {
   heroKicker: 'système d’acquisition connecté', heroTitle: 'Transformez plus de vos prospects en rendez-vous — <span class="text-gradient-flow">sans les perdre entre vos outils.</span>', heroDescription: 'On relie campagnes, pages de conversion, CRM et relances dans un seul système commercial, avec des prochaines étapes et responsabilités définies.', seeProof: 'Voir les réalisations', auditNote: 'L’audit identifie la première rupture de votre parcours. Sans engagement et sans outil imposé.', contactUs: 'Nous contacter directement', whatsappUs: 'Ou écrivez-nous sur WhatsApp',
   problemsKicker: 'là où les ventes se bloquent', problemsTitle1: 'Vos leads sont là.', problemsTitle2: 'Les passages de relais cassent.', problemsDescription: 'La perte arrive souvent après le clic : entre un formulaire, un message, un tableur et la prochaine relance.',
@@ -351,7 +401,7 @@ const t = computed(() => locale.value === 'en' ? {
   secondaryKicker: 'quatre autres systèmes connectés', secondaryTitle1: 'Piloter les opérations, grandir, fidéliser', secondaryTitle2: 'ou produire du contenu vidéo.', secondaryDescription: 'Quand le blocage n’est plus l’acquisition, on relie les systèmes qui tournent derrière la vente.',
   methodKicker: 'un parcours maîtrisé', methodTitle1: 'Comprendre d’abord.', methodTitle2: 'Relier ce qui compte.', methodDescription: 'Chaque phase produit une décision, un périmètre explicite et un livrable utilisable.',
   proofKicker: 'livré, pas inventé', proofTitle1: 'Des systèmes déjà', proofTitle2: 'mis en situation réelle.', proofDescription: 'Les preuves ci-dessous viennent des fiches projets publiées et des retours clients disponibles sur le site.', allProof: 'Toutes les réalisations', testimonialsKicker: 'retours clients',
-  faqKicker: 'avant de réserver', faqTitle1: 'Des réponses claires, puis', faqTitle2: 'un audit utile.', bookingDescription: 'Vérifiez les principales objections, puis choisissez votre créneau directement ici.', bookingKicker: 'réservation sur le site', bookingTitle: 'Choisissez votre créneau d’audit gratuit.', bookingText: 'Le calendrier ne charge qu’après votre choix d’afficher les créneaux. S’il est indisponible, le formulaire local prend le relais.',
+  faqKicker: 'avant de réserver', faqTitle1: 'Des réponses claires, puis', faqTitle2: 'un audit utile.', bookingDescription: 'Vérifiez les principales objections, puis choisissez votre créneau directement ici.', bookingKicker: 'réservation sur le site', bookingTitle: 'Choisissez votre créneau d’audit gratuit.', bookingText: 'Le calendrier s’ouvre directement ci-dessous. S’il est indisponible, le formulaire local prend le relais.',
 })
 
 const problems = computed(() => locale.value === 'en' ? [
@@ -376,6 +426,17 @@ const useCases = computed(() => locale.value === 'en' ? [
   { to: '/solutions/agent-whatsapp-ia', icon: MessageCircle, title: 'Qualifier les échanges WhatsApp', text: 'Répondre, recueillir le contexte et transmettre une conversation structurée à la bonne personne.' },
   { to: '/solutions/automatisation-n8n', icon: Workflow, title: 'Arrêter les ressaisies', text: 'Relier les outils existants pour que l’information circule une fois et reste exploitable.' },
   { to: '/solutions/relance-panier-abandonne', icon: ShoppingCart, title: 'Relancer les paniers abandonnés', text: 'Détecter l’abandon et déclencher une relance calibrée sur le canal choisi.' },
+])
+// Détail du cas d'usage mis en avant : reprend ce que fait réellement l'agent WhatsApp
+// (cf. /solutions/agent-whatsapp-ia), sans promesse de résultat chiffré.
+const leadUseCasePoints = computed(() => locale.value === 'en' ? [
+  'Answers immediately, even outside office hours',
+  'Collects the context before the sales conversation',
+  'Hands over a structured thread to the right person',
+] : [
+  'Répond tout de suite, même hors horaires de bureau',
+  'Recueille le contexte avant l’échange commercial',
+  'Transmet un fil structuré à la bonne personne',
 ])
 const secondaryOffers = computed(() => locale.value === 'en' ? [
   { tag: '2', title: 'AI Piloting Agents', description: 'Connect repetitive operational work to controlled AI agents on WhatsApp or Telegram, with validation rules for sensitive actions.', result: 'a controlled operating system', features: ['Tasks mapped before automation', 'Connections to existing tools', 'Human validation where needed'], to: '/offres/pilotage-ia', icon: Bot },

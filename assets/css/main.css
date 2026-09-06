@@ -262,6 +262,13 @@ svg.lucide { stroke-width: 1.6; }
   transition: transform .25s cubic-bezier(.22, 1, .36, 1);
 }
 
+/* --- Parallax au scroll (piloté par useScrollParallax via --sy/--depth) ---
+   Complète .parallax-layer (souris) : fonctionne aussi sur mobile et au défilement. --- */
+.scroll-parallax {
+  will-change: transform;
+  transform: translate3d(0, calc(var(--sy, 0) * var(--depth, 0) * 1px), 0);
+}
+
 /* --- Tilt 3D (cartes) --- */
 .tilt { transform-style: preserve-3d; transition: transform .4s cubic-bezier(.22, 1, .36, 1); will-change: transform; }
 .tilt-inner { transform: translateZ(40px); }
@@ -543,5 +550,101 @@ svg.lucide { stroke-width: 1.6; }
   *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
   .reveal, .reveal-left, .reveal-right, .reveal-scale { opacity: 1 !important; transform: none !important; }
   .orb { animation: none; }
-  .parallax-layer { transform: none !important; }
+  .parallax-layer, .scroll-parallax { transform: none !important; }
+}
+
+/* ============================================================
+   BANDE "MÉTHODE" — rupture sombre à mi-page (accueil).
+   Remplace 4 cartes blanches identiques par une progression
+   numérotée reliée par une ligne : le parcours se lit d'un coup
+   d'œil au lieu de 4 blocs de même poids visuel.
+   ============================================================ */
+.method-band {
+  background-color: #1c0038;
+  background-image: linear-gradient(150deg, #2a0a52 0%, #1c0038 55%, #150029 100%);
+}
+.method-steps {
+  display: grid;
+  gap: 2.25rem 1.5rem;
+  counter-reset: method;
+}
+.method-step {
+  position: relative;
+  padding-left: 3.75rem;
+}
+/* Ligne verticale de liaison (mobile) : le parcours reste lisible comme une suite. */
+.method-step::before {
+  content: "";
+  position: absolute;
+  left: 1.3rem;
+  top: 3rem;
+  bottom: -2.25rem;
+  width: 1px;
+  background: linear-gradient(to bottom, rgba(255,255,255,.22), rgba(255,255,255,0));
+}
+.method-step:last-child::before { display: none; }
+.method-step-num {
+  position: absolute;
+  left: 0;
+  top: 0;
+  display: grid;
+  place-items: center;
+  width: 2.6rem;
+  height: 2.6rem;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, .18);
+  background: rgba(255, 255, 255, .05);
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: .75rem;
+  font-weight: 700;
+  color: #3DE0C5;
+  backdrop-filter: blur(6px);
+}
+@media (min-width: 768px) {
+  .method-steps { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (min-width: 1024px) {
+  .method-steps { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 2rem 1.75rem; }
+  .method-step { padding-left: 0; padding-top: 4.25rem; }
+  .method-step-num { top: 0; }
+  /* Desktop : la ligne passe à l'horizontale, d'une étape à la suivante. */
+  .method-step::before {
+    left: 3.1rem;
+    right: -1.75rem;
+    top: 1.3rem;
+    bottom: auto;
+    width: auto;
+    height: 1px;
+    background: linear-gradient(to right, rgba(255,255,255,.22), rgba(255,255,255,0));
+  }
+}
+
+/* Panneau de réservation (accueil) : surélevé et cerné pour marquer la dernière étape
+   du parcours, au lieu d'une simple colonne de texte à côté de la FAQ. */
+.booking-panel {
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border-subtle);
+  background: var(--bg-elevated);
+  padding: 1.75rem;
+  box-shadow: var(--elev-3);
+}
+@media (min-width: 640px) { .booking-panel { padding: 2.25rem; } }
+.dark .booking-panel { background: var(--surface); border-color: rgba(255, 255, 255, .1); }
+
+/* Cas d'usage (accueil) : le premier cas occupe une colonne pleine hauteur à gauche,
+   les deux autres s'empilent à droite. Évite trois cartes de poids strictement égal. */
+.use-case-grid { grid-template-columns: minmax(0, 1fr); }
+@media (min-width: 1024px) {
+  .use-case-grid {
+    grid-template-columns: 1.25fr 1fr;
+    grid-template-rows: repeat(2, minmax(0, 1fr));
+  }
+  .use-case-lead { grid-row: span 2; }
+}
+.use-case-lead {
+  background: linear-gradient(158deg, rgba(109, 40, 217, .06), transparent 62%), var(--bg-elevated);
+  border-color: rgba(109, 40, 217, .18);
+}
+.dark .use-case-lead {
+  background: linear-gradient(158deg, rgba(139, 92, 246, .12), transparent 62%), var(--surface);
 }

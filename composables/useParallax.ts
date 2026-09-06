@@ -127,3 +127,49 @@ export function useScrollProgress() {
     cancelAnimationFrame(raf)
   })
 }
+
+/**
+ * Parallax piloté par le SCROLL (complément de `useParallax`, qui ne réagit qu'à la souris
+ * et reste donc inerte sur mobile). Écrit `--sy` sur l'élément hôte : progression -1..1 de
+ * la traversée de l'élément dans le viewport (0 = centré à l'écran).
+ *
+ * Les enfants `.scroll-parallax` consomment `--sy` avec leur propre `--depth` :
+ *   const host = useScrollParallax()
+ *   <section :ref="host">
+ *     <div class="scroll-parallax" style="--depth: 40"> couche lente </div>
+ *   </section>
+ *
+ * Désactivé si prefers-reduced-motion. Lecture seule du layout dans un rAF : aucun
+ * listener de scroll bloquant, et rien n'est écrit pendant la phase de scroll elle-même.
+ */
+export function useScrollParallax() {
+  const host = ref<HTMLElement | null>(null)
+  let raf = 0
+
+  const update = () => {
+    raf = 0
+    const el = host.value
+    if (!el) return
+    const r = el.getBoundingClientRect()
+    const vh = window.innerHeight || 1
+    // Centre de l'élément rapporté au centre du viewport, normalisé et borné.
+    const progress = ((r.top + r.height / 2) - vh / 2) / (vh / 2 + r.height / 2)
+    el.style.setProperty('--sy', Math.max(-1, Math.min(1, progress)).toFixed(3))
+  }
+  const onScroll = () => { if (!raf) raf = requestAnimationFrame(update) }
+
+  onMounted(() => {
+    if (!host.value) return
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
+    window.addEventListener('scroll', onScroll, { passive: true })
+    window.addEventListener('resize', onScroll, { passive: true })
+    update()
+  })
+  onBeforeUnmount(() => {
+    window.removeEventListener('scroll', onScroll)
+    window.removeEventListener('resize', onScroll)
+    cancelAnimationFrame(raf)
+  })
+
+  return host
+}
