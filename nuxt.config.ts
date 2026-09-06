@@ -58,8 +58,14 @@ export default defineNuxtConfig({
     autopublishApiKey: process.env.AUTOPUBLISH_API_KEY || '',
     n8nWebhookUrl: process.env.N8N_WEBHOOK_URL || '',
     ghlWebhookUrl: process.env.GHL_WEBHOOK_URL || '',
-    mailProviderKey: process.env.MAIL_PROVIDER_KEY || '',
-    mailFrom: process.env.MAIL_FROM || 'NovatrixAI <ressources@novatrixai.com>',
+    // Envoi d e-mails par SMTP (cf. server/utils/mail.ts).
+    smtpHost: process.env.SMTP_HOST || '',
+    smtpPort: process.env.SMTP_PORT || '587',
+    smtpUser: process.env.SMTP_USER || '',
+    smtpPass: process.env.SMTP_PASS || '',
+    mailFrom: process.env.MAIL_FROM || 'NovatrixAI <contact@novatrixai.com>',
+    // Destinataire des alertes 'nouveau lead' si le reglage admin lead_notification_email est vide.
+    mailToInternal: process.env.MAIL_TO_INTERNAL || '',
     s3Endpoint: process.env.S3_ENDPOINT || '',
     s3Bucket: process.env.S3_BUCKET || '',
     s3Key: process.env.S3_KEY || '',
@@ -71,7 +77,8 @@ export default defineNuxtConfig({
     public: {
       siteUrl: process.env.SITE_URL || 'http://localhost:3000',
       calendarUrl: process.env.NUXT_PUBLIC_CALENDAR_URL || 'https://calendly.com/novatrix217/audit-gratuit',
-      whatsappUrl: process.env.NUXT_PUBLIC_WHATSAPP_URL || 'https://wa.me/22900000000',
+      // Vide par defaut : les CTA WhatsApp sont masques tant qu un vrai numero n est pas configure.
+      whatsappUrl: process.env.NUXT_PUBLIC_WHATSAPP_URL || '',
       cloudinaryCloudName: process.env.NUXT_CLOUDINARY_CLOUD_NAME || '',
     },
   },

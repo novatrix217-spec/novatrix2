@@ -22,6 +22,7 @@
       <div v-if="menuOpen" id="mobile-menu" class="border-t px-5 py-5 lg:hidden" :class="isHero ? 'border-white/10 glass-dark' : 'border-[var(--border-subtle)] glass'">
         <nav class="flex flex-col gap-1" :aria-label="$t('header.mobileNav')">
           <NuxtLink v-for="link in links" :key="link.to" :to="localePath(link.to)" class="rounded-xl px-4 py-3 text-sm font-semibold transition" :class="isActive(link.to) ? (isHero ? 'bg-white/10 text-white' : 'bg-[var(--accent-soft)] text-[var(--accent)]') : 'hover:bg-[var(--accent-soft)]'" @click="menuOpen = false">{{ link.label }}</NuxtLink>
+          <NuxtLink :to="localePath('/contact')" class="rounded-xl px-4 py-3 text-sm font-semibold transition" :class="isActive('/contact') ? (isHero ? 'bg-white/10 text-white' : 'bg-[var(--accent-soft)] text-[var(--accent)]') : 'hover:bg-[var(--accent-soft)]'" @click="menuOpen = false">{{ $t('nav.contact') }}</NuxtLink>
           <div class="mt-3 flex gap-2">
             <NuxtLink :to="switchLocalePath(locale === 'fr' ? 'en' : 'fr')" class="grid h-12 place-items-center rounded-xl border px-4 font-mono text-xs font-bold" @click="menuOpen = false">{{ locale === 'fr' ? 'EN' : 'FR' }}</NuxtLink>
             <button class="grid h-12 w-12 place-items-center rounded-xl border" :aria-label="$t('header.changeTheme')" @click="toggleTheme"><Sun v-if="colorMode.value === 'dark'" class="h-4 w-4" /><Moon v-else class="h-4 w-4" /></button>
@@ -56,7 +57,9 @@ const links = computed(() => [
   { label: t('nav.useCases'), to: '/solutions' },
   { label: t('nav.realisations'), to: '/realisations' },
   { label: t('nav.videoLab'), to: '/video-lab' },
+  { label: t('nav.formation'), to: '/formation' },
   { label: t('nav.resources'), to: '/ressources' },
+  { label: t('nav.blog'), to: '/blog' },
   { label: t('nav.about'), to: '/a-propos' },
 ])
 function isActive(to: string) {

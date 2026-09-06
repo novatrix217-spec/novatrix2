@@ -20,11 +20,11 @@ tourne en **fonctions serverless** ; le preset Nitro `vercel` est auto-détecté
 | `ADMIN_EMAIL` / `ADMIN_PASSWORD` | Bootstrap du 1er admin si `users` vide | |
 
 **Requises pour les ressources téléchargeables (S3/Cloudflare R2) :**
-`S3_ENDPOINT`, `S3_BUCKET`, `S3_KEY`, `S3_SECRET`.
+`NUXT_CLOUDINARY_CLOUD_NAME` / `NUXT_CLOUDINARY_API_KEY` / `NUXT_CLOUDINARY_API_SECRET` (hebergement des fichiers et medias). Les variables `S3_*` sont facultatives : elles ne servent qu aux ressources historiques stockees avant la bascule sur Cloudinary.
 
 **Optionnelles :**
 `AUTOPUBLISH_API_KEY` (auto-publication n8n/Make), `N8N_WEBHOOK_URL`, `GHL_WEBHOOK_URL`,
-`MAIL_PROVIDER_KEY` + `MAIL_FROM` (emails Resend),
+`SMTP_HOST` / `SMTP_PORT` / `SMTP_USER` / `SMTP_PASS` + `MAIL_FROM` (envoi SMTP), `MAIL_TO_INTERNAL` (alertes nouveau lead),
 `NUXT_PUBLIC_CALENDAR_URL`, `NUXT_PUBLIC_WHATSAPP_URL`, `ALLOW_DEMO_DOWNLOADS`.
 
 ## 3. Comportement sans configuration

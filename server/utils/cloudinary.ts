@@ -13,7 +13,9 @@ export async function uploadRaw(data:Uint8Array,folder:string,filename:string){
   const base64=`data:application/octet-stream;base64,${Buffer.from(data).toString('base64')}`
   const publicId=`${filename.replace(/\.[^.]+$/,'').replace(/[^a-z0-9-]/gi,'-')}-${Date.now()}`
   const result=await client().uploader.upload(base64,{folder:`novatrixai/${folder}`,resource_type:'raw',public_id:publicId,use_filename:false})
-  return {url:result.secure_url}
+  // fl_attachment force le telechargement : sans lui un PDF s ouvre dans l onglet au lieu d etre enregistre.
+  const url=result.secure_url.replace('/raw/upload/','/raw/upload/fl_attachment/')
+  return {url}
 }
 export function cloudinaryUrl(publicId:string,transform=''){
   const c=config()

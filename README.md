@@ -25,9 +25,11 @@ Copier .env.example, puis définir :
 - AUTH_SESSION_SECRET : secret d’au moins 32 caractères pour sessions et liens signés.
 - ADMIN_EMAIL et ADMIN_PASSWORD : création du premier administrateur si users est vide.
 - AUTOPUBLISH_API_KEY : clé Bearer réservée à n8n/Make.
-- S3_* : endpoint, bucket et identifiants R2/S3.
+- NUXT_CLOUDINARY_* : hebergement des fichiers, images et videos (stockage principal).
+- S3_* : facultatif, uniquement pour les ressources historiques anterieures a la bascule Cloudinary.
 - N8N_WEBHOOK_URL et GHL_WEBHOOK_URL : webhooks facultatifs des nouveaux leads.
-- MAIL_PROVIDER_KEY et MAIL_FROM : livraison email via Resend.
+- SMTP_HOST, SMTP_PORT, SMTP_USER, SMTP_PASS et MAIL_FROM : livraison email via SMTP.
+- MAIL_TO_INTERNAL : destinataire des alertes "nouveau lead" (sinon le reglage admin, sinon MAIL_FROM).
 - SITE_URL, NUXT_PUBLIC_CALENDAR_URL et NUXT_PUBLIC_WHATSAPP_URL : URLs publiques.
 
 ## Modèles MongoDB
