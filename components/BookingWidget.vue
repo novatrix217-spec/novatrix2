@@ -83,6 +83,10 @@ onMounted(() => {
   window.addEventListener('message', onCalendlyMessage)
   window.addEventListener('online', onOnline)
   window.addEventListener('offline', onOffline)
+  // Chargement direct de Calendly : priorite a la conversion plutot qu'a l'etape de
+  // consentement intermediaire (cf. politique de confidentialite et mentions legales,
+  // mises a jour en consequence pour refleter ce chargement automatique).
+  start()
 })
 onBeforeUnmount(() => {
   clearResponseTimeout()
