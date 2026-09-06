@@ -8,7 +8,10 @@
       <div class="reveal"><SectionHeading :kicker="t.teamKicker" center>{{ t.teamTitle1 }} <span class="text-gradient">{{ t.teamTitle2 }}</span></SectionHeading></div>
       <div class="mx-auto mt-12 grid max-w-3xl gap-6 sm:grid-cols-2">
         <div v-for="(member, i) in team" :key="member.name" class="card card-hover reveal-scale flex flex-col items-center !p-8 text-center" :data-reveal-delay="i * 90">
-          <img :src="member.photo" :alt="member.alt" width="112" height="112" class="h-28 w-28 rounded-full object-cover object-top" loading="lazy"/>
+          <!-- Repli sur les initiales tant qu'une photo réelle n'est pas fournie : jamais
+               d'image cassée, et jamais de portrait générique ou généré à la place. -->
+          <img v-if="member.photo && !failedPhotos.has(member.name)" :src="member.photo" :alt="member.alt" width="112" height="112" class="h-28 w-28 rounded-full object-cover object-top" loading="lazy" @error="failedPhotos.add(member.name)"/>
+          <span v-else class="grid h-28 w-28 place-items-center rounded-full bg-[var(--accent-soft)] font-heading text-2xl font-bold text-[var(--accent)]" role="img" :aria-label="member.alt">{{ member.initials }}</span>
           <p class="mt-5 font-bold">{{ member.name }}</p>
           <p class="mt-1 text-xs font-semibold uppercase tracking-wide text-[var(--text-secondary)]">{{ member.role }}</p>
         </div>
@@ -25,6 +28,8 @@ const seoMeta = computed(() => locale.value === 'en'
   : { title: 'À propos', description: 'NovatrixAI relie toute votre chaîne d’acquisition, de la pub au rendez-vous signé. Un seul responsable du résultat, basé à Cotonou.' })
 useSeoMeta({ title: () => seoMeta.value.title, description: () => seoMeta.value.description })
 const revealRoot=useScrollReveal()
+// Photos dont le chargement a échoué : bascule sur les initiales sans image cassée.
+const failedPhotos=reactive(new Set<string>())
 const t=computed(()=>locale.value==='en'?{
   kicker:'novatrixai', description:'Based in Cotonou, we take back control of the chain that’s losing you clients: from the first ad to the signed appointment.',
   heroTitle:'You don’t need one more tool.<br><span class="text-gradient">You need everything to talk to each other.</span>',
@@ -43,11 +48,11 @@ const t=computed(()=>locale.value==='en'?{
   teamKicker:'l’équipe', teamTitle1:'Derrière le', teamTitle2:'système.',
 })
 const team=computed(()=>locale.value==='en'?[
-  { name:'Raphaël Jacques-Dane Patrick Agbahungba', role:'Founder & CEO', photo:'/img/founder-dane.jpg', alt:'Raphaël Jacques-Dane Patrick Agbahungba, founder and CEO of NovatrixAI' },
-  { name:'Mériadeck Amoussou', role:'CTO', photo:'/img/cto-meriadeck.jpg', alt:'Mériadeck Amoussou, CTO of NovatrixAI' },
+  { name:'Raphaël Jacques-Dane Patrick Agbahungba', role:'Founder & CEO', initials:'RA', photo:'/img/founder-dane.jpg', alt:'Raphaël Jacques-Dane Patrick Agbahungba, founder and CEO of NovatrixAI' },
+  { name:'Mériadeck Amoussou', role:'CTO', initials:'MA', photo:'', alt:'Mériadeck Amoussou, CTO of NovatrixAI' },
 ]:[
-  { name:'Raphaël Jacques-Dane Patrick Agbahungba', role:'Fondateur & CEO', photo:'/img/founder-dane.jpg', alt:'Raphaël Jacques-Dane Patrick Agbahungba, fondateur et CEO de NovatrixAI' },
-  { name:'Mériadeck Amoussou', role:'Directeur technique (CTO)', photo:'/img/cto-meriadeck.jpg', alt:'Mériadeck Amoussou, directeur technique de NovatrixAI' },
+  { name:'Raphaël Jacques-Dane Patrick Agbahungba', role:'Fondateur & CEO', initials:'RA', photo:'/img/founder-dane.jpg', alt:'Raphaël Jacques-Dane Patrick Agbahungba, fondateur et CEO de NovatrixAI' },
+  { name:'Mériadeck Amoussou', role:'Directeur technique (CTO)', initials:'MA', photo:'', alt:'Mériadeck Amoussou, directeur technique de NovatrixAI' },
 ])
 const values=computed(()=>locale.value==='en'?[
   {icon:FileText,title:'You keep control',text:'You understand what’s running and why. No black box, no forced dependency.'},
