@@ -273,6 +273,12 @@ svg.lucide { stroke-width: 1.6; }
 .reveal-scale { opacity: 0; transform: scale(.94); transition: opacity .7s cubic-bezier(.22, 1, .36, 1), transform .7s cubic-bezier(.22, 1, .36, 1); }
 .is-visible { opacity: 1 !important; transform: none !important; }
 
+/* --- Micro-interaction flèche ↗ (liens/CTA externes ou "en savoir plus") ---
+   Prête à l'emploi : entourer le glyphe d'un <span class="link-arrow__glyph">↗</span>
+   à l'intérieur d'un lien/bouton portant la classe .link-arrow. Aucun JS requis. */
+.link-arrow__glyph { display: inline-block; transition: transform .25s cubic-bezier(.22, 1, .36, 1); }
+.link-arrow:hover .link-arrow__glyph { transform: translate(2px, -2px); }
+
 /* --- Barre de progression de scroll (2 teintes analogues, pas d'arc-en-ciel) --- */
 .scroll-progress {
   position: fixed; top: 0; left: 0; height: 3px; z-index: 60;

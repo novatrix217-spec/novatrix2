@@ -21,3 +21,7 @@ logs
 .env
 .env.*
 !.env.example
+
+# Sources video du Video Lab : hebergees sur Cloudinary (scripts/upload-video-lab.mjs),
+# jamais versionnees. Le manifeste shared/video-lab-assets.json suffit au site.
+public/media/video-lab/

@@ -1,0 +1,72 @@
+{
+  "ceo-face-camera": {
+    "publicId": "novatrix/video-lab/ceo-face-camera",
+    "src": "https://res.cloudinary.com/ckop8kvg/video/upload/f_auto,q_auto/v1/novatrix/video-lab/ceo-face-camera?_a=BAMAPqcg0",
+    "poster": "https://res.cloudinary.com/ckop8kvg/video/upload/c_scale,q_auto,so_1,w_640/v1/novatrix/video-lab/ceo-face-camera.webp?_a=BAMAPqcg0",
+    "duration": 10.005,
+    "bytes": 2674165
+  },
+  "ceo-tournage-publicite": {
+    "publicId": "novatrix/video-lab/ceo-tournage-publicite",
+    "src": "https://res.cloudinary.com/ckop8kvg/video/upload/f_auto,q_auto/v1/novatrix/video-lab/ceo-tournage-publicite?_a=BAMAPqcg0",
+    "poster": "https://res.cloudinary.com/ckop8kvg/video/upload/c_scale,q_auto,so_1,w_640/v1/novatrix/video-lab/ceo-tournage-publicite.webp?_a=BAMAPqcg0",
+    "duration": 10.005,
+    "bytes": 2443696
+  },
+  "erudit-village-gothique": {
+    "publicId": "novatrix/video-lab/erudit-village-gothique",
+    "src": "https://res.cloudinary.com/ckop8kvg/video/upload/f_auto,q_auto/v1/novatrix/video-lab/erudit-village-gothique?_a=BAMAPqcg0",
+    "poster": "https://res.cloudinary.com/ckop8kvg/video/upload/c_scale,q_auto,so_1,w_640/v1/novatrix/video-lab/erudit-village-gothique.webp?_a=BAMAPqcg0",
+    "duration": 10.005,
+    "bytes": 4756767
+  },
+  "fondateur-cinematique": {
+    "publicId": "novatrix/video-lab/fondateur-cinematique",
+    "src": "https://res.cloudinary.com/ckop8kvg/video/upload/f_auto,q_auto/v1/novatrix/video-lab/fondateur-cinematique?_a=BAMAPqcg0",
+    "poster": "https://res.cloudinary.com/ckop8kvg/video/upload/c_scale,q_auto,so_1,w_640/v1/novatrix/video-lab/fondateur-cinematique.webp?_a=BAMAPqcg0",
+    "duration": 10.005,
+    "bytes": 3068734
+  },
+  "joueur-baseball-porcelaine": {
+    "publicId": "novatrix/video-lab/joueur-baseball-porcelaine",
+    "src": "https://res.cloudinary.com/ckop8kvg/video/upload/f_auto,q_auto/v1/novatrix/video-lab/joueur-baseball-porcelaine?_a=BAMAPqcg0",
+    "poster": "https://res.cloudinary.com/ckop8kvg/video/upload/c_scale,q_auto,so_1,w_640/v1/novatrix/video-lab/joueur-baseball-porcelaine.webp?_a=BAMAPqcg0",
+    "duration": 8,
+    "bytes": 3642772
+  },
+  "laboratoire-spatial-vide": {
+    "publicId": "novatrix/video-lab/laboratoire-spatial-vide",
+    "src": "https://res.cloudinary.com/ckop8kvg/video/upload/f_auto,q_auto/v1/novatrix/video-lab/laboratoire-spatial-vide?_a=BAMAPqcg0",
+    "poster": "https://res.cloudinary.com/ckop8kvg/video/upload/c_scale,q_auto,so_1,w_640/v1/novatrix/video-lab/laboratoire-spatial-vide.webp?_a=BAMAPqcg0",
+    "duration": 10.005,
+    "bytes": 2660799
+  },
+  "orbit-lab": {
+    "publicId": "novatrix/video-lab/orbit-lab",
+    "src": "https://res.cloudinary.com/ckop8kvg/video/upload/f_auto,q_auto/v1/novatrix/video-lab/orbit-lab?_a=BAMAPqcg0",
+    "poster": "https://res.cloudinary.com/ckop8kvg/video/upload/c_scale,q_auto,so_1,w_640/v1/novatrix/video-lab/orbit-lab.webp?_a=BAMAPqcg0",
+    "duration": 10.005,
+    "bytes": 2371398
+  },
+  "porte-parole-logiciel-saas": {
+    "publicId": "novatrix/video-lab/porte-parole-logiciel-saas",
+    "src": "https://res.cloudinary.com/ckop8kvg/video/upload/f_auto,q_auto/v1/novatrix/video-lab/porte-parole-logiciel-saas?_a=BAMAPqcg0",
+    "poster": "https://res.cloudinary.com/ckop8kvg/video/upload/c_scale,q_auto,so_1,w_640/v1/novatrix/video-lab/porte-parole-logiciel-saas.webp?_a=BAMAPqcg0",
+    "duration": 10,
+    "bytes": 4921056
+  },
+  "porte-parole-studio-fr": {
+    "publicId": "novatrix/video-lab/porte-parole-studio-fr",
+    "src": "https://res.cloudinary.com/ckop8kvg/video/upload/f_auto,q_auto/v1/novatrix/video-lab/porte-parole-studio-fr?_a=BAMAPqcg0",
+    "poster": "https://res.cloudinary.com/ckop8kvg/video/upload/c_scale,q_auto,so_1,w_640/v1/novatrix/video-lab/porte-parole-studio-fr.webp?_a=BAMAPqcg0",
+    "duration": 10.005,
+    "bytes": 2236969
+  },
+  "scientifique-labo": {
+    "publicId": "novatrix/video-lab/scientifique-labo",
+    "src": "https://res.cloudinary.com/ckop8kvg/video/upload/f_auto,q_auto/v1/novatrix/video-lab/scientifique-labo?_a=BAMAPqcg0",
+    "poster": "https://res.cloudinary.com/ckop8kvg/video/upload/c_scale,q_auto,so_1,w_640/v1/novatrix/video-lab/scientifique-labo.webp?_a=BAMAPqcg0",
+    "duration": 10.005,
+    "bytes": 1950321
+  }
+}
