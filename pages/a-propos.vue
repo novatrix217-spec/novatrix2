@@ -48,11 +48,11 @@ const t=computed(()=>locale.value==='en'?{
   teamKicker:'l’équipe', teamTitle1:'Derrière le', teamTitle2:'système.',
 })
 const team=computed(()=>locale.value==='en'?[
-  { name:'Raphaël Jacques-Dane Patrick Agbahungba', role:'Founder & CEO', initials:'RA', photo:'/img/founder-dane.jpg', alt:'Raphaël Jacques-Dane Patrick Agbahungba, founder and CEO of NovatrixAI' },
-  { name:'Mériadeck Amoussou', role:'Co-founder & CTO', initials:'MA', photo:'/img/cto-meriadeck.jpg', alt:'Mériadeck Amoussou, co-founder and CTO of NovatrixAI' },
+  { name:'Raphaël Jacques-Dane Patrick AGBAHUNGBA', role:'Founder & CEO', initials:'RA', photo:'/img/founder-dane.jpg', alt:'Raphaël Jacques-Dane Patrick AGBAHUNGBA, founder and CEO of NovatrixAI' },
+  { name:'Mériadeck AMOUSSOU', role:'Co-founder & CTO', initials:'MA', photo:'/img/cto-meriadeck.jpg', alt:'Mériadeck AMOUSSOU, co-founder and CTO of NovatrixAI' },
 ]:[
-  { name:'Raphaël Jacques-Dane Patrick Agbahungba', role:'Fondateur & CEO', initials:'RA', photo:'/img/founder-dane.jpg', alt:'Raphaël Jacques-Dane Patrick Agbahungba, fondateur et CEO de NovatrixAI' },
-  { name:'Mériadeck Amoussou', role:'Cofondateur & directeur technique (CTO)', initials:'MA', photo:'/img/cto-meriadeck.jpg', alt:'Mériadeck Amoussou, cofondateur et directeur technique de NovatrixAI' },
+  { name:'Raphaël Jacques-Dane Patrick AGBAHUNGBA', role:'Fondateur & CEO', initials:'RA', photo:'/img/founder-dane.jpg', alt:'Raphaël Jacques-Dane Patrick AGBAHUNGBA, fondateur et CEO de NovatrixAI' },
+  { name:'Mériadeck AMOUSSOU', role:'Cofondateur & directeur technique (CTO)', initials:'MA', photo:'/img/cto-meriadeck.jpg', alt:'Mériadeck AMOUSSOU, cofondateur et directeur technique de NovatrixAI' },
 ])
 const values=computed(()=>locale.value==='en'?[
   {icon:FileText,title:'You keep control',text:'You understand what’s running and why. No black box, no forced dependency.'},
