@@ -18,7 +18,7 @@ if(locale.value==='en'&&!resourceHasCompleteEnglish)await navigateTo(`/ressource
 const cld=useCloudinaryUrl()
 const coverUrl=computed(()=>cld(resource.value?.coverImageKey,'w_1200,h_500,c_fill'))
 const seoMeta=computed(()=>({title:lf(resource.value!.title,resource.value!.titleEn),description:lf(resource.value!.description,resource.value!.descriptionEn)}))
-useSeoMeta({ title: () => seoMeta.value.title, description: () => seoMeta.value.description, ogImage: () => coverUrl.value||undefined })
+usePageSeo(() => seoMeta.value.title, () => seoMeta.value.description, () => coverUrl.value || '/og-default.png')
 const gate=ref(false)
 const t=computed(()=>locale.value==='en'?{
   resourceKicker:'resource', unlock:'Unlock the resource', back:'Back to resources',

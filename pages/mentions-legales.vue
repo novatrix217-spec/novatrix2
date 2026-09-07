@@ -30,7 +30,7 @@ const localePath = useLocalePath()
 const seo = computed(() => locale.value === 'en'
   ? { title: 'Legal notice', description: 'Publisher, hosting provider and cookie information for the NovatrixAI website.' }
   : { title: 'Mentions légales', description: 'Éditeur, hébergeur et informations sur les cookies du site NovatrixAI.' })
-useSeoMeta({ title: () => seo.value.title, description: () => seo.value.description })
+usePageSeo(() => seo.value.title, () => seo.value.description)
 const t = computed(() => locale.value === 'en' ? {
   kicker: 'legal notice', title: 'Legal <span class="text-gradient">notice.</span>',
   editorTitle: 'Website publisher', editorText: 'This website is published by:',

@@ -387,7 +387,7 @@ const seo = computed(() => locale.value === 'en' ? {
 } : {
   title: 'Transformez plus de prospects en rendez-vous', description: 'NovatrixAI relie acquisition, CRM et relances pour éviter que vos prospects se perdent entre vos outils. Découvrez le système et réservez un audit gratuit.',
 })
-useSeoMeta({ title: () => seo.value.title, description: () => seo.value.description })
+usePageSeo(() => seo.value.title, () => seo.value.description)
 
 const t = computed(() => locale.value === 'en' ? {
   heroKicker: 'connected acquisition system', heroTitle: 'Turn more of your prospects into meetings — <span class="text-gradient-flow">without losing them between your tools.</span>', heroDescription: 'We connect campaigns, conversion pages, CRM and follow-up into one sales system, with defined next steps and ownership.', seeProof: 'See delivered work', auditNote: 'The audit identifies the first break in your journey. No commitment and no tool imposed.', contactUs: 'Contact us directly', whatsappUs: 'Or message us on WhatsApp',

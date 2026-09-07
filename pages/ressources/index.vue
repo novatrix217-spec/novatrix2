@@ -17,7 +17,7 @@ const t = computed(() => locale.value === 'en' ? {
 const seoMeta = computed(() => locale.value === 'en'
   ? { title: 'Free resources', description: 'NovatrixAI guides, checklists and canvases on acquisition, AI agents and building applications.' }
   : { title: 'Ressources gratuites', description: 'Guides, checklists et canevas NovatrixAI sur l’acquisition, les agents IA et la création d’applications.' })
-useSeoMeta({ title: () => seoMeta.value.title, description: () => seoMeta.value.description })
+usePageSeo(() => seoMeta.value.title, () => seoMeta.value.description)
 const {data}=await useFetch<{items:PublicResource[]}>('/api/resources',{default:()=>({items:demoResources})})
 const active=ref('Toutes')
 const localizedItems=computed(()=>{

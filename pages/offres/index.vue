@@ -36,7 +36,7 @@ const { openCalendly } = useCalendly()
 const seoMeta = computed(() => locale.value === 'en'
   ? { title: 'Six systems to acquire, operate and grow', description: 'Acquisition, AI piloting, Novatrix Launch, e-commerce retention, AI video creative and custom web & apps — six connected systems, scoped around your actual bottleneck.' }
   : { title: 'Six systèmes pour acquérir, piloter et grandir', description: 'Acquisition, pilotage IA, Novatrix Launch, rétention e-commerce, créatifs vidéo IA et web & applications sur mesure — six systèmes connectés, cadrés autour de votre blocage réel.' })
-useSeoMeta({ title: () => seoMeta.value.title, description: () => seoMeta.value.description })
+usePageSeo(() => seoMeta.value.title, () => seoMeta.value.description)
 const revealRoot = useScrollReveal()
 const t = computed(() => locale.value === 'en' ? {
   kicker: 'six connected systems', description: 'Six intervention systems built around a business flow: acquisition first, then piloting, growth, retention, creative content and the digital products that support them.',

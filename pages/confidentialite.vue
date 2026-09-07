@@ -15,7 +15,7 @@ const { locale } = useI18n()
 const seo = computed(() => locale.value === 'en'
   ? { title: 'Privacy Policy', description: 'How NovatrixAI and its booking provider process personal data.' }
   : { title: 'Politique de confidentialité', description: 'Comment NovatrixAI et son outil de réservation traitent les données personnelles.' })
-useSeoMeta({ title: () => seo.value.title, description: () => seo.value.description })
+usePageSeo(() => seo.value.title, () => seo.value.description)
 const t = computed(() => locale.value === 'en' ? {
   kicker: 'privacy', title: 'Privacy <span class="text-gradient">policy.</span>',
   collectedTitle: 'Data collected', collectedText: 'NovatrixAI collects information submitted through its forms: identity, contact details, company, consent, campaign parameters, IP address and browser information.',

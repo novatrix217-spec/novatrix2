@@ -76,7 +76,7 @@ const seo = computed(() => locale.value === 'en' ? {
 } : {
   title: 'Réserver votre audit projet gratuit', description: 'Choisissez votre créneau directement sur NovatrixAI. Nous cartographions votre système actuel et identifions la prochaine décision utile pour votre projet.',
 })
-useSeoMeta({ title: () => seo.value.title, description: () => seo.value.description })
+usePageSeo(() => seo.value.title, () => seo.value.description)
 const t = computed(() => locale.value === 'en' ? {
   kicker: 'free project audit', description: 'Choose your slot directly here. We review your current system and the outcome you want, whether the scope concerns web, applications, AI, automation or training.',
   heroTitle: 'Turn your current context into <span class="text-gradient">a useful next decision.</span>', bookingKicker: 'book without leaving the site', bookingTitle: 'Pick the slot that works for you.', bookingText: 'The conversation focuses on your objective, current tools or process, constraints and the first decision worth making.', bookingPoints: ['A map of the current context', 'The first issue or opportunity to investigate', 'A concrete next decision, with no commitment'],

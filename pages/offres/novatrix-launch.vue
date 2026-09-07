@@ -5,7 +5,12 @@ const { locale } = useI18n()
 const seoMeta = computed(() => locale.value === 'en'
   ? { title: 'Novatrix Launch — Start, Growth, Scale', description: 'A complete support program to launch, grow and scale your digital acquisition system, structured in three progressive stages.' }
   : { title: 'Novatrix Launch — Start, Growth, Scale', description: 'Un accompagnement complet pour lancer, développer et faire grandir votre système d’acquisition digitale, structuré en trois paliers progressifs.' })
-useSeoMeta({ title: () => seoMeta.value.title, description: () => seoMeta.value.description })
+usePageSeo(() => seoMeta.value.title, () => seoMeta.value.description)
+// Fil d Ariane affiche en SERP a la place de l URL brute.
+useBreadcrumb(() => [
+  { name: locale.value === 'en' ? 'Services' : 'Offres', path: '/offres' },
+  { name: seoMeta.value.title, path: '/offres/novatrix-launch' },
+])
 const titleHtml = computed(() => locale.value === 'en'
   ? 'A progressive path, from your first system to <span class="text-gradient">a scaled operation.</span>'
   : 'Un parcours progressif, du premier système à <span class="text-gradient">une activité qui passe à l’échelle.</span>')

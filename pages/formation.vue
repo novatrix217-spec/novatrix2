@@ -56,7 +56,7 @@ const { openCalendly } = useCalendly()
 const seoMeta = computed(() => locale.value === 'en'
   ? { title: 'Workshop — Explore your first AI automation', description: 'A guided 3-hour session to explore n8n and work toward a first workflow on your use case, depending on the prerequisites and your pace.' }
   : { title: 'Atelier — Explorez votre première automatisation avec l’IA', description: 'Une session guidée de 3h pour explorer n8n et avancer vers un premier workflow sur votre cas, selon les prérequis et votre rythme.' })
-useSeoMeta({ title: () => seoMeta.value.title, description: () => seoMeta.value.description })
+usePageSeo(() => seoMeta.value.title, () => seoMeta.value.description)
 const site = String(useRuntimeConfig().public.siteUrl).replace(/\/$/, '')
 useHead(() => ({ script: [
   { type: 'application/ld+json', innerHTML: JSON.stringify({ '@context': 'https://schema.org', '@type': 'Course', name: locale.value==='en'?'Explore your first AI automation':'Explorez votre première automatisation avec l’IA', description: locale.value==='en'?'Guided workshop to explore n8n and work toward a first workflow according to the participant’s prerequisites and pace.':'Atelier guidé pour explorer n8n et avancer vers un premier workflow selon les prérequis et le rythme du participant.', provider: { '@type': 'Organization', name: 'NovatrixAI', sameAs: site } }) },

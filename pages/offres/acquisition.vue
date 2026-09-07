@@ -5,7 +5,12 @@ const { locale } = useI18n()
 const seoMeta = computed(() => locale.value === 'en'
   ? { title: 'Connected acquisition system', description: 'Connect creatives, campaigns, conversion pages, CRM, follow-up and sales handoff in one readable prospect journey.' }
   : { title: 'Système d’acquisition connecté', description: 'Reliez créatifs, campagnes, pages de conversion, CRM, relances et passage aux ventes dans un parcours prospect lisible.' })
-useSeoMeta({ title: () => seoMeta.value.title, description: () => seoMeta.value.description })
+usePageSeo(() => seoMeta.value.title, () => seoMeta.value.description)
+// Fil d Ariane affiche en SERP a la place de l URL brute.
+useBreadcrumb(() => [
+  { name: locale.value === 'en' ? 'Services' : 'Offres', path: '/offres' },
+  { name: seoMeta.value.title, path: '/offres/acquisition' },
+])
 const titleHtml = computed(() => locale.value === 'en'
   ? 'Stop paying for clicks that <span class="text-gradient">end up in the trash.</span>'
   : 'Arrêtez de payer des clics qui <span class="text-gradient">finissent à la poubelle.</span>')

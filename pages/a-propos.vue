@@ -26,7 +26,7 @@ const { locale } = useI18n()
 const seoMeta = computed(() => locale.value === 'en'
   ? { title: 'About', description: 'NovatrixAI connects your entire acquisition chain, from the ad to the signed appointment. One team accountable for the result, based in Cotonou.' }
   : { title: 'À propos', description: 'NovatrixAI relie toute votre chaîne d’acquisition, de la pub au rendez-vous signé. Un seul responsable du résultat, basé à Cotonou.' })
-useSeoMeta({ title: () => seoMeta.value.title, description: () => seoMeta.value.description })
+usePageSeo(() => seoMeta.value.title, () => seoMeta.value.description)
 const revealRoot=useScrollReveal()
 // Photos dont le chargement a échoué : bascule sur les initiales sans image cassée.
 const failedPhotos=reactive(new Set<string>())

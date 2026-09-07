@@ -42,7 +42,7 @@ const t = computed(() => locale.value === 'en' ? {
 const seoMeta = computed(() => locale.value === 'en'
   ? { title: 'Client reviews', description: 'What NovatrixAI clients say about the systems delivered — reviews moderated before publication.' }
   : { title: 'Avis clients', description: 'Ce que les clients de NovatrixAI disent des systèmes livrés — avis modérés avant publication.' })
-useSeoMeta({ title: () => seoMeta.value.title, description: () => seoMeta.value.description })
+usePageSeo(() => seoMeta.value.title, () => seoMeta.value.description)
 const {data}=await useFetch<{items:PublicTestimonial[]}>('/api/testimonials',{default:()=>({items:demoTestimonials})})
 const form=reactive({name:'',role:'',email:'',rating:5,text:'',website:''}),pending=ref(false),feedback=ref(''),success=ref(false)
 async function submit(){pending.value=true;feedback.value='';try{await $fetch('/api/testimonials',{method:'POST',body:form});success.value=true;feedback.value=t.value.sent;Object.assign(form,{name:'',role:'',email:'',rating:5,text:''})}catch(e:any){success.value=false;feedback.value=locale.value==='fr'&&e?.data?.statusMessage?e.data.statusMessage:t.value.failed}finally{pending.value=false}}

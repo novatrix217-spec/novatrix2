@@ -40,7 +40,7 @@ const t = computed(() => locale.value === 'en' ? {
 const seoMeta = computed(() => locale.value === 'en'
   ? { title: 'Case studies', description: 'Automations, AI agents and applications delivered by NovatrixAI — real systems, not mockups.' }
   : { title: 'Réalisations', description: 'Automatisations, agents IA et applications livrés par NovatrixAI — des systèmes réels, pas des maquettes.' })
-useSeoMeta({ title: () => seoMeta.value.title, description: () => seoMeta.value.description })
+usePageSeo(() => seoMeta.value.title, () => seoMeta.value.description)
 const {data}=await useFetch<{items:PublicProject[]}>('/api/projects',{default:()=>({items:demoProjects})})
 const {data:testimonials}=await useFetch<{items:PublicTestimonial[]}>('/api/testimonials',{default:()=>({items:demoTestimonials})})
 const active=ref('Toutes')

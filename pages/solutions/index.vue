@@ -24,7 +24,7 @@ const { openCalendly } = useCalendly()
 const seoMeta = computed(() => locale.value === 'en'
   ? { title: 'Use cases — solve a visible break first', description: 'WhatsApp qualification, n8n data flow and abandoned cart follow-up: start from the situation your team recognizes today.' }
   : { title: 'Cas d’usage — corriger d’abord une rupture visible', description: 'Qualification WhatsApp, circulation des données avec n8n et relance panier : partez de la situation que votre équipe reconnaît aujourd’hui.' })
-useSeoMeta({ title: () => seoMeta.value.title, description: () => seoMeta.value.description })
+usePageSeo(() => seoMeta.value.title, () => seoMeta.value.description)
 const t = computed(() => locale.value === 'en' ? {
   kicker: 'use cases', title1: 'Start from the situation', title2: 'that blocks the sale.',
   description: 'These pages describe concrete uses. Each one can be scoped alone, then connected to a complete system when useful.',

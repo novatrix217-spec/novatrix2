@@ -5,7 +5,7 @@ const { locale } = useI18n()
 const seoMeta = computed(() => locale.value === 'en'
   ? { title: 'n8n Automation — custom workflows between your tools', description: 'Design, development and maintenance of n8n workflows: your tools talk to each other, your data flows on its own, no more manual re-entry.' }
   : { title: 'Automatisation n8n — workflows sur mesure entre vos outils', description: 'Conception, développement et maintenance de workflows n8n : vos outils se parlent, vos données circulent seules, plus de ressaisie manuelle.' })
-useSeoMeta({ title: () => seoMeta.value.title, description: () => seoMeta.value.description })
+usePageSeo(() => seoMeta.value.title, () => seoMeta.value.description)
 const titleHtml = computed(() => locale.value === 'en'
   ? 'Your tools connected by n8n — <span class="text-gradient">with fewer manual handoffs.</span>'
   : 'Vos outils reliés par n8n — <span class="text-gradient">avec moins de passages manuels.</span>')

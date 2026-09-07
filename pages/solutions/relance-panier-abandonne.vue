@@ -5,7 +5,7 @@ const { locale } = useI18n()
 const seoMeta = computed(() => locale.value === 'en'
   ? { title: 'Abandoned cart recovery — Shopify and beyond', description: 'An automation that detects abandoned carts and follows up by SMS, email or WhatsApp at the right time. System already deployed on Shopify with Twilio.' }
   : { title: 'Relance automatique des paniers abandonnés — Shopify et au-delà', description: 'Une automatisation qui détecte les paniers abandonnés et relance par SMS, email ou WhatsApp au bon moment. Système déjà déployé sur Shopify avec Twilio.' })
-useSeoMeta({ title: () => seoMeta.value.title, description: () => seoMeta.value.description })
+usePageSeo(() => seoMeta.value.title, () => seoMeta.value.description)
 const titleHtml = computed(() => locale.value === 'en'
   ? 'Follow up on abandoned carts <span class="text-gradient">before the opportunity goes cold.</span>'
   : 'Relancez les paniers abandonnés <span class="text-gradient">avant que l’opportunité ne refroidisse.</span>')

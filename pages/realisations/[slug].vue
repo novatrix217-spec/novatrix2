@@ -52,7 +52,7 @@ if(locale.value==='en'&&!projectHasCompleteEnglish)await navigateTo(`/realisatio
 const projectImage=useProjectImage()
 const coverUrl=computed(()=>projectImage(project.value,'w_1200,h_675,c_fill'))
 const seoMeta=computed(()=>({title:lf(project.value!.title,project.value!.titleEn),description:lf(project.value!.summary,project.value!.summaryEn)}))
-useSeoMeta({ title: () => seoMeta.value.title, description: () => seoMeta.value.description, ogImage: () => coverUrl.value||undefined })
+usePageSeo(() => seoMeta.value.title, () => seoMeta.value.description, () => coverUrl.value || '/og-default.png')
 const { openCalendly } = useCalendly()
 const localizedFeatures=computed(()=>lf(project.value?.features,project.value?.featuresEn)||[])
 const localizedResults=computed(()=>lf(project.value?.results,project.value?.resultsEn)||[])

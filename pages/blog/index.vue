@@ -16,7 +16,7 @@ const t = computed(() => locale.value === 'en' ? {
 const seoMeta = computed(() => locale.value === 'en'
   ? { title: 'AI, acquisition and products blog', description: 'NovatrixAI analyses on acquisition systems, AI piloting agents and business applications.' }
   : { title: 'Blog IA, acquisition et produits', description: 'Analyses NovatrixAI sur les systèmes d’acquisition, les agents IA de pilotage et les applications métier.' })
-useSeoMeta({ title: () => seoMeta.value.title, description: () => seoMeta.value.description })
+usePageSeo(() => seoMeta.value.title, () => seoMeta.value.description)
 const {data}=await useFetch<{items:PublicArticle[]}>('/api/articles',{default:()=>({items:demoArticles})})
 const articles=computed(() => {
   const items = data.value?.items || []

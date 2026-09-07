@@ -5,7 +5,12 @@ const { locale } = useI18n()
 const seoMeta = computed(() => locale.value === 'en'
   ? { title: 'Custom web development and applications', description: 'Websites, web and mobile apps, APIs and integrations that connect your processes and stop double entry. Built to be used, not just demoed.' }
   : { title: 'Création web et applications sur mesure', description: 'Sites, applis web et mobiles, APIs et intégrations qui relient vos process et arrêtent les doubles saisies. Conçus pour être utilisés, pas seulement montrés.' })
-useSeoMeta({ title: () => seoMeta.value.title, description: () => seoMeta.value.description })
+usePageSeo(() => seoMeta.value.title, () => seoMeta.value.description)
+// Fil d Ariane affiche en SERP a la place de l URL brute.
+useBreadcrumb(() => [
+  { name: locale.value === 'en' ? 'Services' : 'Offres', path: '/offres' },
+  { name: seoMeta.value.title, path: '/offres/creation-web-apps' },
+])
 const titleHtml = computed(() => locale.value === 'en'
   ? 'A digital product designed to save time for <span class="text-gradient">your teams when adopted.</span>'
   : 'Un produit numérique conçu pour faire gagner du temps à <span class="text-gradient">vos équipes lorsqu’il est adopté.</span>')

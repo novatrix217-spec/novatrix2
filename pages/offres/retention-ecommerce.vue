@@ -5,7 +5,12 @@ const { locale } = useI18n()
 const seoMeta = computed(() => locale.value === 'en'
   ? { title: 'E-commerce retention and conversion', description: 'Email and SMS abandoned-cart recovery, segmentation and AI CRM for e-commerce, built to recover more carts and keep customers coming back.' }
   : { title: 'Rétention & conversion e-commerce', description: 'Relance email/SMS des paniers abandonnés, segmentation et CRM IA e-commerce, pensés pour récupérer plus de paniers et fidéliser vos clients.' })
-useSeoMeta({ title: () => seoMeta.value.title, description: () => seoMeta.value.description })
+usePageSeo(() => seoMeta.value.title, () => seoMeta.value.description)
+// Fil d Ariane affiche en SERP a la place de l URL brute.
+useBreadcrumb(() => [
+  { name: locale.value === 'en' ? 'Services' : 'Offres', path: '/offres' },
+  { name: seoMeta.value.title, path: '/offres/retention-ecommerce' },
+])
 const titleHtml = computed(() => locale.value === 'en'
   ? 'Recover the carts you’re already <span class="text-gradient">paying to attract.</span>'
   : 'Récupérez les paniers que vous <span class="text-gradient">payez déjà pour attirer.</span>')

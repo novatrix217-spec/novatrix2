@@ -91,7 +91,7 @@ const revealRoot = useScrollReveal()
 const seoMeta = computed(() => locale.value === 'en'
   ? { title: 'Video Lab — AI-generated creative content', description: 'AI avatar UGC, script and voice, multilingual dubbing, automatic long-video cutdown and pre-release performance prediction.' }
   : { title: 'Vidéo Lab — contenu créatif généré par IA', description: 'UGC IA avatar/script/voix, doublage multilingue, découpage automatique de vidéos longues et prédiction de performance avant diffusion.' })
-useSeoMeta({ title: () => seoMeta.value.title, description: () => seoMeta.value.description })
+usePageSeo(() => seoMeta.value.title, () => seoMeta.value.description)
 
 const t = computed(() => locale.value === 'en' ? {
   kicker: 'offer · ai video creative', title1: 'AI-generated video content,', title2: 'made to convert.',

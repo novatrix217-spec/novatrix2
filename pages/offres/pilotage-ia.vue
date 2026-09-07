@@ -5,7 +5,12 @@ const { locale } = useI18n()
 const seoMeta = computed(() => locale.value === 'en'
   ? { title: 'Controlled AI piloting agents', description: 'Connect selected operational tasks to AI agents with explicit access, validation and escalation rules.' }
   : { title: 'Agents IA de pilotage contrôlés', description: 'Reliez certaines tâches opérationnelles à des agents IA avec des règles explicites d’accès, de validation et d’escalade.' })
-useSeoMeta({ title: () => seoMeta.value.title, description: () => seoMeta.value.description })
+usePageSeo(() => seoMeta.value.title, () => seoMeta.value.description)
+// Fil d Ariane affiche en SERP a la place de l URL brute.
+useBreadcrumb(() => [
+  { name: locale.value === 'en' ? 'Services' : 'Offres', path: '/offres' },
+  { name: seoMeta.value.title, path: '/offres/pilotage-ia' },
+])
 const titleHtml = computed(() => locale.value === 'en'
   ? 'Pilot selected workflows through <span class="text-gradient">a controlled conversation.</span>'
   : 'Pilotez certains flux via <span class="text-gradient">une conversation contrôlée.</span>')
