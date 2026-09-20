@@ -2,9 +2,11 @@
 // aux projets importés par scripts/seed-comeup.mjs). Le contenu est paraphrasé à partir du
 // cahier des charges et du modèle de consolidation RH conservés dans le Drive interne.
 //
-// Le client n’est pas nommé : secteur santé, données patients, et aucun accord écrit de
-// référencement public n’a été recueilli. Aucun résultat chiffré n’est publié — les seules
-// valeurs du dossier (tarif de téléconsultation, volumes de CA) sont des données client.
+// L’organisation n’est pas nommée : secteur santé, données patients, et aucun accord écrit de
+// référencement n’a été recueilli pour la structure elle-même. Seule la citation du dirigeant
+// est reprise, parce qu’elle est déjà publiée sous son nom (avis ComeUp, cf. quoteAfter).
+// Aucun résultat chiffré n’est publié — les seules valeurs du dossier (tarif de
+// téléconsultation, volumes de CA) sont des données client.
 // Insertion uniquement si le slug n’existe pas ; une fiche déjà présente n’est jamais écrasée.
 // Le mode par défaut est une simulation en lecture seule.
 //
@@ -68,6 +70,17 @@ const project = {
     'Worked hours consolidated per employee and per month',
     'Export in the format expected by the payroll software',
   ],
+  // Avis laissé sur ComeUp par le dirigeant, déjà importé et publié par scripts/seed-comeup.mjs
+  // sous son nom et sa fonction : la citation est donc déjà publique et consentie. Elle est
+  // reprise ici telle quelle, sans mentionner le centre de santé ni le secteur.
+  quoteAfter: {
+    text: 'Je tiens à vous remercier sincèrement pour votre efficacité et votre réactivité face à une demande urgente. Votre travail est remarquable, réalisé avec sérieux, écoute du client et une véritable force de proposition.',
+    author: 'Donald Alban Petrus, Président, DSAP – LDR Group',
+  },
+  quoteAfterEn: {
+    text: 'I sincerely want to thank you for your efficiency and responsiveness in handling an urgent request. Your work is remarkable, carried out with seriousness, attentiveness to the client, and real initiative.',
+    author: 'Donald Alban Petrus, President, DSAP – LDR Group',
+  },
   tools: ['Make', 'Google Sheets'],
   status: 'draft',
   featured: false,
