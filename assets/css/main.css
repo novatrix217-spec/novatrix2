@@ -182,16 +182,21 @@ svg.lucide { stroke-width: 1.6; }
   background-image: linear-gradient(165deg, #2a0a52 0%, #1c0038 60%, #1c0038 100%);
 }
 /* Header flottant sur le hero : un fond dégressif (au lieu de transparent) le distingue
-   nettement du hero derrière lui, sans casser l'effet "flottant" recherché.
-   Le dégradé seul ne suffisait pas : il est de la même couleur que le hero (#1c0038), donc
-   invisible sur la page d'accueil. Un filet lumineux en bas du header et un léger flou
-   tracent la limite entre la nav et le hero, sans ajouter de barre opaque. */
-.header-hero {
-  background-image: linear-gradient(180deg, rgba(11, 3, 24, .92) 0%, rgba(17, 2, 38, .72) 60%, rgba(28, 0, 56, 0) 100%);
-  backdrop-filter: blur(10px) saturate(130%);
-  -webkit-backdrop-filter: blur(10px) saturate(130%);
-  border-bottom: 1px solid rgba(255, 255, 255, .1);
-  box-shadow: 0 1px 0 rgba(255, 255, 255, .04), 0 12px 32px rgba(0, 0, 0, .28);
+   nettement du hero derrière lui, sans casser l'effet "flottant" recherché. */
+
+/* Barre de navigation : opaque en permanence, y compris au-dessus du hero violet.
+   Le .glass semi-transparent laissait remonter le violet du hero et teintait la barre en
+   lilas, ce qui affaiblissait le contraste du logo et des liens. Un fond franc règle le
+   contraste une fois pour toutes, quelle que soit la section survolée. */
+header.glass {
+  background: var(--surface);
+  border-bottom: 1px solid var(--border-subtle);
+  box-shadow: 0 1px 0 rgba(22, 6, 48, .04), 0 10px 30px rgba(35, 6, 65, .08);
+}
+.dark header.glass {
+  background: var(--surface);
+  border-bottom-color: rgba(255, 255, 255, .1);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, .45);
 }
 .soft-grid {
   background-image: linear-gradient(rgba(109,40,217,.015) 1px, transparent 1px), linear-gradient(90deg, rgba(109,40,217,.015) 1px, transparent 1px);
@@ -672,7 +677,9 @@ svg.lucide { stroke-width: 1.6; }
 .hero-screen {
   height: 100vh;
   height: 100svh;
-  padding-top: 7rem;
+  /* La barre de navigation est opaque : le contenu doit commencer franchement dessous,
+     sinon le kicker passe sous la barre au lieu de s'aligner avec. */
+  padding-top: 8.5rem;
   padding-bottom: 1.5rem;
 }
 @media (min-width: 1024px) {

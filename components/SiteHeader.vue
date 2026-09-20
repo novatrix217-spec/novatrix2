@@ -59,8 +59,13 @@ const menuOpen = ref(false)
 const scrolled = ref(false)
 const openGroup = ref<string | null>(null)
 const { openCalendly } = useCalendly()
-// Header sombre tant qu'on survole le hero (fond violet) ; bascule en glass clair une fois le hero dépassé.
-const isHero = computed(() => (route.path === '/' || route.path === '/en') && colorMode.value !== 'dark' && !scrolled.value)
+// La nav reste claire en permanence, y compris au-dessus du hero violet : le contenu qu'elle
+// porte (liens, logo, boutons) est donc toujours dessiné en couleurs sombres, lisibles sur le
+// fond clair. Auparavant elle basculait en transparent sur le hero, ce qui donnait du texte
+// blanc sur fond clair pendant la transition et un contraste illisible sur mobile.
+// isHero est conservé et figé à false : le header garde une seule apparence, et les variantes
+// « sur le hero » des classes utilitaires ci-dessous deviennent inertes sans être supprimées.
+const isHero = computed(() => false)
 // Le hero (.hero-screen) fait 100vh moins la hauteur du header, pas la hauteur pleine du
 // viewport : on bascule dès qu'on a dépassé sa position réelle dans le document, pour ne
 // pas garder le texte blanc de la nav sur un fond clair une fois le hero passé.
