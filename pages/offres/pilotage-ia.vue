@@ -27,7 +27,7 @@ const content = computed(() => locale.value === 'en' ? {
   faqs: [
     { question: 'How is this system priced?', answer: 'It depends on the number of workflows, access rules and integrations. The free audit defines the useful first scope.' },
     { question: 'How is the delivery timeline set?', answer: 'It depends on the validated workflows, data access and safeguards. The delivery sequence is agreed after scoping.' },
-    { question: 'What if the agent gets something wrong?', answer: 'On legal, tax and financial matters, it prepares and proposes — you validate. On the rest, an escalation safeguard is set with you before the first deployment.' },
+    { question: 'What if the agent gets something wrong?', answer: 'On legal, tax and financial matters, it prepares and proposes: you validate. On the rest, an escalation safeguard is set with you before the first deployment.' },
     { question: 'Can I limit what the agent does on its own?', answer: 'Yes, the autonomy level is fixed with you, action by action, before the first deployment.' },
   ],
   ctaTitle: 'Identify the first workflow worth controlling with an agent.',
@@ -44,7 +44,7 @@ const content = computed(() => locale.value === 'en' ? {
   faqs: [
     { question: 'Comment ce système est-il chiffré ?', answer: 'Cela dépend du nombre de flux, des règles d’accès et des intégrations. L’audit gratuit définit le premier périmètre utile.' },
     { question: 'Comment le délai de livraison est-il fixé ?', answer: 'Il dépend des flux validés, des accès aux données et des garde-fous. La séquence de livraison est convenue après le cadrage.' },
-    { question: 'Que se passe-t-il si l’agent se trompe ?', answer: 'Sur les sujets juridiques, fiscaux et financiers, il prépare et propose — c’est vous qui validez. Sur le reste, un garde-fou d’escalade est fixé avec vous avant le premier déploiement.' },
+    { question: 'Que se passe-t-il si l’agent se trompe ?', answer: 'Sur les sujets juridiques, fiscaux et financiers, il prépare et propose : c’est vous qui validez. Sur le reste, un garde-fou d’escalade est fixé avec vous avant le premier déploiement.' },
     { question: 'Puis-je limiter ce que l’agent fait seul ?', answer: 'Oui, le niveau d’autonomie est fixé avec vous, action par action, avant le premier déploiement.' },
   ],
   ctaTitle: 'Identifiez le premier flux à confier à un agent contrôlé.',

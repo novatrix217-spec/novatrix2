@@ -4,24 +4,24 @@
     <!-- Hero plein écran : la hauteur du header fixe est retirée du calcul (au lieu d'être
          ajoutée en padding), sinon la section dépasse le viewport au lieu de le remplir.
          100svh suit la barre d'URL mobile, avec repli 100vh pour les navigateurs anciens. -->
-    <section class="hero-rich hero-screen relative flex overflow-hidden text-white">
+    <section class="hero-rich hero-screen relative flex items-center overflow-hidden text-white">
       <ClientOnly><HeroCanvas /></ClientOnly>
-      <div class="container-shell relative z-10 grid w-full items-center gap-8 py-10 lg:grid-cols-[1.12fr_.88fr]">
+      <div class="container-shell relative z-10 grid w-full items-center gap-6 py-6 lg:grid-cols-[1.12fr_.88fr] lg:gap-8">
         <div class="relative z-10">
-          <p ref="heroKickerEl" class="kicker !text-[#3DE0C5]">{{ t.heroKicker }}</p>
-          <h1 ref="heroTitleEl" class="mt-5 max-w-4xl text-[2.35rem] font-bold leading-[1.05] tracking-[-.04em] sm:text-5xl xl:text-6xl" v-html="t.heroTitle"/>
-          <p ref="heroDescEl" class="mt-5 max-w-2xl text-base leading-7 text-white/75 sm:text-lg sm:leading-8">{{ t.heroDescription }}</p>
-          <div class="mt-7 flex flex-col gap-3 sm:flex-row">
-            <button ref="heroCtaBtnEl" type="button" class="btn-primary !px-7 !py-4" @click="openCalendly">{{ $t('header.bookCall') }} <ArrowRight class="h-4 w-4"/></button>
-            <NuxtLink ref="heroCtaLinkEl" :to="localePath('/realisations')" class="inline-flex min-h-12 items-center justify-center rounded-xl border border-white/20 px-6 py-3 text-sm font-bold text-white transition hover:bg-white/10">{{ t.seeProof }}</NuxtLink>
+          <p ref="heroKickerEl" class="kicker !text-[#3DE0C5] !text-xs">{{ t.heroKicker }}</p>
+          <h1 ref="heroTitleEl" class="mt-4 max-w-4xl text-[clamp(1.5rem,2.4vw+3vh,3.5rem)] font-bold leading-[1.08] tracking-[-.04em]" v-html="t.heroTitle"/>
+          <p ref="heroDescEl" class="mt-3 max-w-2xl text-[clamp(.9rem,.3vw+1.4vh,1.15rem)] leading-7 text-white/75">{{ t.heroDescription }}</p>
+          <div class="mt-5 flex flex-col gap-3 sm:flex-row">
+            <button ref="heroCtaBtnEl" type="button" class="btn-primary !px-6 !py-3 !text-sm" @click="openCalendly">{{ $t('header.bookCall') }} <ArrowRight class="h-4 w-4"/></button>
+            <NuxtLink ref="heroCtaLinkEl" :to="localePath('/realisations')" class="inline-flex min-h-11 items-center justify-center rounded-xl border border-white/20 px-6 py-3 text-sm font-bold text-white transition hover:bg-white/10">{{ t.seeProof }}</NuxtLink>
           </div>
-          <div class="mt-4 flex flex-col gap-2 sm:flex-row sm:items-center sm:gap-4">
+          <div class="mt-3 flex flex-col gap-2 sm:flex-row sm:items-center sm:gap-4">
             <a href="#reservation" class="inline-flex items-center gap-2 text-sm font-bold text-white underline decoration-white/40 underline-offset-4 transition hover:decoration-white">{{ t.contactUs }} <ArrowRight class="h-3.5 w-3.5"/></a>
             <a v-if="hasWhatsapp" :href="whatsappUrl" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 text-sm font-semibold text-white/70 transition hover:text-white"><SvgWhatsappSVG class="h-4 w-4 shrink-0"/>{{ t.whatsappUs }}</a>
           </div>
-          <p ref="heroAuditNoteEl" class="mt-4 max-w-xl text-xs leading-5 text-white/55">{{ t.auditNote }}</p>
+          <p ref="heroAuditNoteEl" class="mt-3 max-w-xl text-xs leading-5 text-white/55">{{ t.auditNote }}</p>
         </div>
-        <HeroFlowViz class="mt-6 lg:mt-0 lg:h-[480px]" />
+        <HeroFlowViz class="mt-4 max-h-[36vh] lg:mt-0 lg:max-h-[min(440px,50vh)]" />
       </div>
     </section>
 
@@ -121,7 +121,6 @@
     <!-- 6. Méthode — rupture sombre à mi-page : casse la répétition des sections claires
          et donne un deuxième temps fort après le hero. Parallax au scroll sur le fond. -->
     <section ref="methodSectionEl" class="method-band grain relative overflow-hidden py-24 text-white lg:py-32">
-      <BrandRibbon id="ribbon-method" on-dark/>
       <div class="scroll-parallax pointer-events-none absolute -right-24 -top-24 h-[420px] w-[420px] rounded-full bg-violet-600/20 blur-[110px]" style="--depth: 60" aria-hidden="true"/>
       <div class="scroll-parallax pointer-events-none absolute -bottom-32 -left-20 h-[380px] w-[380px] rounded-full bg-[#3DE0C5]/10 blur-[110px]" style="--depth: -45" aria-hidden="true"/>
       <div class="container-shell relative z-10">
@@ -131,7 +130,7 @@
           <p class="mt-5 text-lg leading-8 text-white/70">{{ t.methodDescription }}</p>
         </div>
         <ol class="method-steps mt-14">
-          <li v-for="(item, i) in method" :key="item.step" class="method-step reveal" :data-reveal-delay="i * 80">
+          <li v-for="item in method" :key="item.step" class="method-step">
             <span class="method-step-num">{{ item.step }}</span>
             <h3 class="mt-5 text-lg font-bold">{{ item.title }}</h3>
             <p class="mt-3 text-sm leading-6 text-white/60">{{ item.text }}</p>
@@ -145,7 +144,7 @@
       <div class="container-shell">
         <div class="flex flex-col justify-between gap-6 sm:flex-row sm:items-end"><SectionHeading :kicker="t.proofKicker" :description="t.proofDescription">{{ t.proofTitle1 }} <span class="text-gradient">{{ t.proofTitle2 }}</span></SectionHeading><NuxtLink :to="localePath('/realisations')" class="btn-secondary">{{ t.allProof }} <ArrowRight class="h-4 w-4"/></NuxtLink></div>
         <div class="mt-12 grid gap-6 md:grid-cols-3"><ProjectCard v-for="project in featuredProjects" :key="project.slug" :project="project"/></div>
-        <div v-if="testimonials.length" class="mt-14 border-t pt-12"><p class="kicker text-center">{{ t.testimonialsKicker }}</p><TestimonialWall class="mt-7" :items="testimonials" :limit="3"/></div>
+        <div v-if="testimonials.length" class="mt-14 border-t pt-12"><p class="kicker text-center">{{ t.testimonialsKicker }}</p><TestimonialCarousel class="mt-7" :items="testimonials"/></div>
       </div>
     </section>
 
@@ -377,7 +376,7 @@ const featuredProjects = computed(() => {
   const items = locale.value === 'en' ? source.filter(hasCompleteProjectEnglish) : source
   return (items.some(project => project.featured) ? items.filter(project => project.featured) : items).slice(0, 3)
 })
-const testimonials = computed(() => (testimonialsData.value?.items?.length ? testimonialsData.value.items : demoTestimonials).slice(0, 3))
+const testimonials = computed(() => testimonialsData.value?.items?.length ? testimonialsData.value.items : demoTestimonials)
 // Compteurs de la bande de preuve : volumes réels publiés, jamais de chiffre inventé.
 const projectsCount = computed(() => projectsData.value?.items?.length || demoProjects.length)
 const testimonialsCount = computed(() => testimonialsData.value?.items?.length || demoTestimonials.length)
@@ -385,12 +384,12 @@ const testimonialsCount = computed(() => testimonialsData.value?.items?.length |
 const seo = computed(() => locale.value === 'en' ? {
   title: 'Turn more prospects into booked meetings', description: 'NovatrixAI connects acquisition, CRM and follow-up so prospects stop leaking between your tools. Explore the system and book a free audit.',
 } : {
-  title: 'Transformez plus de prospects en rendez-vous', description: 'NovatrixAI relie acquisition, CRM et relances pour éviter que vos prospects se perdent entre vos outils. Découvrez le système et réservez un audit gratuit.',
+  title: 'Transformez plus de prospects en rendez-vous', description: 'NovatrixAI relie acquisition, CRM et relances pour éviter que vos prospects se perdent entre vos outils. Réservez un audit gratuit.',
 })
 usePageSeo(() => seo.value.title, () => seo.value.description)
 
 const t = computed(() => locale.value === 'en' ? {
-  heroKicker: 'connected acquisition system', heroTitle: 'Turn more of your prospects into meetings — <span class="text-gradient-flow">without losing them between your tools.</span>', heroDescription: 'We connect campaigns, conversion pages, CRM and follow-up into one sales system, with defined next steps and ownership.', seeProof: 'See delivered work', auditNote: 'The audit identifies the first break in your journey. No commitment and no tool imposed.', contactUs: 'Contact us directly', whatsappUs: 'Or message us on WhatsApp',
+  heroKicker: 'connected acquisition system', heroTitle: 'Turn more of your prospects into meetings, <span class="text-gradient-flow">without losing them between your tools.</span>', heroDescription: 'We connect campaigns, conversion pages, CRM and follow-up into one sales system, with defined next steps and ownership.', seeProof: 'See delivered work', auditNote: 'The audit identifies the first break in your journey. No commitment and no tool imposed.', contactUs: 'Contact us directly', whatsappUs: 'Or message us on WhatsApp',
   problemsKicker: 'where sales stall', problemsTitle1: 'Your leads are there.', problemsTitle2: 'The handoffs fail.', problemsDescription: 'The loss often happens after the click: between a form, a message, a spreadsheet and the next follow-up.',
   acquisitionKicker: 'flagship solution', acquisitionTitle1: 'One acquisition system,', acquisitionTitle2: 'from attention to sales.', acquisitionDescription: 'We connect the five links that move a prospect forward. The scope adapts to what already exists and what is actually broken.', viewAcquisition: 'Explore the acquisition system',
   useCasesKicker: 'start from a concrete leak', useCasesTitle1: 'A use case your team', useCasesTitle2: 'recognizes immediately.', useCasesDescription: 'Each use case solves a visible break and can connect to the complete acquisition system.', allUseCases: 'All use cases', discover: 'See the use case',
@@ -399,7 +398,7 @@ const t = computed(() => locale.value === 'en' ? {
   proofKicker: 'delivered, not invented', proofTitle1: 'Systems that have already', proofTitle2: 'run in real conditions.', proofDescription: 'The evidence below comes from published project records and client feedback available on the site.', allProof: 'All case studies', testimonialsKicker: 'client feedback',
   faqKicker: 'before you book', faqTitle1: 'Clear answers, then', faqTitle2: 'a useful audit.', bookingDescription: 'Check the main objections, then choose a slot directly here.', bookingKicker: 'book inside the site', bookingTitle: 'Choose your free audit slot.', bookingText: 'The calendar opens directly below. If it is unavailable, the local contact form takes over.',
 } : {
-  heroKicker: 'système d’acquisition connecté', heroTitle: 'Transformez plus de vos prospects en rendez-vous — <span class="text-gradient-flow">sans les perdre entre vos outils.</span>', heroDescription: 'On relie campagnes, pages de conversion, CRM et relances dans un seul système commercial, avec des prochaines étapes et responsabilités définies.', seeProof: 'Voir les réalisations', auditNote: 'L’audit identifie la première rupture de votre parcours. Sans engagement et sans outil imposé.', contactUs: 'Nous contacter directement', whatsappUs: 'Ou écrivez-nous sur WhatsApp',
+  heroKicker: 'système d’acquisition connecté', heroTitle: 'Transformez plus de vos prospects en rendez-vous, <span class="text-gradient-flow">sans les perdre entre vos outils.</span>', heroDescription: 'On relie campagnes, pages de conversion, CRM et relances dans un seul système commercial, avec des prochaines étapes et responsabilités définies.', seeProof: 'Voir les réalisations', auditNote: 'L’audit identifie la première rupture de votre parcours. Sans engagement et sans outil imposé.', contactUs: 'Nous contacter directement', whatsappUs: 'Ou écrivez-nous sur WhatsApp',
   problemsKicker: 'là où les ventes se bloquent', problemsTitle1: 'Vos leads sont là.', problemsTitle2: 'Les passages de relais cassent.', problemsDescription: 'La perte arrive souvent après le clic : entre un formulaire, un message, un tableur et la prochaine relance.',
   acquisitionKicker: 'solution locomotive', acquisitionTitle1: 'Un système d’acquisition,', acquisitionTitle2: 'de l’attention à la vente.', acquisitionDescription: 'On relie les cinq maillons qui font avancer un prospect. Le périmètre s’adapte à l’existant et à ce qui bloque réellement.', viewAcquisition: 'Découvrir le système d’acquisition',
   useCasesKicker: 'partir d’une fuite concrète', useCasesTitle1: 'Un cas d’usage que votre équipe', useCasesTitle2: 'reconnaît tout de suite.', useCasesDescription: 'Chaque cas règle une rupture visible et peut se connecter au système d’acquisition complet.', allUseCases: 'Tous les cas d’usage', discover: 'Voir le cas d’usage',
@@ -445,12 +444,12 @@ const leadUseCasePoints = computed(() => locale.value === 'en' ? [
 ])
 const secondaryOffers = computed(() => locale.value === 'en' ? [
   { tag: '2', title: 'AI Piloting Agents', description: 'Connect repetitive operational work to controlled AI agents on WhatsApp or Telegram, with validation rules for sensitive actions.', result: 'a controlled operating system', features: ['Tasks mapped before automation', 'Connections to existing tools', 'Human validation where needed'], to: '/offres/pilotage-ia', icon: Bot },
-  { tag: '3', title: 'Novatrix Launch', description: 'A staged support program — Start, Growth, Scale — that adapts to where your system stands today.', result: 'a progressive path to a scaled system', features: ['Start: first system live', 'Growth: follow-up and CRM connected', 'Scale: channels expanded'], to: '/offres/novatrix-launch', icon: Rocket },
+  { tag: '3', title: 'Novatrix Launch', description: 'A staged support program (Start, Growth, Scale) that adapts to where your system stands today.', result: 'a progressive path to a scaled system', features: ['Start: first system live', 'Growth: follow-up and CRM connected', 'Scale: channels expanded'], to: '/offres/novatrix-launch', icon: Rocket },
   { tag: '4', title: 'E-commerce Retention & Conversion', description: 'Email/SMS abandoned-cart recovery, segmentation and AI CRM built to bring customers back.', result: 'more recovered carts, customers who return', features: ['Abandoned-cart detection and recovery', 'Email and SMS sequences', 'Behavior-based segmentation'], to: '/offres/retention-ecommerce', icon: ShoppingCart },
   { tag: '5', title: 'AI Creative & Video Content', description: 'AI avatar UGC, multilingual dubbing, automatic cutdown and performance prediction.', result: 'video content at a steady pace', features: ['AI avatar UGC', 'Multilingual dubbing', 'Automatic cutdown'], to: '/video-lab', icon: Clapperboard },
 ] : [
   { tag: '2', title: 'Agents IA de pilotage interne', description: 'Relier le travail opérationnel répétitif à des agents IA contrôlés sur WhatsApp ou Telegram, avec des règles de validation pour les actions sensibles.', result: 'un système d’opérations maîtrisé', features: ['Tâches cartographiées avant automatisation', 'Connexion aux outils existants', 'Validation humaine quand elle compte'], to: '/offres/pilotage-ia', icon: Bot },
-  { tag: '3', title: 'Novatrix Launch', description: 'Un accompagnement progressif — Start, Growth, Scale — qui s’adapte à l’état actuel de votre système.', result: 'un parcours progressif vers un système à l’échelle', features: ['Start : premier système opérationnel', 'Growth : relances et CRM connectés', 'Scale : canaux étendus'], to: '/offres/novatrix-launch', icon: Rocket },
+  { tag: '3', title: 'Novatrix Launch', description: 'Un accompagnement progressif (Start, Growth, Scale) qui s’adapte à l’état actuel de votre système.', result: 'un parcours progressif vers un système à l’échelle', features: ['Start : premier système opérationnel', 'Growth : relances et CRM connectés', 'Scale : canaux étendus'], to: '/offres/novatrix-launch', icon: Rocket },
   { tag: '4', title: 'Rétention & conversion e-commerce', description: 'Relance email/SMS des paniers abandonnés, segmentation et CRM IA pensés pour faire revenir vos clients.', result: 'plus de paniers récupérés, des clients qui reviennent', features: ['Détection et relance des paniers abandonnés', 'Séquences email et SMS', 'Segmentation comportementale'], to: '/offres/retention-ecommerce', icon: ShoppingCart },
   { tag: '5', title: 'Créatifs & contenu vidéo IA', description: 'UGC IA avatar, doublage multilingue, découpage automatique et prédiction de performance.', result: 'du contenu vidéo à un rythme régulier', features: ['UGC IA avatar', 'Doublage multilingue', 'Découpage automatique'], to: '/video-lab', icon: Clapperboard },
 ])

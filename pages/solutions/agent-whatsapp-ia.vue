@@ -3,8 +3,8 @@
 import { MessageCircle, Zap, Database, Users, ShieldCheck } from 'lucide-vue-next'
 const { locale } = useI18n()
 const seoMeta = computed(() => locale.value === 'en'
-  ? { title: 'WhatsApp AI Agent — qualification with human handoff', description: 'An AI agent wired into WhatsApp Business that uses your approved data, qualifies requests and hands the conversation to a human when needed.' }
-  : { title: 'Agent IA WhatsApp — qualification avec relais humain', description: 'Un agent IA branché sur WhatsApp Business qui utilise vos données validées, qualifie les demandes et transmet la conversation à un humain quand nécessaire.' })
+  ? { title: 'WhatsApp AI Agent: qualification with human handoff', description: 'An AI agent wired into WhatsApp Business that uses your approved data, qualifies requests and hands the conversation to a human when needed.' }
+  : { title: 'Agent IA WhatsApp : qualification avec relais humain', description: 'Un agent IA branché sur WhatsApp Business qui utilise vos données validées, qualifie les demandes et transmet la conversation à un humain quand nécessaire.' })
 usePageSeo(() => seoMeta.value.title, () => seoMeta.value.description)
 const titleHtml = computed(() => locale.value === 'en'
   ? 'Qualify WhatsApp requests and <span class="text-gradient">hand them over with context.</span>'

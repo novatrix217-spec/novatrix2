@@ -3,7 +3,7 @@
 
   <section class="card mt-8 !p-6">
     <h2 class="text-sm font-bold uppercase tracking-wide text-[var(--muted)]">Auto-publication (n8n / Make)</h2>
-    <p class="mt-2 text-sm leading-6 text-[var(--muted)]">Configurez un nœud HTTP Request dans votre automatisation : méthode <code class="rounded bg-[var(--surface-soft)] px-1.5 py-0.5 font-mono text-xs">POST</code> vers l’URL ci-dessous, en-tête <code class="rounded bg-[var(--surface-soft)] px-1.5 py-0.5 font-mono text-xs">Authorization: Bearer &lt;clé&gt;</code>, corps JSON avec <code class="rounded bg-[var(--surface-soft)] px-1.5 py-0.5 font-mono text-xs">title, excerpt, body, category</code> (voir champs optionnels dans la doc technique).</p>
+    <p class="mt-2 text-sm leading-6 text-[var(--muted)]">Configurez un nœud HTTP Request dans votre automatisation : méthode <code class="rounded bg-[var(--surface-soft)] px-1.5 py-0.5 font-mono text-xs">POST</code> vers l’URL ci-dessous, en-tête <code class="rounded bg-[var(--surface-soft)] px-1.5 py-0.5 font-mono text-xs">Authorization: Bearer &lt;clé&gt;</code>, corps JSON avec <code class="rounded bg-[var(--surface-soft)] px-1.5 py-0.5 font-mono text-xs">title, excerpt, body, category</code> (voir champs optionnels dans la doc technique). Dans <code class="rounded bg-[var(--surface-soft)] px-1.5 py-0.5 font-mono text-xs">body</code>, insérez des images avec <code class="rounded bg-[var(--surface-soft)] px-1.5 py-0.5 font-mono text-xs">![alt](url)</code> et des liens avec <code class="rounded bg-[var(--surface-soft)] px-1.5 py-0.5 font-mono text-xs">[texte](url)</code> — seules les URLs http(s) ou relatives sont acceptées.</p>
     <div v-if="automation" class="mt-4 grid gap-3 sm:grid-cols-[auto_1fr_auto]">
       <span class="self-center font-mono text-[11px] uppercase text-[var(--muted)]">URL</span>
       <code class="rounded-lg border bg-[var(--surface-soft)] px-3 py-2 text-xs">{{ automation.webhookUrl }}</code>
@@ -24,7 +24,7 @@
       <div class="flex items-center gap-4"><img v-if="coverUrl" :src="coverUrl" alt="" class="h-16 w-24 rounded-lg object-cover"/><div class="flex-1"><input type="file" accept="image/png,image/jpeg,image/webp" class="block w-full text-sm" @change="uploadCover"/><p v-if="coverNotice" class="mt-1 text-xs text-[var(--muted)]">{{ coverNotice }}</p></div></div>
       <input v-model="form.tagsRaw" class="field" placeholder="Tags, séparés par des virgules"/>
       <textarea v-model="form.excerpt" class="field min-h-20 py-3" placeholder="Extrait (affiché sur la carte et en meta description par défaut)" required maxlength="400"/>
-      <textarea v-model="form.body" class="field min-h-64 py-3 font-mono text-xs" placeholder="Corps en Markdown (#, ##, -, **gras**)" required/>
+      <textarea v-model="form.body" class="field min-h-64 py-3 font-mono text-xs" placeholder="Corps en Markdown (#, ##, -, **gras**, *italique*, [lien](url), ![alt](url))" required/>
       <details class="text-sm"><summary class="cursor-pointer font-semibold text-[var(--muted)]">Référencement (optionnel)</summary>
         <div class="mt-3 space-y-3"><input v-model="form.metaTitle" class="field" placeholder="Titre SEO (70 car. max, sinon le titre)" maxlength="70"/><textarea v-model="form.metaDescription" class="field min-h-16 py-2" placeholder="Meta description (170 car. max, sinon l’extrait)" maxlength="170"/></div>
       </details>

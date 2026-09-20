@@ -27,7 +27,7 @@ export function loadCalendlyAssets(): Promise<void> {
       document.head.appendChild(link)
     }
 
-    const timeout = window.setTimeout(() => reject(new Error('timeout')), 12000)
+    const timeout = window.setTimeout(() => reject(new Error('timeout')), 20000)
     const finish = () => {
       window.clearTimeout(timeout)
       window.Calendly ? resolve() : reject(new Error('unavailable'))

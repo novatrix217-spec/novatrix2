@@ -2,6 +2,8 @@ import mongoose from 'mongoose'
 const { Schema,model,models }=mongoose
 const MetricSchema=new Schema({value:{type:String,required:true},label:{type:String,required:true}},{_id:false})
 const QuoteSchema=new Schema({text:{type:String,required:true},author:String},{_id:false})
+const DashboardRowSchema=new Schema({month:{type:String,required:true},prospects:{type:String,required:true},purchases:{type:String,required:true},revenue:{type:String,required:true}},{_id:false})
+const DashboardProofSchema=new Schema({period:{type:String,required:true},prospects:{type:String,required:true},purchases:{type:String,required:true},revenue:{type:String,required:true},roi:{type:String,required:true},rows:{type:[DashboardRowSchema],default:[]},totalProspects:{type:String,required:true},totalPurchases:{type:String,required:true},totalRevenue:{type:String,required:true}},{_id:false})
 const ProjectSchema=new Schema({
   title:{type:String,required:true,trim:true},
   titleEn:String,
@@ -24,6 +26,7 @@ const ProjectSchema=new Schema({
   results:{type:[String],default:[]},
   resultsEn:{type:[String],default:[]},
   tools:{type:[String],default:[]},
+  dashboardProof:DashboardProofSchema,
   deliveryDays:Number,
   coverImageKey:String,
   status:{type:String,enum:['draft','published'],default:'draft',index:true},

@@ -5,7 +5,7 @@
         <CalendarDays class="mx-auto h-9 w-9 text-violet-700"/>
         <h3 class="mt-5 text-2xl font-bold text-[#160630]">{{ t.consentTitle }}</h3>
         <p class="mt-3 text-sm leading-6 text-slate-600">{{ t.consentText }}</p>
-        <button type="button" class="btn-primary mt-6" :aria-controls="hostId" @click="start">{{ t.showSlots }}</button>
+        <button type="button" class="btn-primary mt-6" :aria-controls="hostId" @click="start()">{{ t.showSlots }}</button>
         <p class="mt-4 text-xs leading-5 text-slate-500"><NuxtLink :to="localePath('/confidentialite') + '#calendly'" class="underline hover:text-violet-700" @click="closeCalendly">{{ t.privacy }}</NuxtLink></p>
       </div>
     </div>
@@ -13,7 +13,7 @@
       <div><LoaderCircle class="mx-auto h-7 w-7 animate-spin text-violet-700"/><p class="mt-4 font-semibold text-[#160630]">{{ t.loading }}</p><p class="mt-2 text-sm text-slate-500">{{ t.loadingHelp }}</p></div>
     </div>
     <div v-else-if="status === 'error' || status === 'offline'" class="absolute inset-0 z-10 grid place-items-center bg-white p-8 text-center" role="alert">
-      <div class="max-w-md"><WifiOff class="mx-auto h-8 w-8 text-violet-700"/><h3 class="mt-4 text-xl font-bold text-[#160630]">{{ status === 'offline' ? t.offline : t.error }}</h3><p class="mt-3 text-sm leading-6 text-slate-600">{{ t.fallback }}</p><div class="mt-6 flex flex-col justify-center gap-3 sm:flex-row"><button type="button" class="btn-primary" @click="start">{{ t.retry }}</button><NuxtLink :to="localePath('/contact') + '#contact-form'" class="btn-secondary" @click="closeCalendly">{{ t.form }}</NuxtLink></div></div>
+      <div class="max-w-md"><WifiOff class="mx-auto h-8 w-8 text-violet-700"/><h3 class="mt-4 text-xl font-bold text-[#160630]">{{ status === 'offline' ? t.offline : t.error }}</h3><p class="mt-3 text-sm leading-6 text-slate-600">{{ t.fallback }}</p><div class="mt-6 flex flex-col justify-center gap-3 sm:flex-row"><button type="button" class="btn-primary" @click="start()">{{ t.retry }}</button><NuxtLink :to="localePath('/contact') + '#contact-form'" class="btn-secondary" @click="closeCalendly">{{ t.form }}</NuxtLink></div></div>
     </div>
     <div v-else-if="status === 'success'" class="absolute inset-0 z-10 grid place-items-center bg-white p-8 text-center" role="status">
       <div class="max-w-md"><CircleCheck class="mx-auto h-10 w-10 text-emerald-600"/><h3 class="mt-4 text-2xl font-bold text-[#160630]">{{ t.success }}</h3><p class="mt-3 text-sm leading-6 text-slate-600">{{ t.successHelp }}</p></div>
@@ -33,6 +33,7 @@ const hostId = useId()
 const status = ref<'idle'|'loading'|'ready'|'error'|'offline'|'success'>('idle')
 let expectedFrame: HTMLIFrameElement | null = null
 let responseTimeout: number | undefined
+let autoRetried = false
 
 const t = computed(() => locale.value === 'en' ? {
   consentTitle: 'Display available slots', consentText: 'By continuing, the Calendly booking tool will load inside this page and may process technical and booking data.', showSlots: 'Display slots', privacy: 'How Calendly processes data',
@@ -48,17 +49,31 @@ function clearResponseTimeout() {
   if (responseTimeout) window.clearTimeout(responseTimeout)
   responseTimeout = undefined
 }
-async function start() {
-  if (!host.value || status.value === 'loading') return
+async function start(isRetry = false) {
+  if (!host.value || (status.value === 'loading' && !isRetry)) return
   clearResponseTimeout()
   expectedFrame = null
+  if (!isRetry) autoRetried = false
   status.value = 'loading'
   try {
     await initInlineWidget(host.value)
     responseTimeout = window.setTimeout(() => {
-      if (status.value === 'loading') { host.value?.replaceChildren(); expectedFrame = null; status.value = navigator.onLine ? 'error' : 'offline' }
-    }, 15000)
+      if (status.value !== 'loading') return
+      if (!autoRetried) {
+        autoRetried = true
+        start(true)
+        return
+      }
+      host.value?.replaceChildren()
+      expectedFrame = null
+      status.value = navigator.onLine ? 'error' : 'offline'
+    }, 20000)
   } catch {
+    if (!autoRetried) {
+      autoRetried = true
+      start(true)
+      return
+    }
     status.value = navigator.onLine ? 'error' : 'offline'
   }
 }
@@ -71,7 +86,7 @@ function onCalendlyMessage(event: MessageEvent) {
   if (eventName === 'calendly.profile_page_viewed' || eventName === 'calendly.event_type_viewed' || eventName === 'calendly.date_and_time_selected') {
     clearResponseTimeout()
     status.value = 'ready'
-  } else if (eventName === 'calendly.event_scheduled' && event.source === expectedFrame.contentWindow) {
+  } else if (eventName === 'calendly.event_scheduled') {
     clearResponseTimeout()
     status.value = 'success'
   }

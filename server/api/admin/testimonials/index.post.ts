@@ -1,0 +1,4 @@
+import { z } from 'zod'
+import { TestimonialModel } from '../../../models/Testimonial'
+const schema=z.object({name:z.string().trim().min(2).max(120),role:z.string().trim().max(160).optional(),text:z.string().trim().min(2).max(2000),rating:z.number().min(1).max(5).optional(),source:z.enum(['comeup','site']).default('comeup'),reviewDate:z.string().datetime().optional(),status:z.enum(['pending','published','rejected']).default('published')})
+export default defineEventHandler(async event=>{await requireAdmin(event);const parsed=schema.safeParse(await readBody(event));if(!parsed.success)throw createError({statusCode:400,statusMessage:'Avis invalide'});await connectDb();const item=await TestimonialModel.create({...parsed.data,reviewDate:parsed.data.reviewDate?new Date(parsed.data.reviewDate):undefined});setResponseStatus(event,201);return item})

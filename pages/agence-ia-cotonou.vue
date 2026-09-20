@@ -3,8 +3,8 @@
 import { MapPin, Workflow, Globe, MessageSquare } from 'lucide-vue-next'
 const { locale } = useI18n()
 const seoMeta = computed(() => locale.value === 'en'
-  ? { title: 'AI Agency in Cotonou — automation and AI agents in Benin', description: 'NovatrixAI designs acquisition systems, AI agents and custom applications from Cotonou, Benin.' }
-  : { title: 'Agence IA à Cotonou — automatisation et agents IA au Bénin', description: 'NovatrixAI conçoit des systèmes d’acquisition, agents IA et applications sur mesure depuis Cotonou, au Bénin.' })
+  ? { title: 'AI Agency in Cotonou: automation and AI agents in Benin', description: 'NovatrixAI designs acquisition systems, AI agents and custom applications from Cotonou, Benin.' }
+  : { title: 'Agence IA à Cotonou : automatisation et agents IA au Bénin', description: 'NovatrixAI conçoit des systèmes d’acquisition, agents IA et applications sur mesure depuis Cotonou, au Bénin.' })
 usePageSeo(() => seoMeta.value.title, () => seoMeta.value.description)
 const titleHtml = computed(() => locale.value === 'en'
   ? 'An AI agency in Cotonou, focused on <span class="text-gradient">your business flow.</span>'

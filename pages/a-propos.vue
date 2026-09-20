@@ -1,6 +1,4 @@
 <template><div ref="revealRoot"><PageHero :kicker="t.kicker" :description="t.description"><span v-html="t.heroTitle"/></PageHero>
-  <section class="section-pad"><div class="container-shell grid gap-12 lg:grid-cols-2"><div class="reveal-left"><SectionHeading :kicker="t.convictionKicker"><span v-html="t.convictionTitle"/></SectionHeading></div><div class="reveal-right space-y-5 text-lg leading-8 text-[var(--muted)]"><p>{{ t.p1 }}</p><p>{{ t.p2 }}</p></div></div></section>
-  <section class="section-pad border-y bg-[var(--surface)]"><div class="container-shell"><div class="reveal"><SectionHeading :kicker="t.workKicker" center>{{ t.workTitle1 }} <span class="text-gradient">{{ t.workTitle2 }}</span></SectionHeading></div><div class="mt-12 grid gap-5 md:grid-cols-3"><div v-for="(item,i) in values" :key="item.title" class="card card-hover glass-sheen reveal-scale" :data-reveal-delay="i*90"><component :is="item.icon" class="h-6 w-6 text-violet-600"/><h3 class="mt-4 text-lg font-bold">{{ item.title }}</h3><p class="mt-2 text-sm leading-6 text-[var(--muted)]">{{ item.text }}</p></div></div></div></section>
 
   <!-- Équipe : photos réelles uniquement (aucune photo générée ni générique). -->
   <section class="section-pad">
@@ -18,6 +16,9 @@
       </div>
     </div>
   </section>
+
+  <section class="section-pad border-y bg-[var(--surface)]"><div class="container-shell grid gap-12 lg:grid-cols-2"><div class="reveal-left"><SectionHeading :kicker="t.convictionKicker"><span v-html="t.convictionTitle"/></SectionHeading></div><div class="reveal-right space-y-5 text-lg leading-8 text-[var(--muted)]"><p>{{ t.p1 }}</p><p>{{ t.p2 }}</p></div></div></section>
+  <section class="section-pad"><div class="container-shell"><div class="reveal"><SectionHeading :kicker="t.workKicker" center>{{ t.workTitle1 }} <span class="text-gradient">{{ t.workTitle2 }}</span></SectionHeading></div><div class="mt-12 grid gap-5 md:grid-cols-3"><div v-for="(item,i) in values" :key="item.title" class="card card-hover glass-sheen reveal-scale" :data-reveal-delay="i*90"><component :is="item.icon" class="h-6 w-6 text-violet-600"/><h3 class="mt-4 text-lg font-bold">{{ item.title }}</h3><p class="mt-2 text-sm leading-6 text-[var(--muted)]">{{ item.text }}</p></div></div></div></section>
 
   <CtaBand/></div></template>
 <script setup lang="ts">

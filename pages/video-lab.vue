@@ -23,47 +23,43 @@
       </div>
     </section>
 
-    <!-- Galerie de démonstration : vidéos générées par IA, clic pour lire avec le son -->
+    <!-- Galerie de démonstration : lecteurs natifs basiques, sans logique JS -->
     <section class="section-pad border-y bg-[var(--surface)]">
       <div class="container-shell">
         <div class="reveal"><SectionHeading :kicker="t.galleryKicker" center :description="t.galleryDescription">{{ t.galleryTitle1 }} <span class="text-gradient">{{ t.galleryTitle2 }}</span></SectionHeading></div>
 
         <div class="mt-12 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-          <article
-            v-for="(video, i) in videos"
-            :key="video.slug"
-            class="reveal card overflow-hidden !p-0"
-            :data-reveal-delay="i * 70"
-          >
-            <button
-              type="button"
-              class="group relative block aspect-video w-full overflow-hidden bg-gradient-to-br from-[#2a0f5c] via-[#160630] to-[#0b0318] text-left"
-              :aria-label="playingSlug === video.slug ? t.pauseAria : t.playAria"
-              @click="toggle(video.slug)"
-            >
+          <article v-for="(video, i) in videos" :key="video.slug" class="reveal card overflow-hidden !p-0" :data-reveal-delay="i * 70">
+            <div class="group relative aspect-video w-full overflow-hidden bg-gradient-to-br from-[#2a0f5c] via-[#160630] to-[#0b0318]">
               <video
                 :ref="(el) => setVideoRef(el, video.slug)"
                 class="h-full w-full object-cover transition duration-300"
                 :class="playingSlug === video.slug ? '' : 'brightness-75 group-hover:brightness-90'"
                 :poster="video.poster"
+                :src="video.src"
                 preload="none"
                 muted
-                playsinline
                 :controls="playingSlug === video.slug"
-                :src="video.src"
-                @ended="onEnded(video.slug)"
-                @pause="onEnded(video.slug)"
-                @click.stop
+                @play="onNativePlay(video.slug)"
+                @pause="onNativePause(video.slug)"
+                @ended="onNativePause(video.slug)"
               />
               <span
                 v-if="playingSlug !== video.slug"
                 class="pointer-events-none absolute inset-0 flex items-center justify-center transition duration-300 group-hover:scale-105"
               >
-                <span class="flex h-14 w-14 items-center justify-center rounded-full bg-white/90 shadow-lg backdrop-blur transition group-hover:bg-white">
+                <span class="flex h-14 w-14 items-center justify-center rounded-full bg-white/90 shadow-lg backdrop-blur">
                   <Play class="ml-1 h-6 w-6 text-[#2a0f5c]" fill="currentColor"/>
                 </span>
               </span>
-            </button>
+              <button
+                v-if="playingSlug !== video.slug"
+                type="button"
+                class="absolute inset-0"
+                :aria-label="t.playAria"
+                @click="startPlayback(video.slug)"
+              />
+            </div>
             <div class="p-5">
               <h3 class="font-bold">{{ video.title }}</h3>
               <p class="mt-2 text-sm leading-6 text-[var(--muted)]">{{ video.description }}</p>
@@ -82,15 +78,13 @@ import { ArrowRight, Gauge, Languages, Play, ScissorsLineDashed, UserRoundCog } 
 import type { ComponentPublicInstance } from 'vue'
 import videoAssets from '~/shared/video-lab-assets.json'
 
-interface VideoLabItem { slug: string; src: string; poster: string; title: string; description: string }
-
 const { locale } = useI18n()
 const { openCalendly } = useCalendly()
 const revealRoot = useScrollReveal()
 
 const seoMeta = computed(() => locale.value === 'en'
-  ? { title: 'Video Lab — AI-generated creative content', description: 'AI avatar UGC, script and voice, multilingual dubbing, automatic long-video cutdown and pre-release performance prediction.' }
-  : { title: 'Vidéo Lab — contenu créatif généré par IA', description: 'UGC IA avatar/script/voix, doublage multilingue, découpage automatique de vidéos longues et prédiction de performance avant diffusion.' })
+  ? { title: 'Video Lab: AI-generated creative content', description: 'AI avatar UGC, script and voice, multilingual dubbing, automatic long-video cutdown and pre-release performance prediction.' }
+  : { title: 'Vidéo Lab : contenu créatif généré par IA', description: 'UGC IA avatar/script/voix, doublage multilingue, découpage automatique de vidéos longues et prédiction de performance avant diffusion.' })
 usePageSeo(() => seoMeta.value.title, () => seoMeta.value.description)
 
 const t = computed(() => locale.value === 'en' ? {
@@ -99,8 +93,8 @@ const t = computed(() => locale.value === 'en' ? {
   offerKicker: 'the offer', offerTitle: 'A creative video system, not a one-off deliverable.',
   offerText: 'We connect script, AI avatar voice, multilingual dubbing and automatic cutdown so your video content keeps a steady pace without rebuilding everything from scratch each time. Performance prediction helps prioritize which cut to publish first.',
   galleryKicker: 'ai demo reel', galleryTitle1: 'AI-generated video', galleryTitle2: 'demonstrations.',
-  galleryDescription: 'These 10 clips were produced end-to-end by AI generation tools, as a demonstration of our AI Creative & Video Content offer — no real footage, no real actors. Click a card to play with sound.',
-  playAria: 'Play the video with sound', pauseAria: 'Pause the video',
+  galleryDescription: 'These 10 clips were produced end-to-end by AI generation tools, as a demonstration of our AI Creative & Video Content offer: no real footage, no real actors.',
+  playAria: 'Play the video with sound',
   ctaTitle: 'Map the video content that should support your acquisition system.',
 } : {
   kicker: 'offre · créatifs vidéo ia', title1: 'Du contenu vidéo généré par IA,', title2: 'pensé pour convertir.',
@@ -108,8 +102,8 @@ const t = computed(() => locale.value === 'en' ? {
   offerKicker: 'l’offre', offerTitle: 'Un système de créatifs vidéo, pas un livrable isolé.',
   offerText: 'On relie script, voix d’avatar IA, doublage multilingue et découpage automatique pour que votre contenu vidéo garde un rythme régulier sans tout reconstruire à chaque fois. La prédiction de performance aide à prioriser le montage à publier en premier.',
   galleryKicker: 'démo générée par ia', galleryTitle1: 'Démonstrations vidéo', galleryTitle2: 'générées par IA.',
-  galleryDescription: 'Ces 10 extraits ont été produits de bout en bout par des outils de génération IA, en démonstration de notre offre Créatifs & Contenu Vidéo IA — aucune image réelle, aucun acteur réel. Cliquez sur une carte pour lancer la lecture avec le son.',
-  playAria: 'Lire la vidéo avec le son', pauseAria: 'Mettre la vidéo en pause',
+  galleryDescription: 'Ces 10 extraits ont été produits de bout en bout par des outils de génération IA, en démonstration de notre offre Créatifs & Contenu Vidéo IA : aucune image réelle, aucun acteur réel.',
+  playAria: 'Lire la vidéo avec le son',
   ctaTitle: 'Cartographions le contenu vidéo qui doit soutenir votre système d’acquisition.',
 })
 
@@ -125,6 +119,8 @@ const capabilities = computed(() => locale.value === 'en' ? [
   { icon: Gauge, title: 'Prédiction de performance avant diffusion', text: 'Une estimation pour prioriser le montage à publier en premier.' },
 ])
 
+interface VideoLabItem { slug: string; src: string; poster: string; title: string; description: string }
+
 // 10 vidéos réellement générées par IA (cf. brief), hébergées sur Cloudinary
 // (f_auto/q_auto) plutôt que versionnées : voir scripts/upload-video-lab.mjs.
 // Légendes descriptives honnêtes du contenu réel — aucun storytelling client inventé.
@@ -138,7 +134,7 @@ const videos = computed<VideoLabItem[]>(() => locale.value === 'en' ? [
   { slug: 'orbit-lab', src: videoAssets['orbit-lab'].src, poster: videoAssets['orbit-lab'].poster, title: 'Orbit Lab', description: 'Sci-fi orbital laboratory sequence.' },
   { slug: 'scientifique-labo', src: videoAssets['scientifique-labo'].src, poster: videoAssets['scientifique-labo'].poster, title: 'Scientist in a lab', description: 'A scientist examining a sample in a laboratory.' },
   { slug: 'erudit-village-gothique', src: videoAssets['erudit-village-gothique'].src, poster: videoAssets['erudit-village-gothique'].poster, title: 'Scholar in a gothic village', description: 'A scholar walking through a gothic-style village.' },
-  { slug: 'joueur-baseball-porcelaine', src: videoAssets['joueur-baseball-porcelaine'].src, poster: videoAssets['joueur-baseball-porcelaine'].poster, title: 'Baseball player (creative test)', description: 'A baseball player shattering porcelain — a creative style test.' },
+  { slug: 'joueur-baseball-porcelaine', src: videoAssets['joueur-baseball-porcelaine'].src, poster: videoAssets['joueur-baseball-porcelaine'].poster, title: 'Baseball player (creative test)', description: 'A baseball player shattering porcelain: a creative style test.' },
 ] : [
   { slug: 'porte-parole-studio-fr', src: videoAssets['porte-parole-studio-fr'].src, poster: videoAssets['porte-parole-studio-fr'].poster, title: 'Porte-parole studio (FR)', description: 'Avatar IA s’exprimant en français dans un décor de studio.' },
   { slug: 'ceo-face-camera', src: videoAssets['ceo-face-camera'].src, poster: videoAssets['ceo-face-camera'].poster, title: 'CEO face caméra', description: 'Avatar IA d’un dirigeant tech s’adressant directement à la caméra.' },
@@ -149,10 +145,12 @@ const videos = computed<VideoLabItem[]>(() => locale.value === 'en' ? [
   { slug: 'orbit-lab', src: videoAssets['orbit-lab'].src, poster: videoAssets['orbit-lab'].poster, title: 'Orbit Lab', description: 'Séquence de laboratoire orbital, style science-fiction.' },
   { slug: 'scientifique-labo', src: videoAssets['scientifique-labo'].src, poster: videoAssets['scientifique-labo'].poster, title: 'Scientifique en laboratoire', description: 'Un scientifique examine un échantillon en laboratoire.' },
   { slug: 'erudit-village-gothique', src: videoAssets['erudit-village-gothique'].src, poster: videoAssets['erudit-village-gothique'].poster, title: 'Érudit dans un village gothique', description: 'Un érudit traverse un village au décor gothique.' },
-  { slug: 'joueur-baseball-porcelaine', src: videoAssets['joueur-baseball-porcelaine'].src, poster: videoAssets['joueur-baseball-porcelaine'].poster, title: 'Joueur de baseball (test créatif)', description: 'Un joueur de baseball brisant de la porcelaine — un test de style créatif.' },
+  { slug: 'joueur-baseball-porcelaine', src: videoAssets['joueur-baseball-porcelaine'].src, poster: videoAssets['joueur-baseball-porcelaine'].poster, title: 'Joueur de baseball (test créatif)', description: 'Un joueur de baseball brisant de la porcelaine : un test de style créatif.' },
 ])
 
-// Lecture au clic : un seul lecteur actif à la fois, son activé, sans autoplay.
+// L'overlay ne fait jamais lui-même play()/pause() sur l'état affiché : il déclenche
+// juste el.play(), et c'est l'événement natif @play/@pause/@ended qui met à jour
+// playingSlug. Une seule source de vérité (le <video> natif) évite tout désync.
 const playingSlug = ref<string | null>(null)
 const videoEls = new Map<string, HTMLVideoElement>()
 
@@ -161,25 +159,19 @@ function setVideoRef(el: Element | ComponentPublicInstance | null, slug: string)
   else videoEls.delete(slug)
 }
 
-function toggle(slug: string) {
+function onNativePlay(slug: string) {
   const current = playingSlug.value
   if (current && current !== slug) videoEls.get(current)?.pause()
-
-  const el = videoEls.get(slug)
-  if (!el) return
-
-  if (playingSlug.value === slug) {
-    el.pause()
-    playingSlug.value = null
-    return
-  }
-
-  el.muted = false
   playingSlug.value = slug
-  void el.play().catch(() => { /* lecture bloquée par le navigateur : l'utilisateur peut réessayer via les contrôles natifs */ })
+  const el = videoEls.get(slug)
+  if (el) el.muted = false
 }
 
-function onEnded(slug: string) {
+function onNativePause(slug: string) {
   if (playingSlug.value === slug) playingSlug.value = null
+}
+
+function startPlayback(slug: string) {
+  void videoEls.get(slug)?.play()
 }
 </script>

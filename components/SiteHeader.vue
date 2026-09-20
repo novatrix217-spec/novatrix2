@@ -1,9 +1,23 @@
 <template>
-  <header class="fixed inset-x-0 top-0 z-50 transition-all duration-300" :class="[isHero ? 'border-transparent bg-transparent text-white shadow-none' : 'glass text-[var(--text-primary)]', scrolled ? 'shadow-lg' : '']">
+  <header class="fixed inset-x-0 top-0 z-50 transition-all duration-300" :class="[isHero ? 'header-hero border-transparent text-white shadow-none' : 'glass text-[var(--text-primary)]', scrolled ? 'shadow-lg' : '']">
     <div class="container-shell flex h-[4.75rem] items-center justify-between lg:h-20">
       <BrandMark :light="isHero" />
       <nav class="hidden items-center gap-1 lg:flex" :aria-label="$t('nav.home') === 'Home' ? 'Main navigation' : 'Navigation principale'">
-        <NuxtLink v-for="link in links" :key="link.to" :to="localePath(link.to)" class="rounded-lg px-3 py-2 text-sm font-semibold transition" :class="navClass(link.to)">{{ link.label }}</NuxtLink>
+        <template v-for="item in navItems" :key="item.key">
+          <NuxtLink v-if="!item.children" :to="localePath(item.to)" class="rounded-lg px-3 py-2 text-sm font-semibold transition" :class="navClass(item.to)">{{ item.label }}</NuxtLink>
+          <div v-else data-nav-group class="relative">
+            <button type="button" class="flex items-center gap-1 rounded-lg px-3 py-2 text-sm font-semibold transition" :class="[groupLinkClass(item), openGroup === item.key ? (isHero ? 'bg-white/10 text-white' : 'bg-[var(--accent-soft)] text-[var(--accent)]') : '']" aria-haspopup="true" :aria-expanded="openGroup === item.key" @click="openGroup = openGroup === item.key ? null : item.key" @keydown.escape="openGroup = null">
+              {{ item.label }}
+              <ChevronDown class="h-3.5 w-3.5 transition" :class="openGroup === item.key ? 'rotate-180' : ''" />
+            </button>
+            <Transition name="modal">
+              <div v-if="openGroup === item.key" class="absolute left-0 top-full mt-1 min-w-[11rem] rounded-xl border p-1.5 shadow-lg glass" :class="isHero && !scrolled ? 'border-white/15' : 'border-[var(--border-subtle)]'">
+                <NuxtLink v-for="child in item.children" :key="child.to" :to="localePath(child.to)" class="block rounded-lg px-3 py-2 text-sm font-semibold transition hover:bg-[var(--accent-soft)]" @click="openGroup = null">{{ child.label }}</NuxtLink>
+              </div>
+            </Transition>
+          </div>
+        </template>
+        <NuxtLink :to="localePath('/contact')" class="rounded-lg px-3 py-2 text-sm font-semibold transition" :class="navClass('/contact')">{{ $t('nav.contact') }}</NuxtLink>
       </nav>
       <div class="hidden items-center gap-2 lg:flex">
         <NuxtLink :to="switchLocalePath(locale === 'fr' ? 'en' : 'fr')" class="grid h-10 place-items-center rounded-xl border px-3 font-mono text-xs font-bold transition hover:bg-[var(--accent-soft)]" :class="isHero ? 'border-white/15' : ''" :aria-label="$t('header.switchLang')">{{ locale === 'fr' ? 'EN' : 'FR' }}</NuxtLink>
@@ -21,8 +35,7 @@
     <Transition name="modal">
       <div v-if="menuOpen" id="mobile-menu" class="border-t px-5 py-5 lg:hidden" :class="isHero ? 'border-white/10 glass-dark' : 'border-[var(--border-subtle)] glass'">
         <nav class="flex flex-col gap-1" :aria-label="$t('header.mobileNav')">
-          <NuxtLink v-for="link in links" :key="link.to" :to="localePath(link.to)" class="rounded-xl px-4 py-3 text-sm font-semibold transition" :class="isActive(link.to) ? (isHero ? 'bg-white/10 text-white' : 'bg-[var(--accent-soft)] text-[var(--accent)]') : 'hover:bg-[var(--accent-soft)]'" @click="menuOpen = false">{{ link.label }}</NuxtLink>
-          <NuxtLink :to="localePath('/contact')" class="rounded-xl px-4 py-3 text-sm font-semibold transition" :class="isActive('/contact') ? (isHero ? 'bg-white/10 text-white' : 'bg-[var(--accent-soft)] text-[var(--accent)]') : 'hover:bg-[var(--accent-soft)]'" @click="menuOpen = false">{{ $t('nav.contact') }}</NuxtLink>
+          <NuxtLink v-for="link in mobileLinks" :key="link.to" :to="localePath(link.to)" class="rounded-xl px-4 py-3 text-sm font-semibold transition" :class="isActive(link.to) ? (isHero ? 'bg-white/10 text-white' : 'bg-[var(--accent-soft)] text-[var(--accent)]') : 'hover:bg-[var(--accent-soft)]'" @click="menuOpen = false">{{ link.label }}</NuxtLink>
           <div class="mt-3 flex gap-2">
             <NuxtLink :to="switchLocalePath(locale === 'fr' ? 'en' : 'fr')" class="grid h-12 place-items-center rounded-xl border px-4 font-mono text-xs font-bold" @click="menuOpen = false">{{ locale === 'fr' ? 'EN' : 'FR' }}</NuxtLink>
             <button class="grid h-12 w-12 place-items-center rounded-xl border" :aria-label="$t('header.changeTheme')" @click="toggleTheme"><Sun v-if="colorMode.value === 'dark'" class="h-4 w-4" /><Moon v-else class="h-4 w-4" /></button>
@@ -35,7 +48,7 @@
 </template>
 
 <script setup lang="ts">
-import { Menu, Moon, Sun, X } from 'lucide-vue-next'
+import { ChevronDown, Menu, Moon, Sun, X } from 'lucide-vue-next'
 const route = useRoute()
 const colorMode = useColorMode()
 const { t, locale } = useI18n()
@@ -43,24 +56,73 @@ const localePath = useLocalePath()
 const switchLocalePath = useSwitchLocalePath()
 const menuOpen = ref(false)
 const scrolled = ref(false)
+const openGroup = ref<string | null>(null)
 const { openCalendly } = useCalendly()
 // Header sombre tant qu'on survole le hero (fond violet) ; bascule en glass clair une fois le hero dépassé.
 const isHero = computed(() => (route.path === '/' || route.path === '/en') && colorMode.value !== 'dark' && !scrolled.value)
-// Le hero fait min-h-screen : on bascule quand on a quasi dépassé la hauteur du viewport.
-function onScroll() { scrolled.value = window.scrollY > window.innerHeight - 90 }
-onMounted(() => { window.addEventListener('scroll', onScroll, { passive: true }); onScroll() })
-onBeforeUnmount(() => window.removeEventListener('scroll', onScroll))
+// Le hero (.hero-screen) fait 100vh moins la hauteur du header, pas la hauteur pleine du
+// viewport : on bascule dès qu'on a dépassé sa position réelle dans le document, pour ne
+// pas garder le texte blanc de la nav sur un fond clair une fois le hero passé.
+function onScroll() {
+  const hero = document.querySelector('.hero-screen')
+  const heroBottomInDocument = hero ? hero.getBoundingClientRect().bottom + window.scrollY : window.innerHeight
+  scrolled.value = window.scrollY > heroBottomInDocument - 90
+}
+function onClickOutside(event: MouseEvent) {
+  if (openGroup.value && !(event.target as HTMLElement).closest('[data-nav-group]')) {
+    openGroup.value = null
+  }
+}
+function onKeydown(event: KeyboardEvent) {
+  if (event.key === 'Escape') openGroup.value = null
+}
+onMounted(() => {
+  window.addEventListener('scroll', onScroll, { passive: true })
+  window.addEventListener('resize', onScroll, { passive: true })
+  document.addEventListener('click', onClickOutside)
+  document.addEventListener('keydown', onKeydown)
+  onScroll()
+})
+onBeforeUnmount(() => {
+  window.removeEventListener('scroll', onScroll)
+  window.removeEventListener('resize', onScroll)
+  document.removeEventListener('click', onClickOutside)
+  document.removeEventListener('keydown', onKeydown)
+})
 // Recalcule l'état au changement de route (sinon le header garde son apparence "scrollé" en revenant à l'accueil).
 watch(() => route.path, () => { nextTick(onScroll) })
-const links = computed(() => [
+const navItems = computed(() => [
+  {
+    key: 'offres',
+    label: t('nav.solutions'),
+    children: [
+      { label: t('nav.solutions'), to: '/offres' },
+      { label: t('nav.useCases'), to: '/solutions' },
+      { label: t('nav.realisations'), to: '/realisations' },
+    ],
+  },
+  { key: 'videoLab', label: t('nav.videoLab'), to: '/video-lab' },
+  { key: 'about', label: t('nav.about'), to: '/a-propos' },
+  {
+    key: 'resources',
+    label: t('nav.resources'),
+    children: [
+      { label: t('nav.resources'), to: '/ressources' },
+      { label: t('nav.blog'), to: '/blog' },
+      { label: t('nav.formation'), to: '/formation' },
+    ],
+  },
+])
+const mobileLinks = computed(() => [
   { label: t('nav.solutions'), to: '/offres' },
   { label: t('nav.useCases'), to: '/solutions' },
   { label: t('nav.realisations'), to: '/realisations' },
   { label: t('nav.videoLab'), to: '/video-lab' },
-  { label: t('nav.formation'), to: '/formation' },
+  { label: t('nav.about'), to: '/a-propos' },
   { label: t('nav.resources'), to: '/ressources' },
   { label: t('nav.blog'), to: '/blog' },
-  { label: t('nav.about'), to: '/a-propos' },
+  { label: t('nav.formation'), to: '/formation' },
+  { label: t('nav.contact'), to: '/contact' },
 ])
 function isActive(to: string) {
   const localized = localePath(to)
@@ -70,6 +132,10 @@ function isActive(to: string) {
 }
 function navClass(to: string) {
   const active = isActive(to)
+  return active ? (isHero.value ? 'bg-white/10 text-white' : 'bg-[var(--accent-soft)] text-[var(--accent)]') : (isHero.value ? 'text-white/70 hover:bg-white/5 hover:text-white' : 'text-[var(--text-secondary)] hover:bg-[var(--accent-soft)] hover:text-[var(--text-primary)]')
+}
+function groupLinkClass(item: { children?: { to: string }[] }) {
+  const active = !!item.children?.some(child => isActive(child.to))
   return active ? (isHero.value ? 'bg-white/10 text-white' : 'bg-[var(--accent-soft)] text-[var(--accent)]') : (isHero.value ? 'text-white/70 hover:bg-white/5 hover:text-white' : 'text-[var(--text-secondary)] hover:bg-[var(--accent-soft)] hover:text-[var(--text-primary)]')
 }
 function toggleTheme() { colorMode.preference = colorMode.value === 'dark' ? 'light' : 'dark' }

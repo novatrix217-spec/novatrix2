@@ -12,6 +12,20 @@
       <div class="grid grid-cols-2 gap-3"><input v-model="form.quoteBeforeText" class="field" placeholder="Citation « avant » (optionnel)"/><input v-model="form.quoteBeforeAuthor" class="field" placeholder="Auteur"/></div>
       <div class="grid grid-cols-2 gap-3"><input v-model="form.quoteAfterText" class="field" placeholder="Citation « après » (optionnel)"/><input v-model="form.quoteAfterAuthor" class="field" placeholder="Auteur"/></div>
       <textarea v-model="form.metricsRaw" class="field min-h-16 py-3" placeholder="Résultats chiffrés : une ligne par métrique, format « valeur | libellé »"/>
+      <details class="text-sm"><summary class="cursor-pointer font-semibold text-[var(--muted)]">Preuve dashboard CRM (optionnel)</summary>
+        <div class="mt-3 space-y-3">
+          <div class="grid grid-cols-2 gap-3">
+            <input v-model="form.dashPeriod" class="field" placeholder="Période (ex : 01/07 – 10/08/2026)"/>
+            <input v-model="form.dashRoi" class="field" placeholder="ROI total (ex : 9,1x)"/>
+          </div>
+          <div class="grid grid-cols-3 gap-3">
+            <input v-model="form.dashProspects" class="field" placeholder="Prospects (ex : 76)"/>
+            <input v-model="form.dashPurchases" class="field" placeholder="Achats (ex : 16)"/>
+            <input v-model="form.dashRevenue" class="field" placeholder="CA total (ex : 3 540 €)"/>
+          </div>
+          <textarea v-model="form.dashRowsRaw" class="field min-h-20 py-3 font-mono text-xs" placeholder="Récap mensuel : une ligne par mois, format « mois | prospects | achats | CA »&#10;Juillet | 52 | 12 | 2 980 €"/>
+        </div>
+      </details>
       <div class="grid grid-cols-2 gap-3">
         <textarea v-model="form.resultsRaw" class="field min-h-20 py-3" placeholder="Résultats (FR), une ligne par résultat"/>
         <textarea v-model="form.resultsEnRaw" class="field min-h-20 py-3" placeholder="Résultats (EN), une ligne par résultat"/>
@@ -36,14 +50,14 @@ definePageMeta({middleware:'admin',layout:'admin',i18n:{locales:['fr']}})
 useSeoMeta({title:'Réalisations',robots:'noindex,nofollow'})
 const {data,refresh}=await useFetch<any>('/api/admin/projects')
 const notice=ref(''),editingId=ref('')
-const blank=()=>({title:'',category:'Acquisition',deliveryDays:'',summary:'',challenge:'',solution:'',featuresRaw:'',quoteBeforeText:'',quoteBeforeAuthor:'',quoteAfterText:'',quoteAfterAuthor:'',metricsRaw:'',resultsRaw:'',resultsEnRaw:'',toolsRaw:'',status:'draft',featured:false,coverImageKey:''})
+const blank=()=>({title:'',category:'Acquisition',deliveryDays:'',summary:'',challenge:'',solution:'',featuresRaw:'',quoteBeforeText:'',quoteBeforeAuthor:'',quoteAfterText:'',quoteAfterAuthor:'',metricsRaw:'',resultsRaw:'',resultsEnRaw:'',toolsRaw:'',status:'draft',featured:false,coverImageKey:'',dashPeriod:'',dashProspects:'',dashPurchases:'',dashRevenue:'',dashRoi:'',dashRowsRaw:''})
 const form=reactive(blank())
 const cld=useCloudinaryUrl()
 const coverUrl=computed(()=>cld(form.coverImageKey,'w_240,h_160,c_fill'))
 const coverNotice=ref('')
 async function uploadCover(e:Event){const file=(e.target as HTMLInputElement).files?.[0];if(!file)return;const body=new FormData();body.append('file',file);coverNotice.value='Téléversement…';try{const r=await $fetch<any>('/api/admin/upload?folder=projects',{method:'POST',body});form.coverImageKey=r.key;coverNotice.value='Image envoyée.'}catch(err:any){coverNotice.value=err?.data?.statusMessage||'Échec du téléversement'}}
 function resetForm(){editingId.value='';Object.assign(form,blank());notice.value='';coverNotice.value=''}
-function edit(item:any){editingId.value=item._id;Object.assign(form,{title:item.title,category:item.category,deliveryDays:item.deliveryDays||'',summary:item.summary,challenge:item.challenge||'',solution:item.solution||'',featuresRaw:(item.features||[]).join('\n'),quoteBeforeText:item.quoteBefore?.text||'',quoteBeforeAuthor:item.quoteBefore?.author||'',quoteAfterText:item.quoteAfter?.text||'',quoteAfterAuthor:item.quoteAfter?.author||'',metricsRaw:(item.resultsMetrics||[]).map((m:any)=>`${m.value} | ${m.label}`).join('\n'),resultsRaw:(item.results||[]).join('\n'),resultsEnRaw:(item.resultsEn||[]).join('\n'),toolsRaw:(item.tools||[]).join(', '),status:item.status,featured:!!item.featured,coverImageKey:item.coverImageKey||''})}
+function edit(item:any){editingId.value=item._id;const d=item.dashboardProof;Object.assign(form,{title:item.title,category:item.category,deliveryDays:item.deliveryDays||'',summary:item.summary,challenge:item.challenge||'',solution:item.solution||'',featuresRaw:(item.features||[]).join('\n'),quoteBeforeText:item.quoteBefore?.text||'',quoteBeforeAuthor:item.quoteBefore?.author||'',quoteAfterText:item.quoteAfter?.text||'',quoteAfterAuthor:item.quoteAfter?.author||'',metricsRaw:(item.resultsMetrics||[]).map((m:any)=>`${m.value} | ${m.label}`).join('\n'),resultsRaw:(item.results||[]).join('\n'),resultsEnRaw:(item.resultsEn||[]).join('\n'),toolsRaw:(item.tools||[]).join(', '),status:item.status,featured:!!item.featured,coverImageKey:item.coverImageKey||'',dashPeriod:d?.period||'',dashProspects:d?.prospects||'',dashPurchases:d?.purchases||'',dashRevenue:d?.revenue||'',dashRoi:d?.roi||'',dashRowsRaw:(d?.rows||[]).map((r:any)=>`${r.month} | ${r.prospects} | ${r.purchases} | ${r.revenue}`).join('\n')})}
 function payload(){
   const features=form.featuresRaw.split('\n').map(s=>s.trim()).filter(Boolean)
   const tools=form.toolsRaw.split(',').map(s=>s.trim()).filter(Boolean)
@@ -56,6 +70,10 @@ function payload(){
   if(form.solution)body.solution=form.solution
   if(form.quoteBeforeText)body.quoteBefore={text:form.quoteBeforeText,author:form.quoteBeforeAuthor||undefined}
   if(form.quoteAfterText)body.quoteAfter={text:form.quoteAfterText,author:form.quoteAfterAuthor||undefined}
+  if(form.dashPeriod&&form.dashProspects&&form.dashPurchases&&form.dashRevenue&&form.dashRoi){
+    const rows=form.dashRowsRaw.split('\n').map(s=>s.trim()).filter(Boolean).map(line=>{const [month,prospects,purchases,revenue]=line.split('|').map(s=>s.trim());return {month,prospects,purchases,revenue}}).filter(r=>r.month&&r.prospects&&r.purchases&&r.revenue)
+    body.dashboardProof={period:form.dashPeriod,prospects:form.dashProspects,purchases:form.dashPurchases,revenue:form.dashRevenue,roi:form.dashRoi,rows,totalProspects:form.dashProspects,totalPurchases:form.dashPurchases,totalRevenue:form.dashRevenue}
+  }
   return body
 }
 async function save(){notice.value='Enregistrement…';try{if(editingId.value){await $fetch(`/api/admin/projects/${editingId.value}`,{method:'PATCH',body:payload()})}else{await $fetch('/api/admin/projects',{method:'POST',body:payload()})}notice.value='Enregistré.';resetForm();await refresh()}catch(err:any){notice.value=err?.data?.statusMessage||'Échec de l’enregistrement'}}

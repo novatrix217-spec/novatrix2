@@ -181,6 +181,11 @@ svg.lucide { stroke-width: 1.6; }
   background-color: #1c0038;
   background-image: linear-gradient(165deg, #2a0a52 0%, #1c0038 60%, #1c0038 100%);
 }
+/* Header flottant sur le hero : un fond dégressif (au lieu de transparent) le distingue
+   nettement du hero derrière lui, sans casser l'effet "flottant" recherché. */
+.header-hero {
+  background-image: linear-gradient(180deg, rgba(28, 0, 56, .85) 0%, rgba(28, 0, 56, .55) 70%, transparent 100%);
+}
 .soft-grid {
   background-image: linear-gradient(rgba(109,40,217,.015) 1px, transparent 1px), linear-gradient(90deg, rgba(109,40,217,.015) 1px, transparent 1px);
   background-size: 56px 56px;
@@ -198,6 +203,7 @@ svg.lucide { stroke-width: 1.6; }
 .prose-novatrix p, .prose-novatrix ul, .prose-novatrix ol { margin: 1rem 0; }
 .prose-novatrix ul { list-style: disc; padding-left: 1.3rem; }
 .prose-novatrix a { color: var(--primary); text-decoration: underline; }
+.prose-novatrix img { display: block; max-width: 100%; height: auto; margin: 1.75rem auto; border-radius: 1rem; box-shadow: var(--elev-3); }
 
 @keyframes pulse-ring { 0%,100% { opacity:.8; transform:scale(1) } 50% { opacity:.25; transform:scale(1.1) } }
 @keyframes dash-flow { to { stroke-dashoffset: -24; } }
@@ -649,21 +655,24 @@ svg.lucide { stroke-width: 1.6; }
   background: linear-gradient(158deg, rgba(139, 92, 246, .12), transparent 62%), var(--surface);
 }
 
-/* Hero plein écran : occupe exactement la hauteur visible sous le header fixe (4.75rem
-   mobile / 5rem desktop, cf. SiteHeader). Le padding-top d'antan s'ajoutait à min-height
-   et faisait déborder la section au-delà du viewport. */
+/* Hero plein écran : occupe exactement la hauteur de l'écran. Le header (fixed, donc
+   hors flux) flotte par-dessus sa portion supérieure — pas de margin-top ici, sinon le
+   fond clair de la page apparaît sous le header transparent au lieu du hero violet.
+   Le contenu est centré via flex/items-center sur ces 100vh : sans compenser la hauteur
+   du header, ce centrage remonte le kicker/titre jusque sous la nav transparente (effet
+   "collé"). Le padding-top (hauteur du header + marge supplémentaire) pousse donc le
+   centrage flex vers le bas de l'écran ; le padding-bottom reste minimal. */
 .hero-screen {
-  min-height: calc(100vh - 4.75rem);
-  min-height: calc(100svh - 4.75rem);
-  margin-top: 4.75rem;
+  height: 100vh;
+  height: 100svh;
+  padding-top: 7rem;
+  padding-bottom: 1.5rem;
 }
 @media (min-width: 1024px) {
-  .hero-screen { min-height: calc(100vh - 5rem); min-height: calc(100svh - 5rem); margin-top: 5rem; }
-}
-/* Sous 700px de haut (paysage mobile, petits portables), on laisse le contenu
-   déterminer la hauteur plutôt que de comprimer le texte. */
-@media (max-height: 700px) {
-  .hero-screen { min-height: 0; padding-top: 2rem; padding-bottom: 3rem; }
+  .hero-screen {
+    padding-top: 9rem;
+    padding-bottom: 2rem;
+  }
 }
 
 /* ============================================================

@@ -22,8 +22,8 @@ const localePath = useLocalePath()
 const revealRoot = useScrollReveal()
 const { openCalendly } = useCalendly()
 const seoMeta = computed(() => locale.value === 'en'
-  ? { title: 'Use cases — solve a visible break first', description: 'WhatsApp qualification, n8n data flow and abandoned cart follow-up: start from the situation your team recognizes today.' }
-  : { title: 'Cas d’usage — corriger d’abord une rupture visible', description: 'Qualification WhatsApp, circulation des données avec n8n et relance panier : partez de la situation que votre équipe reconnaît aujourd’hui.' })
+  ? { title: 'Use cases: solve a visible break first', description: 'WhatsApp qualification, n8n data flow and abandoned cart follow-up: start from the situation your team recognizes today.' }
+  : { title: 'Cas d’usage : corriger d’abord une rupture visible', description: 'Qualification WhatsApp, circulation des données avec n8n et relance panier : partez de la situation que votre équipe reconnaît aujourd’hui.' })
 usePageSeo(() => seoMeta.value.title, () => seoMeta.value.description)
 const t = computed(() => locale.value === 'en' ? {
   kicker: 'use cases', title1: 'Start from the situation', title2: 'that blocks the sale.',
@@ -36,11 +36,11 @@ const t = computed(() => locale.value === 'en' ? {
 })
 const solutions = computed(() => locale.value === 'en' ? [
   { to: '/solutions/agent-whatsapp-ia', icon: MessageCircle, title: 'Qualify WhatsApp conversations', description: 'Collect useful context, answer known questions and hand the conversation to the right person.' },
-  { to: '/solutions/automatisation-n8n', icon: Workflow, title: 'n8n Automation', description: 'Your tools connected so data flows on its own, entered once — no more re-typing the same thing three times.' },
+  { to: '/solutions/automatisation-n8n', icon: Workflow, title: 'n8n Automation', description: 'Your tools connected so data flows on its own, entered once, no more re-typing the same thing three times.' },
   { to: '/solutions/relance-panier-abandonne', icon: ShoppingCart, title: 'Abandoned Cart Follow-up', description: 'Automatic follow-up on the configured channel, designed to give eligible abandoned carts another opportunity to convert.' },
 ] : [
   { to: '/solutions/agent-whatsapp-ia', icon: MessageCircle, title: 'Qualifier les échanges WhatsApp', description: 'Recueillir le contexte utile, répondre aux questions connues et transmettre l’échange à la bonne personne.' },
-  { to: '/solutions/automatisation-n8n', icon: Workflow, title: 'Automatisation n8n', description: 'Vos outils reliés pour que la donnée circule seule, saisie une fois — fini les ressaisies trois fois la même info.' },
+  { to: '/solutions/automatisation-n8n', icon: Workflow, title: 'Automatisation n8n', description: 'Vos outils reliés pour que la donnée circule seule, saisie une fois, fini les ressaisies trois fois la même info.' },
   { to: '/solutions/relance-panier-abandonne', icon: ShoppingCart, title: 'Relance panier abandonné', description: 'Une relance automatique sur le canal configuré, conçue pour donner aux paniers éligibles une nouvelle occasion de convertir.' },
 ])
 </script>

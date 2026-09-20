@@ -18,7 +18,7 @@ const content = computed(() => locale.value === 'en' ? {
   kicker: 'offer 4 · e-commerce retention', title: 'E-commerce Retention & Conversion',
   description: 'We connect abandoned-cart follow-up, customer segmentation and an AI-assisted CRM so your store keeps the customers it already paid to acquire.',
   systemTitle: 'The traffic you already have is your cheapest growth lever.',
-  systemText: 'A visitor who leaves a full cart isn’t a lost sale — until no one follows up. We connect detection, calibrated email/SMS follow-up and segmentation so recoverable carts get a real second chance, without spamming every visitor the same way.',
+  systemText: 'A visitor who leaves a full cart isn’t a lost sale, until no one follows up. We connect detection, calibrated email/SMS follow-up and segmentation so recoverable carts get a real second chance, without spamming every visitor the same way.',
   modules: ['Abandoned-cart detection connected to your store', 'Calibrated email and SMS follow-up sequences', 'Customer segmentation by behavior and value', 'AI-assisted CRM for e-commerce', 'Results tracked against your actual sales, not vanity metrics'],
   capabilitiesTitle: 'What moves the recovery rate.',
   capabilities: [
@@ -37,7 +37,7 @@ const content = computed(() => locale.value === 'en' ? {
   kicker: 'offre 4 · rétention e-commerce', title: 'Rétention & conversion e-commerce',
   description: 'Nous relions la relance des paniers abandonnés, la segmentation client et un CRM assisté par IA pour que votre boutique garde les clients qu’elle a déjà payés pour acquérir.',
   systemTitle: 'Le trafic que vous avez déjà est votre levier de croissance le moins cher.',
-  systemText: 'Un visiteur qui abandonne un panier plein n’est pas une vente perdue — tant que personne ne le relance. On relie détection, relance email/SMS calibrée et segmentation pour que les paniers récupérables aient une vraie seconde chance, sans envoyer le même message à tout le monde.',
+  systemText: 'Un visiteur qui abandonne un panier plein n’est pas une vente perdue, tant que personne ne le relance. On relie détection, relance email/SMS calibrée et segmentation pour que les paniers récupérables aient une vraie seconde chance, sans envoyer le même message à tout le monde.',
   modules: ['Détection des paniers abandonnés connectée à votre boutique', 'Séquences de relance email et SMS calibrées', 'Segmentation client par comportement et valeur', 'CRM assisté par IA pour l’e-commerce', 'Résultats suivis sur vos ventes réelles, pas des indicateurs de vanité'],
   capabilitiesTitle: 'Ce qui fait bouger le taux de récupération.',
   capabilities: [

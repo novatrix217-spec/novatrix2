@@ -1,4 +1,4 @@
-<template><OfferDetail v-bind="content"><template #title><span v-html="titleHtml"/></template></OfferDetail></template>
+<template><OfferDetail v-bind="content"><template #title><span v-html="titleHtml"/></template><template #proof><DashboardProof v-bind="dashboardProof"/></template></OfferDetail></template>
 <script setup lang="ts">
 import { BarChart3,MailCheck,MousePointerClick } from 'lucide-vue-next'
 const { locale } = useI18n()
@@ -26,7 +26,7 @@ const content = computed(() => locale.value === 'en' ? {
   faqs: [
     { question: 'How is the system priced?', answer: 'It depends on the selected channels, existing assets, data and integrations. The free audit defines the useful starting scope before a proposal is prepared.' },
     { question: 'How is the delivery timeline set?', answer: 'It depends on the channels, existing data and integrations. The scope and checkpoints are agreed after the audit, before implementation starts.' },
-    { question: 'What if my current campaigns are already running?', answer: 'We integrate them rather than rebuild everything — we map what already works and connect the rest.' },
+    { question: 'What if my current campaigns are already running?', answer: 'We integrate them rather than rebuild everything: we map what already works and connect the rest.' },
     { question: 'Is there a minimum ad budget?', answer: 'Yes, a test budget is needed so the system has data to optimize on. We set it together based on your sector.' },
   ],
   ctaTitle: 'Identify the first break in your acquisition journey.',
@@ -42,9 +42,26 @@ const content = computed(() => locale.value === 'en' ? {
   faqs: [
     { question: 'Comment le système est-il chiffré ?', answer: 'Cela dépend des canaux sélectionnés, des actifs existants, des données et des intégrations. L’audit gratuit définit le point de départ utile avant la préparation d’une proposition.' },
     { question: 'Comment le délai de livraison est-il fixé ?', answer: 'Il dépend des canaux, des données disponibles et des intégrations. Le périmètre et les jalons sont convenus après l’audit, avant le début de l’implémentation.' },
-    { question: 'Et si mes campagnes actuelles tournent déjà ?', answer: 'On les intègre plutôt que de tout reconstruire — on cartographie ce qui marche et on connecte le reste.' },
+    { question: 'Et si mes campagnes actuelles tournent déjà ?', answer: 'On les intègre plutôt que de tout reconstruire : on cartographie ce qui marche et on connecte le reste.' },
     { question: 'Faut-il un budget pub minimum ?', answer: 'Oui, un budget test est nécessaire pour que le système ait des données à optimiser. On le définit ensemble selon votre secteur.' },
   ],
   ctaTitle: 'Identifiez la première rupture de votre parcours d’acquisition.',
+})
+// Dashboard CRM réel d'une agence partenaire automatisée par
+// NovatrixAI, période 01/07 → 10/08/2026. Client anonymisé à sa demande — chiffres réels.
+const dashboardProof = computed(() => locale.value === 'en' ? {
+  period: 'Jul 1 – Aug 10, 2026', prospects: '76', purchases: '16', revenue: '€3,540', roi: '9.1x',
+  rows: [
+    { month: 'July', prospects: '52', purchases: '12', revenue: '€2,980' },
+    { month: 'August', prospects: '24', purchases: '4', revenue: '€560' },
+  ],
+  totalProspects: '76', totalPurchases: '16', totalRevenue: '€3,540',
+} : {
+  period: '01/07 – 10/08/2026', prospects: '76', purchases: '16', revenue: '3 540 €', roi: '9,1x',
+  rows: [
+    { month: 'Juillet', prospects: '52', purchases: '12', revenue: '2 980 €' },
+    { month: 'Août', prospects: '24', purchases: '4', revenue: '560 €' },
+  ],
+  totalProspects: '76', totalPurchases: '16', totalRevenue: '3 540 €',
 })
 </script>

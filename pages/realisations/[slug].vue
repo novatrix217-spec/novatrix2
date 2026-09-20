@@ -29,6 +29,10 @@
     </div>
   </section>
 
+  <section v-if="project.dashboardProof" class="section-pad border-t bg-[var(--surface)]">
+    <div class="container-shell"><div class="mx-auto max-w-3xl"><DashboardProof v-bind="project.dashboardProof"/></div></div>
+  </section>
+
   <section class="section-pad"><div class="container-shell grid gap-10 lg:grid-cols-[1fr_.75fr]">
     <div><SectionHeading :kicker="t.summaryKicker">{{ lf(project.summary,project.summaryEn) }}</SectionHeading><p class="mt-6 text-sm leading-7 text-[var(--muted)]">{{ t.sourceLine }}</p></div>
     <aside class="card h-fit !p-7"><p class="kicker">{{ t.stackKicker }}</p><div v-if="project.tools?.length" class="mt-4 flex flex-wrap gap-2"><span v-for="tool in project.tools" :key="tool" class="rounded-md border px-2.5 py-1 font-mono text-[11px] text-[var(--muted)]">{{ tool }}</span></div><p v-else class="mt-4 text-sm text-[var(--muted)]">{{ t.customStack }}</p><p v-if="project.deliveryDays" class="mt-5 flex items-center gap-2 text-sm font-semibold"><Clock3 class="h-4 w-4 text-[var(--teal)]"/>{{ t.deliveredIn }} {{ project.deliveryDays }} {{ $t('card.days') }}</p></aside>
