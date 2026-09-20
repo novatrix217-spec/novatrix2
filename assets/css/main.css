@@ -126,7 +126,9 @@ svg.lucide { stroke-width: 1.6; }
 
 @layer components {
   .container-shell { @apply mx-auto w-full max-w-7xl px-5 sm:px-7 lg:px-10; }
-  .section-pad { @apply py-20 sm:py-24 lg:py-32; }
+  /* py-32 en desktop faisait 8rem en haut ET en bas : entre deux sections successives,
+     16rem de vide cumulé, lu comme un trou plutôt que comme une respiration. */
+  .section-pad { @apply py-14 sm:py-16 lg:py-20; }
   .kicker { @apply font-mono text-[11px] font-semibold uppercase tracking-[0.18em] text-violet-700 dark:text-violet-300; }
   /* Échelle typographique fluide (clamp) — remplace les sauts par breakpoint (point 5).
      display-title : ~2.25rem (mobile) à ~3.75rem (desktop large), section-title en dessous. */
@@ -187,14 +189,17 @@ svg.lucide { stroke-width: 1.6; }
 /* Barre de navigation : opaque en permanence, y compris au-dessus du hero violet.
    Le .glass semi-transparent laissait remonter le violet du hero et teintait la barre en
    lilas, ce qui affaiblissait le contraste du logo et des liens. Un fond franc règle le
-   contraste une fois pour toutes, quelle que soit la section survolée. */
+   contraste une fois pour toutes, quelle que soit la section survolée.
+   La couleur est --bg-void, le beige chaud du fond de page (celui des sections claires
+   comme « là où les ventes se bloquent »), et non le --surface presque blanc : la barre
+   se rattache ainsi au reste du site au lieu de trancher en blanc. */
 header.glass {
-  background: var(--surface);
+  background: var(--bg-void);
   border-bottom: 1px solid var(--border-subtle);
   box-shadow: 0 1px 0 rgba(22, 6, 48, .04), 0 10px 30px rgba(35, 6, 65, .08);
 }
 .dark header.glass {
-  background: var(--surface);
+  background: var(--bg-void);
   border-bottom-color: rgba(255, 255, 255, .1);
   box-shadow: 0 10px 30px rgba(0, 0, 0, .45);
 }
