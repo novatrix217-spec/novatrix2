@@ -205,6 +205,68 @@ export function useMagnetic(strength = 0.28, radius = 90) {
 }
 
 /**
+ * Tilt 3D avec profondeur : en plus de l'inclinaison, écrit `--tx` / `--ty` (-1..1) et
+ * `--glare` (angle du reflet) sur la carte. Les couches internes `.depth-layer` les
+ * consomment avec leur propre `--layer` pour se déplacer plus ou moins que le cadre, ce
+ * qui donne du volume au lieu d'une simple rotation à plat.
+ *
+ *   <article class="tilt-deep">
+ *     <img class="depth-layer" style="--layer: 18">   ← bouge le plus (premier plan)
+ *     <div class="depth-layer" style="--layer: 6">    ← bouge peu (arrière-plan)
+ *
+ * Délégué depuis le conteneur : compatible `v-for`. Inerte au toucher et sous
+ * prefers-reduced-motion.
+ */
+export function useTiltDeep(max = 10) {
+  const host = ref<HTMLElement | null>(null)
+  let raf = 0
+
+  const onMove = (e: PointerEvent) => {
+    const card = (e.target as HTMLElement | null)?.closest<HTMLElement>('.tilt-deep')
+    if (!card) return
+    cancelAnimationFrame(raf)
+    raf = requestAnimationFrame(() => {
+      const r = card.getBoundingClientRect()
+      const px = (e.clientX - r.left) / r.width - 0.5
+      const py = (e.clientY - r.top) / r.height - 0.5
+      card.style.setProperty('--tx', px.toFixed(3))
+      card.style.setProperty('--ty', py.toFixed(3))
+      // Le reflet vient toujours du côté opposé à l'inclinaison, comme une lumière fixe
+      // que la carte renvoie en tournant.
+      card.style.setProperty('--glare', `${(Math.atan2(py, px) * 180 / Math.PI + 90).toFixed(1)}deg`)
+      card.style.setProperty('--glare-o', Math.min(0.42, Math.hypot(px, py) * 0.85).toFixed(3))
+      card.style.transform = `perspective(1100px) rotateX(${(-py * max).toFixed(2)}deg) rotateY(${(px * max).toFixed(2)}deg)`
+    })
+  }
+  const onOut = (e: PointerEvent) => {
+    const card = (e.target as HTMLElement | null)?.closest<HTMLElement>('.tilt-deep')
+    if (!card || card.contains(e.relatedTarget as Node | null)) return
+    card.style.transform = 'perspective(1100px) rotateX(0deg) rotateY(0deg)'
+    card.style.setProperty('--tx', '0')
+    card.style.setProperty('--ty', '0')
+    card.style.setProperty('--glare-o', '0')
+  }
+
+  onMounted(() => {
+    const el = host.value
+    if (!el) return
+    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    const coarse = window.matchMedia('(pointer: coarse)').matches
+    if (reduced || coarse) return
+    el.addEventListener('pointermove', onMove, { passive: true })
+    el.addEventListener('pointerout', onOut, { passive: true })
+  })
+  onBeforeUnmount(() => {
+    const el = host.value
+    el?.removeEventListener('pointermove', onMove)
+    el?.removeEventListener('pointerout', onOut)
+    cancelAnimationFrame(raf)
+  })
+
+  return host
+}
+
+/**
  * Lueur qui suit le curseur sur les éléments `.spotlight` : écrit `--mx` / `--my` (en %)
  * sur la carte survolée, qu'un dégradé radial CSS consomme. Un seul écouteur délégué
  * couvre toute la page, cartes rendues par `v-for` comprises.

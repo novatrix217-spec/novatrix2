@@ -142,27 +142,39 @@
       <div class="scroll-parallax pointer-events-none absolute -right-24 -top-24 h-[420px] w-[420px] rounded-full bg-violet-600/20 blur-[110px]" style="--depth: 60" aria-hidden="true"/>
       <div class="scroll-parallax pointer-events-none absolute -bottom-32 -left-20 h-[380px] w-[380px] rounded-full bg-[#3DE0C5]/10 blur-[110px]" style="--depth: -45" aria-hidden="true"/>
       <div class="container-shell relative z-10">
-        <div class="max-w-3xl">
+        <div class="reveal scroll-parallax max-w-3xl" style="--depth: 20">
           <p class="kicker !text-[#3DE0C5]">{{ t.methodKicker }}</p>
           <h2 class="mt-5 text-3xl font-bold leading-[1.1] tracking-[-.03em] sm:text-5xl">{{ t.methodTitle1 }} <span class="text-gradient-flow">{{ t.methodTitle2 }}</span></h2>
           <p class="mt-5 text-lg leading-8 text-white/70">{{ t.methodDescription }}</p>
         </div>
+        <!-- Les étapes se révèlent l'une après l'autre : le parcours se lit comme une
+             progression plutôt que comme quatre blocs posés d'un coup. -->
         <ol class="method-steps mt-14">
-          <li v-for="item in method" :key="item.step" class="method-step">
+          <li v-for="(item, i) in method" :key="item.step" class="method-step reveal" :data-reveal-delay="i * 130">
             <span class="method-step-num">{{ item.step }}</span>
             <h3 class="mt-5 text-lg font-bold">{{ item.title }}</h3>
             <p class="mt-3 text-sm leading-6 text-white/60">{{ item.text }}</p>
           </li>
         </ol>
+        <!-- Rappel du parcours en une phrase, sur une ligne qui se remplit au défilement :
+             le bas de la bande portait 80px de vide sous les étapes. -->
+        <div class="method-outcome reveal mt-12">
+          <span class="method-outcome-bar" aria-hidden="true"><span class="method-outcome-fill"/></span>
+          <p class="method-outcome-text">{{ t.methodOutcome }}</p>
+        </div>
       </div>
     </section>
 
     <!-- 6 bis. Démonstration vidéo — la capacité de production se montre au lieu de se
          décrire. Fond sombre : les séquences ressortent, et la page alterne enfin autre
          chose que des aplats clairs successifs. -->
-    <section class="video-band relative overflow-hidden py-16 text-white lg:py-20">
+    <section ref="videoBandEl" class="video-band relative overflow-hidden py-16 text-white lg:py-20">
+      <!-- Halos en parallax : ils remontent plus vite que la section, ce qui creuse la
+           profondeur du fond pendant le défilement. -->
+      <div class="scroll-parallax pointer-events-none absolute -left-32 top-0 h-[460px] w-[460px] rounded-full bg-violet-600/20 blur-[120px]" style="--depth: 70" aria-hidden="true"/>
+      <div class="scroll-parallax pointer-events-none absolute -bottom-40 right-0 h-[420px] w-[420px] rounded-full bg-[#C026D3]/12 blur-[120px]" style="--depth: -55" aria-hidden="true"/>
       <div class="container-shell relative z-10">
-        <div class="reveal flex flex-col justify-between gap-6 lg:flex-row lg:items-end">
+        <div class="reveal scroll-parallax flex flex-col justify-between gap-6 lg:flex-row lg:items-end" style="--depth: 22">
           <SectionHeading :kicker="t.videoKicker" dark :description="t.videoDescription">{{ t.videoTitle1 }} <span class="text-gradient">{{ t.videoTitle2 }}</span></SectionHeading>
           <NuxtLink :to="localePath('/video-lab')" class="btn-secondary magnetic shrink-0 !border-white/25 !text-white hover:!bg-white/10">{{ t.videoCta }} <ArrowRight class="h-4 w-4"/></NuxtLink>
         </div>
@@ -174,7 +186,7 @@
     <section class="section-pad border-y bg-[var(--surface)]">
       <div class="container-shell">
         <div class="reveal flex flex-col justify-between gap-6 sm:flex-row sm:items-end"><SectionHeading :kicker="t.proofKicker" :description="t.proofDescription">{{ t.proofTitle1 }} <span class="text-gradient">{{ t.proofTitle2 }}</span></SectionHeading><NuxtLink :to="localePath('/realisations')" class="btn-secondary">{{ t.allProof }} <ArrowRight class="h-4 w-4"/></NuxtLink></div>
-        <div class="mt-12 grid gap-6 md:grid-cols-3"><ProjectCard v-for="(project, i) in featuredProjects" :key="project.slug" :project="project" class="reveal-scale" :data-reveal-delay="i * 110"/></div>
+        <div ref="proofGridEl" class="mt-12 grid gap-6 md:grid-cols-3"><ProjectCard v-for="(project, i) in featuredProjects" :key="project.slug" :project="project" class="reveal-scale" :data-reveal-delay="i * 110"/></div>
         <div v-if="testimonials.length" class="reveal mt-14 border-t pt-12"><p class="kicker text-center">{{ t.testimonialsKicker }}</p><TestimonialCarousel class="mt-7" :items="testimonials"/></div>
       </div>
     </section>
@@ -222,11 +234,13 @@ const methodSectionEl = useScrollParallax()
 const useCasesSectionEl = useParallax(12)
 // Tilt 3D délégué : les trois cartes de cas d'usage s'inclinent sous le curseur.
 const useCasesGridEl = useTiltGroup()
-// Les CTA marqués .magnetic suivent légèrement le pointeur qui s'en approche. Amplitude
-// volontairement faible : au-delà, le bouton se dérobe sous le curseur au lieu d'attirer.
-useMagnetic(0.14, 70)
-// Lueur qui suit le curseur sur les cartes marquées .spotlight.
-useSpotlight()
+// useMagnetic et useSpotlight sont déclarés une fois pour tout le site dans
+// layouts/default.vue : inutile de les répéter ici.
+// Tilt avec profondeur sur les cartes réalisations : la couverture prend de l'avance sur
+// le texte, et un reflet suit l'inclinaison.
+const proofGridEl = useTiltDeep()
+// Parallax au scroll de la bande vidéo : halos et titre se décalent à leur propre vitesse.
+const videoBandEl = useScrollParallax()
 
 // Révélation séquencée du bloc texte hero à l'arrivée (one-shot, cf. brief J2 Hero).
 type ComponentWithEl = { $el?: unknown }
@@ -434,7 +448,7 @@ const t = computed(() => locale.value === 'en' ? {
   acquisitionKicker: 'flagship solution', acquisitionTitle1: 'One acquisition system,', acquisitionTitle2: 'from attention to sales.', acquisitionDescription: 'We connect the five links that move a prospect forward. The scope adapts to what already exists and what is actually broken.', viewAcquisition: 'Explore the acquisition system',
   useCasesKicker: 'start from a concrete leak', useCasesTitle1: 'A use case your team', useCasesTitle2: 'recognizes immediately.', useCasesDescription: 'Each use case solves a visible break and can connect to the complete acquisition system.', allUseCases: 'All use cases', discover: 'See the use case',
   secondaryKicker: 'four more connected systems', secondaryTitle1: 'Pilot operations, grow, retain', secondaryTitle2: 'or produce video content.', secondaryDescription: 'When the bottleneck is no longer acquisition, we connect the systems that run behind the sale.',
-  methodKicker: 'a controlled path', methodTitle1: 'Understand first.', methodTitle2: 'Connect what matters.', methodDescription: 'Every phase has a decision, an explicit scope and a usable output.',
+  methodKicker: 'a controlled path', methodTitle1: 'Understand first.', methodTitle2: 'Connect what matters.', methodDescription: 'Every phase has a decision, an explicit scope and a usable output.', methodOutcome: 'At the end of the four phases, you own a connected system, documented, and measurable on your own numbers.',
   videoKicker: 'produced in-house', videoTitle1: 'Video content generated', videoTitle2: 'by AI, shot by no one.', videoDescription: 'Every sequence below was produced without a camera, a set or a crew. The same pipeline can carry your ads and your spokesperson videos.', videoCta: 'See the Video Lab', scrollCue: 'Scroll',
   proofKicker: 'delivered, not invented', proofTitle1: 'Systems that have already', proofTitle2: 'run in real conditions.', proofDescription: 'The evidence below comes from published project records and client feedback available on the site.', allProof: 'All case studies', testimonialsKicker: 'client feedback',
   faqKicker: 'before you book', faqTitle1: 'Clear answers, then', faqTitle2: 'a useful audit.', bookingDescription: 'Check the main objections, then choose a slot directly here.', bookingKicker: 'book inside the site', bookingTitle: 'Choose your free audit slot.', bookingText: 'The calendar opens directly below. If it is unavailable, the local contact form takes over.',
@@ -444,7 +458,7 @@ const t = computed(() => locale.value === 'en' ? {
   acquisitionKicker: 'solution locomotive', acquisitionTitle1: 'Un système d’acquisition,', acquisitionTitle2: 'de l’attention à la vente.', acquisitionDescription: 'On relie les cinq maillons qui font avancer un prospect. Le périmètre s’adapte à l’existant et à ce qui bloque réellement.', viewAcquisition: 'Découvrir le système d’acquisition',
   useCasesKicker: 'partir d’une fuite concrète', useCasesTitle1: 'Un cas d’usage que votre équipe', useCasesTitle2: 'reconnaît tout de suite.', useCasesDescription: 'Chaque cas règle une rupture visible et peut se connecter au système d’acquisition complet.', allUseCases: 'Tous les cas d’usage', discover: 'Voir le cas d’usage',
   secondaryKicker: 'quatre autres systèmes connectés', secondaryTitle1: 'Piloter les opérations, grandir, fidéliser', secondaryTitle2: 'ou produire du contenu vidéo.', secondaryDescription: 'Quand le blocage n’est plus l’acquisition, on relie les systèmes qui tournent derrière la vente.',
-  methodKicker: 'un parcours maîtrisé', methodTitle1: 'Comprendre d’abord.', methodTitle2: 'Relier ce qui compte.', methodDescription: 'Chaque phase produit une décision, un périmètre explicite et un livrable utilisable.',
+  methodKicker: 'un parcours maîtrisé', methodTitle1: 'Comprendre d’abord.', methodTitle2: 'Relier ce qui compte.', methodDescription: 'Chaque phase produit une décision, un périmètre explicite et un livrable utilisable.', methodOutcome: 'Au bout des quatre phases, vous disposez d’un système connecté, documenté, et mesurable sur vos propres chiffres.',
   videoKicker: 'produit en interne', videoTitle1: 'Du contenu vidéo généré', videoTitle2: 'par IA, tourné par personne.', videoDescription: 'Chaque séquence ci-dessous a été produite sans caméra, sans décor et sans équipe. La même chaîne peut porter vos publicités et vos vidéos de porte-parole.', videoCta: 'Voir le Vidéo Lab', scrollCue: 'Défiler',
   proofKicker: 'livré, pas inventé', proofTitle1: 'Des systèmes déjà', proofTitle2: 'mis en situation réelle.', proofDescription: 'Les preuves ci-dessous viennent des fiches projets publiées et des retours clients disponibles sur le site.', allProof: 'Toutes les réalisations', testimonialsKicker: 'retours clients',
   faqKicker: 'avant de réserver', faqTitle1: 'Des réponses claires, puis', faqTitle2: 'un audit utile.', bookingDescription: 'Vérifiez les principales objections, puis choisissez votre créneau directement ici.', bookingKicker: 'réservation sur le site', bookingTitle: 'Choisissez votre créneau d’audit gratuit.', bookingText: 'Le calendrier s’ouvre directement ci-dessous. S’il est indisponible, le formulaire local prend le relais.',

@@ -298,6 +298,44 @@ header.glass {
   transform: translate3d(0, calc(var(--sy, 0) * var(--depth, 0) * 1px), 0);
 }
 
+/* --- Tilt 3D avec profondeur (piloté par useTiltDeep) ---
+   La carte tourne, et ses couches `.depth-layer` glissent chacune à leur propre vitesse
+   (`--layer`) : l'image de couverture prend de l'avance sur le texte, ce qui fait lire un
+   volume plutôt qu'une simple rotation. `--glare` ajoute un reflet qui suit l'inclinaison. */
+.tilt-deep {
+  position: relative;
+  transform-style: preserve-3d;
+  transition: transform .45s cubic-bezier(.22, 1, .36, 1), box-shadow .45s ease;
+  will-change: transform;
+}
+.tilt-deep:hover { box-shadow: 0 30px 70px rgba(35, 6, 65, .22); }
+.depth-layer {
+  transition: transform .45s cubic-bezier(.22, 1, .36, 1);
+  transform: translate3d(
+    calc(var(--tx, 0) * var(--layer, 0) * -1px),
+    calc(var(--ty, 0) * var(--layer, 0) * -1px),
+    0
+  );
+}
+/* Reflet : une bande lumineuse orientée par --glare, révélée proportionnellement à
+   l'inclinaison (--glare-o). Ne capte aucun clic. */
+.tilt-deep::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  border-radius: inherit;
+  pointer-events: none;
+  opacity: var(--glare-o, 0);
+  transition: opacity .45s ease;
+  background: linear-gradient(var(--glare, 0deg), rgba(255, 255, 255, .5) 0%, transparent 42%);
+  mix-blend-mode: overlay;
+}
+@media (prefers-reduced-motion: reduce) {
+  .tilt-deep, .depth-layer { transition: none; transform: none !important; }
+  .tilt-deep::after { display: none; }
+}
+
 /* --- Lueur qui suit le curseur (pilotée par useSpotlight) ---
    Le dégradé vit dans un ::before en opacité 0, révélé au survol : la carte garde son
    fond et sa bordure, seule la lueur s'ajoute. Le pseudo-élément n'intercepte aucun
@@ -665,7 +703,64 @@ header.glass {
   font-weight: 700;
   color: #3DE0C5;
   backdrop-filter: blur(6px);
+  transition: transform .4s cubic-bezier(.22, 1, .36, 1), border-color .4s ease, box-shadow .4s ease, background-color .4s ease;
 }
+/* L'étape survolée s'allume et se détache : le parcours répond au pointeur au lieu de
+   rester une liste inerte. Le halo reprend le mint des numéros. */
+.method-step { transition: transform .4s cubic-bezier(.22, 1, .36, 1); }
+.method-step:hover { transform: translateY(-4px); }
+.method-step:hover .method-step-num {
+  transform: scale(1.12);
+  border-color: rgba(61, 224, 197, .55);
+  background-color: rgba(61, 224, 197, .12);
+  box-shadow: 0 0 0 6px rgba(61, 224, 197, .08), 0 8px 24px rgba(61, 224, 197, .18);
+}
+.method-step:hover h3 { color: #3DE0C5; }
+.method-step h3 { transition: color .4s ease; }
+@media (prefers-reduced-motion: reduce) {
+  .method-step, .method-step-num { transition: none; }
+  .method-step:hover { transform: none; }
+  .method-step:hover .method-step-num { transform: none; }
+}
+/* Conclusion du parcours : une barre qui se remplit au défilement, puis la phrase de
+   résultat. Occupe le bas de la bande, qui se terminait sur du vide. */
+.method-outcome {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+  border-top: 1px solid rgba(255, 255, 255, .12);
+  padding-top: 1.75rem;
+}
+.method-outcome-bar {
+  position: relative;
+  display: block;
+  height: 2px;
+  flex: 1 1 auto;
+  min-width: 3rem;
+  max-width: 14rem;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, .12);
+  overflow: hidden;
+}
+.method-outcome-fill {
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 0;
+  border-radius: inherit;
+  background: linear-gradient(90deg, #3DE0C5, #6d28d9);
+  transition: width 1.1s cubic-bezier(.22, 1, .36, 1) .2s;
+}
+.method-outcome.is-visible .method-outcome-fill { width: 100%; }
+.method-outcome-text {
+  flex: 1 1 22rem;
+  font-size: .95rem;
+  line-height: 1.7;
+  color: rgba(255, 255, 255, .72);
+}
+@media (prefers-reduced-motion: reduce) {
+  .method-outcome-fill { transition: none; width: 100%; }
+}
+
 @media (min-width: 768px) {
   .method-steps { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
