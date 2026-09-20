@@ -1,5 +1,5 @@
 <template>
-  <header class="fixed inset-x-0 top-0 z-50 transition-all duration-300" :class="[isHero ? 'header-hero border-transparent text-white shadow-none' : 'glass text-[var(--text-primary)]', scrolled ? 'shadow-lg' : '']">
+  <header ref="headerEl" class="fixed inset-x-0 top-0 z-50 transition-all duration-300" :class="[isHero ? 'header-hero text-white' : 'glass text-[var(--text-primary)]', scrolled ? 'shadow-lg' : '']">
     <div class="container-shell flex h-[4.75rem] items-center justify-between lg:h-20">
       <BrandMark :light="isHero" />
       <nav class="hidden items-center gap-1 lg:flex" :aria-label="$t('nav.home') === 'Home' ? 'Main navigation' : 'Navigation principale'">
@@ -54,6 +54,7 @@ const colorMode = useColorMode()
 const { t, locale } = useI18n()
 const localePath = useLocalePath()
 const switchLocalePath = useSwitchLocalePath()
+const headerEl = ref<HTMLElement | null>(null)
 const menuOpen = ref(false)
 const scrolled = ref(false)
 const openGroup = ref<string | null>(null)
@@ -63,10 +64,16 @@ const isHero = computed(() => (route.path === '/' || route.path === '/en') && co
 // Le hero (.hero-screen) fait 100vh moins la hauteur du header, pas la hauteur pleine du
 // viewport : on bascule dès qu'on a dépassé sa position réelle dans le document, pour ne
 // pas garder le texte blanc de la nav sur un fond clair une fois le hero passé.
+// La bascule se fait quand le bas du hero atteint le bas du header, mesuré sur l'élément
+// lui-même : en dur (90px), le seuil était calé sur le header desktop et se déclenchait
+// trop tôt sur mobile, où la nav claire réapparaissait par-dessus le hero encore violet.
+// getBoundingClientRect() est relatif au viewport : il suit donc la barre d'URL mobile,
+// contrairement à une hauteur mémorisée au montage.
 function onScroll() {
   const hero = document.querySelector('.hero-screen')
-  const heroBottomInDocument = hero ? hero.getBoundingClientRect().bottom + window.scrollY : window.innerHeight
-  scrolled.value = window.scrollY > heroBottomInDocument - 90
+  if (!hero) { scrolled.value = window.scrollY > window.innerHeight; return }
+  const headerHeight = headerEl.value?.offsetHeight ?? 76
+  scrolled.value = hero.getBoundingClientRect().bottom <= headerHeight
 }
 function onClickOutside(event: MouseEvent) {
   if (openGroup.value && !(event.target as HTMLElement).closest('[data-nav-group]')) {

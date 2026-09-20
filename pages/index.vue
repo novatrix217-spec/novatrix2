@@ -21,7 +21,7 @@
           </div>
           <p ref="heroAuditNoteEl" class="mt-3 max-w-xl text-xs leading-5 text-white/55">{{ t.auditNote }}</p>
         </div>
-        <HeroFlowViz class="mt-4 max-h-[36vh] lg:mt-0 lg:max-h-[min(440px,50vh)]" />
+        <HeroVideo class="mt-4 max-h-[36vh] lg:mt-0 lg:max-h-[min(440px,50vh)]" />
       </div>
     </section>
 
