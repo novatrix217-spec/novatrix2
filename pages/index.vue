@@ -149,8 +149,14 @@
         </div>
         <!-- Les étapes se révèlent l'une après l'autre : le parcours se lit comme une
              progression plutôt que comme quatre blocs posés d'un coup. -->
-        <ol class="method-steps mt-14">
-          <li v-for="(item, i) in method" :key="item.step" class="method-step reveal" :data-reveal-delay="i * 130">
+        <ol ref="methodTrack" class="method-steps mt-14">
+          <li
+            v-for="(item, i) in method"
+            :key="item.step"
+            :ref="(el) => setMethodStepRef(el, i)"
+            class="method-step reveal"
+            :data-reveal-delay="i * 130"
+          >
             <span class="method-step-num">{{ item.step }}</span>
             <h3 class="mt-5 text-lg font-bold">{{ item.title }}</h3>
             <p class="mt-3 text-sm leading-6 text-white/60">{{ item.text }}</p>
@@ -241,6 +247,9 @@ const useCasesGridEl = useTiltGroup()
 const proofGridEl = useTiltDeep()
 // Parallax au scroll de la bande vidéo : halos et titre se décalent à leur propre vitesse.
 const videoBandEl = useScrollParallax()
+// Les quatre phases s'activent l'une après l'autre au défilement, et la ligne qui les
+// relie se trace au même rythme.
+const { track: methodTrack, setStepRef: setMethodStepRef } = useStepProgress(4)
 
 // Révélation séquencée du bloc texte hero à l'arrivée (one-shot, cf. brief J2 Hero).
 type ComponentWithEl = { $el?: unknown }

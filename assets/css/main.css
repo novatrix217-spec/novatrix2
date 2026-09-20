@@ -676,7 +676,8 @@ header.glass {
   position: relative;
   padding-left: 3.75rem;
 }
-/* Ligne verticale de liaison (mobile) : le parcours reste lisible comme une suite. */
+/* Ligne verticale de liaison (mobile) : le parcours reste lisible comme une suite.
+   Elle se trace quand l'étape s'active, au lieu d'être déjà tirée d'un bout à l'autre. */
 .method-step::before {
   content: "";
   position: absolute;
@@ -684,8 +685,20 @@ header.glass {
   top: 3rem;
   bottom: -2.25rem;
   width: 1px;
-  background: linear-gradient(to bottom, rgba(255,255,255,.22), rgba(255,255,255,0));
+  background: linear-gradient(to bottom, rgba(61, 224, 197, .5), rgba(255,255,255,0));
+  transform-origin: top;
+  transition: transform .7s cubic-bezier(.22, 1, .36, 1) .15s;
 }
+.js-steps .method-step::before { transform: scaleY(0); }
+.js-steps .method-step.is-active::before { transform: scaleY(1); }
+/* Une phase pas encore atteinte reste en retrait : c'est le passage du défilement qui la
+   porte au premier plan, ce qui fait lire le parcours comme une progression.
+   Le retrait n'est appliqué que sous `.js-steps`, posée par le composable une fois
+   l'observateur en place : si le script ne s'exécute pas, le texte reste pleinement
+   lisible au lieu de rester délavé pour toujours. */
+.method-step h3, .method-step p { transition: opacity .6s ease, transform .6s cubic-bezier(.22, 1, .36, 1); }
+.js-steps .method-step:not(.is-active) h3, .js-steps .method-step:not(.is-active) p { opacity: .42; }
+.method-step.is-active h3, .method-step.is-active p { opacity: 1; }
 .method-step:last-child::before { display: none; }
 .method-step-num {
   position: absolute;
@@ -705,6 +718,25 @@ header.glass {
   backdrop-filter: blur(6px);
   transition: transform .4s cubic-bezier(.22, 1, .36, 1), border-color .4s ease, box-shadow .4s ease, background-color .4s ease;
 }
+/* Le numéro d'une phase atteinte s'allume et pulse une fois : le parcours se construit
+   au défilement plutôt que de s'afficher déjà terminé. */
+.method-step.is-active .method-step-num {
+  border-color: rgba(61, 224, 197, .5);
+  background-color: rgba(61, 224, 197, .1);
+  box-shadow: 0 0 0 5px rgba(61, 224, 197, .07);
+  animation: method-num-pop .6s cubic-bezier(.22, 1, .36, 1);
+}
+@keyframes method-num-pop {
+  0% { transform: scale(.82); box-shadow: 0 0 0 0 rgba(61, 224, 197, .45); }
+  60% { transform: scale(1.1); }
+  100% { transform: scale(1); box-shadow: 0 0 0 5px rgba(61, 224, 197, .07); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .method-step.is-active .method-step-num { animation: none; }
+  .method-step::before { transition: none; transform: scaleY(1); }
+  .method-step h3, .method-step p { transition: none; opacity: 1; }
+}
+
 /* L'étape survolée s'allume et se détache : le parcours répond au pointeur au lieu de
    rester une liste inerte. Le halo reprend le mint des numéros. */
 .method-step { transition: transform .4s cubic-bezier(.22, 1, .36, 1); }
@@ -768,7 +800,8 @@ header.glass {
   .method-steps { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 2rem 1.75rem; }
   .method-step { padding-left: 0; padding-top: 4.25rem; }
   .method-step-num { top: 0; }
-  /* Desktop : la ligne passe à l'horizontale, d'une étape à la suivante. */
+  /* Desktop : la ligne passe à l'horizontale, d'une étape à la suivante, et se trace de
+     gauche à droite — l'origine de la mise à l'échelle suit ce changement de sens. */
   .method-step::before {
     left: 3.1rem;
     right: -1.75rem;
@@ -776,8 +809,11 @@ header.glass {
     bottom: auto;
     width: auto;
     height: 1px;
-    background: linear-gradient(to right, rgba(255,255,255,.22), rgba(255,255,255,0));
+    background: linear-gradient(to right, rgba(61, 224, 197, .5), rgba(255,255,255,0));
+    transform-origin: left;
   }
+  .js-steps .method-step::before { transform: scaleX(0); }
+  .js-steps .method-step.is-active::before { transform: scaleX(1); }
 }
 
 /* Panneau de réservation (accueil) : surélevé et cerné pour marquer la dernière étape
