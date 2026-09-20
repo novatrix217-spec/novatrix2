@@ -2,11 +2,11 @@
   <header ref="headerEl" class="fixed inset-x-0 top-0 z-50 transition-all duration-300" :class="[isHero ? 'header-hero text-white' : 'glass text-[var(--text-primary)]', scrolled ? 'shadow-lg' : '']">
     <div class="container-shell flex h-[4.75rem] items-center justify-between lg:h-20">
       <BrandMark :light="isHero" />
-      <nav class="hidden items-center gap-1 lg:flex" :aria-label="$t('nav.home') === 'Home' ? 'Main navigation' : 'Navigation principale'">
+      <nav class="hidden items-center gap-0.5 xl:flex" :aria-label="$t('nav.home') === 'Home' ? 'Main navigation' : 'Navigation principale'">
         <template v-for="item in navItems" :key="item.key">
-          <NuxtLink v-if="!item.children" :to="localePath(item.to)" class="rounded-lg px-3 py-2 text-sm font-semibold transition" :class="navClass(item.to)">{{ item.label }}</NuxtLink>
+          <NuxtLink v-if="!item.children" :to="localePath(item.to)" class="whitespace-nowrap rounded-lg px-3 py-2 text-[.95rem] font-semibold transition" :class="navClass(item.to)">{{ item.label }}</NuxtLink>
           <div v-else data-nav-group class="relative">
-            <button type="button" class="flex items-center gap-1 rounded-lg px-3 py-2 text-sm font-semibold transition" :class="[groupLinkClass(item), openGroup === item.key ? (isHero ? 'bg-white/10 text-white' : 'bg-[var(--accent-soft)] text-[var(--accent)]') : '']" aria-haspopup="true" :aria-expanded="openGroup === item.key" @click="openGroup = openGroup === item.key ? null : item.key" @keydown.escape="openGroup = null">
+            <button type="button" class="flex items-center gap-1 whitespace-nowrap rounded-lg px-3 py-2 text-[.95rem] font-semibold transition" :class="[groupLinkClass(item), openGroup === item.key ? (isHero ? 'bg-white/10 text-white' : 'bg-[var(--accent-soft)] text-[var(--accent)]') : '']" aria-haspopup="true" :aria-expanded="openGroup === item.key" @click="openGroup = openGroup === item.key ? null : item.key" @keydown.escape="openGroup = null">
               {{ item.label }}
               <ChevronDown class="h-3.5 w-3.5 transition" :class="openGroup === item.key ? 'rotate-180' : ''" />
             </button>
@@ -17,23 +17,23 @@
             </Transition>
           </div>
         </template>
-        <NuxtLink :to="localePath('/contact')" class="rounded-lg px-3 py-2 text-sm font-semibold transition" :class="navClass('/contact')">{{ $t('nav.contact') }}</NuxtLink>
+        <NuxtLink :to="localePath('/contact')" class="whitespace-nowrap rounded-lg px-3 py-2 text-[.95rem] font-semibold transition" :class="navClass('/contact')">{{ $t('nav.contact') }}</NuxtLink>
       </nav>
-      <div class="hidden items-center gap-2 lg:flex">
+      <div class="hidden items-center gap-2 xl:flex">
         <NuxtLink :to="switchLocalePath(locale === 'fr' ? 'en' : 'fr')" class="grid h-10 place-items-center rounded-xl border px-3 font-mono text-xs font-bold transition hover:bg-[var(--accent-soft)]" :class="isHero ? 'border-white/15' : ''" :aria-label="$t('header.switchLang')">{{ locale === 'fr' ? 'EN' : 'FR' }}</NuxtLink>
         <button class="grid h-10 w-10 place-items-center rounded-xl border transition hover:bg-[var(--accent-soft)]" :class="isHero ? 'border-white/15' : ''" :aria-label="colorMode.value === 'dark' ? $t('header.lightMode') : $t('header.darkMode')" @click="toggleTheme">
           <Sun v-if="colorMode.value === 'dark'" class="h-4 w-4" />
           <Moon v-else class="h-4 w-4" />
         </button>
-        <button type="button" class="btn-primary !min-h-10 !px-4 !py-2" @click="openCalendly">{{ $t('header.bookCall') }}</button>
+        <button type="button" class="btn-primary !min-h-10 whitespace-nowrap !px-4 !py-2" @click="openCalendly">{{ $t('header.bookCall') }}</button>
       </div>
-      <button class="grid h-10 w-10 place-items-center rounded-xl border lg:hidden" :class="isHero ? 'border-white/15' : ''" :aria-expanded="menuOpen" aria-controls="mobile-menu" :aria-label="$t(menuOpen ? 'header.closeMenu' : 'header.openMenu')" @click="menuOpen = !menuOpen">
+      <button class="grid h-10 w-10 place-items-center rounded-xl border xl:hidden" :class="isHero ? 'border-white/15' : ''" :aria-expanded="menuOpen" aria-controls="mobile-menu" :aria-label="$t(menuOpen ? 'header.closeMenu' : 'header.openMenu')" @click="menuOpen = !menuOpen">
         <X v-if="menuOpen" class="h-5 w-5" />
         <Menu v-else class="h-5 w-5" />
       </button>
     </div>
     <Transition name="modal">
-      <div v-if="menuOpen" id="mobile-menu" class="border-t px-5 py-5 lg:hidden" :class="isHero ? 'border-white/10 glass-dark' : 'border-[var(--border-subtle)] glass'">
+      <div v-if="menuOpen" id="mobile-menu" class="border-t px-5 py-5 xl:hidden" :class="isHero ? 'border-white/10 glass-dark' : 'border-[var(--border-subtle)] glass'">
         <nav class="flex flex-col gap-1" :aria-label="$t('header.mobileNav')">
           <NuxtLink v-for="link in mobileLinks" :key="link.to" :to="localePath(link.to)" class="rounded-xl px-4 py-3 text-sm font-semibold transition" :class="isActive(link.to) ? (isHero ? 'bg-white/10 text-white' : 'bg-[var(--accent-soft)] text-[var(--accent)]') : 'hover:bg-[var(--accent-soft)]'" @click="menuOpen = false">{{ link.label }}</NuxtLink>
           <div class="mt-3 flex gap-2">
@@ -104,6 +104,7 @@ onBeforeUnmount(() => {
 // Recalcule l'état au changement de route (sinon le header garde son apparence "scrollé" en revenant à l'accueil).
 watch(() => route.path, () => { nextTick(onScroll) })
 const navItems = computed(() => [
+  { key: 'home', label: t('nav.home'), to: '/' },
   {
     key: 'offres',
     label: t('nav.solutions'),
@@ -126,6 +127,7 @@ const navItems = computed(() => [
   },
 ])
 const mobileLinks = computed(() => [
+  { label: t('nav.home'), to: '/' },
   { label: t('nav.solutions'), to: '/offres' },
   { label: t('nav.useCases'), to: '/solutions' },
   { label: t('nav.realisations'), to: '/realisations' },
