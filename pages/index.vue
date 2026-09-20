@@ -85,7 +85,7 @@
     <!-- 4. Cas d’usage -->
     <section class="section-pad">
       <div class="container-shell">
-        <div class="flex flex-col justify-between gap-6 sm:flex-row sm:items-end"><SectionHeading :kicker="t.useCasesKicker" :description="t.useCasesDescription">{{ t.useCasesTitle1 }} <span class="text-gradient">{{ t.useCasesTitle2 }}</span></SectionHeading><NuxtLink :to="localePath('/solutions')" class="btn-secondary">{{ t.allUseCases }} <ArrowRight class="h-4 w-4"/></NuxtLink></div>
+        <div class="reveal flex flex-col justify-between gap-6 sm:flex-row sm:items-end"><SectionHeading :kicker="t.useCasesKicker" :description="t.useCasesDescription">{{ t.useCasesTitle1 }} <span class="text-gradient">{{ t.useCasesTitle2 }}</span></SectionHeading><NuxtLink :to="localePath('/solutions')" class="btn-secondary">{{ t.allUseCases }} <ArrowRight class="h-4 w-4"/></NuxtLink></div>
         <!-- Le premier cas est mis en avant (colonne large, fond appuyé) : les trois cartes
              n'ont pas le même poids commercial, la mise en page le reflète. -->
         <div class="use-case-grid mt-12 grid gap-5">
@@ -93,8 +93,9 @@
             v-for="(item, i) in useCases"
             :key="item.to"
             :to="localePath(item.to)"
-            class="use-case card card-hover flex flex-col"
+            class="use-case card card-hover reveal-scale flex flex-col"
             :class="i === 0 ? 'use-case-lead' : ''"
+            :data-reveal-delay="i * 110"
           >
             <component :is="item.icon" class="shrink-0 text-violet-700" :class="i === 0 ? 'h-9 w-9' : 'h-7 w-7'"/>
             <h2 class="mt-5 font-bold" :class="i === 0 ? 'text-2xl' : 'text-xl'">{{ item.title }}</h2>
@@ -113,14 +114,14 @@
     <!-- 5. Systèmes secondaires -->
     <section class="section-pad border-y bg-[var(--surface)]">
       <div class="container-shell">
-        <SectionHeading :kicker="t.secondaryKicker" center :description="t.secondaryDescription">{{ t.secondaryTitle1 }} <span class="text-gradient">{{ t.secondaryTitle2 }}</span></SectionHeading>
-        <div class="mx-auto mt-12 grid max-w-5xl gap-6 md:grid-cols-2"><OfferCard v-for="offer in secondaryOffers" :key="offer.tag" v-bind="offer"/></div>
+        <div class="reveal"><SectionHeading :kicker="t.secondaryKicker" center :description="t.secondaryDescription">{{ t.secondaryTitle1 }} <span class="text-gradient">{{ t.secondaryTitle2 }}</span></SectionHeading></div>
+        <div class="mx-auto mt-12 grid max-w-5xl gap-6 md:grid-cols-2"><OfferCard v-for="(offer, i) in secondaryOffers" :key="offer.tag" v-bind="offer" class="reveal" :data-reveal-delay="i * 110"/></div>
       </div>
     </section>
 
     <!-- 6. Méthode — rupture sombre à mi-page : casse la répétition des sections claires
          et donne un deuxième temps fort après le hero. Parallax au scroll sur le fond. -->
-    <section ref="methodSectionEl" class="method-band grain relative overflow-hidden py-24 text-white lg:py-32">
+    <section ref="methodSectionEl" class="method-band grain relative overflow-hidden py-16 text-white lg:py-20">
       <div class="scroll-parallax pointer-events-none absolute -right-24 -top-24 h-[420px] w-[420px] rounded-full bg-violet-600/20 blur-[110px]" style="--depth: 60" aria-hidden="true"/>
       <div class="scroll-parallax pointer-events-none absolute -bottom-32 -left-20 h-[380px] w-[380px] rounded-full bg-[#3DE0C5]/10 blur-[110px]" style="--depth: -45" aria-hidden="true"/>
       <div class="container-shell relative z-10">
@@ -142,9 +143,9 @@
     <!-- 7. Preuves concentrées -->
     <section class="section-pad border-y bg-[var(--surface)]">
       <div class="container-shell">
-        <div class="flex flex-col justify-between gap-6 sm:flex-row sm:items-end"><SectionHeading :kicker="t.proofKicker" :description="t.proofDescription">{{ t.proofTitle1 }} <span class="text-gradient">{{ t.proofTitle2 }}</span></SectionHeading><NuxtLink :to="localePath('/realisations')" class="btn-secondary">{{ t.allProof }} <ArrowRight class="h-4 w-4"/></NuxtLink></div>
-        <div class="mt-12 grid gap-6 md:grid-cols-3"><ProjectCard v-for="project in featuredProjects" :key="project.slug" :project="project"/></div>
-        <div v-if="testimonials.length" class="mt-14 border-t pt-12"><p class="kicker text-center">{{ t.testimonialsKicker }}</p><TestimonialCarousel class="mt-7" :items="testimonials"/></div>
+        <div class="reveal flex flex-col justify-between gap-6 sm:flex-row sm:items-end"><SectionHeading :kicker="t.proofKicker" :description="t.proofDescription">{{ t.proofTitle1 }} <span class="text-gradient">{{ t.proofTitle2 }}</span></SectionHeading><NuxtLink :to="localePath('/realisations')" class="btn-secondary">{{ t.allProof }} <ArrowRight class="h-4 w-4"/></NuxtLink></div>
+        <div class="mt-12 grid gap-6 md:grid-cols-3"><ProjectCard v-for="(project, i) in featuredProjects" :key="project.slug" :project="project" class="reveal-scale" :data-reveal-delay="i * 110"/></div>
+        <div v-if="testimonials.length" class="reveal mt-14 border-t pt-12"><p class="kicker text-center">{{ t.testimonialsKicker }}</p><TestimonialCarousel class="mt-7" :items="testimonials"/></div>
       </div>
     </section>
 

@@ -143,9 +143,15 @@ svg.lucide { stroke-width: 1.6; }
      (jamais de blanc pur sur --accent, contrainte AA du designer). */
   .btn-primary { @apply inline-flex min-h-12 items-center justify-center gap-2 rounded-xl bg-[var(--accent)] px-6 py-3 text-sm font-bold text-[var(--ink-on-accent)] shadow-lg shadow-black/20 transition duration-300 hover:-translate-y-0.5 hover:bg-[var(--accent-hover)] hover:shadow-xl active:bg-[var(--accent-active)] disabled:cursor-not-allowed disabled:opacity-60; }
   .btn-secondary { @apply inline-flex min-h-12 items-center justify-center gap-2 rounded-xl border px-6 py-3 text-sm font-bold text-violet-700 transition duration-300 hover:-translate-y-0.5 hover:border-violet-400 hover:bg-violet-50 dark:text-violet-200 dark:hover:bg-white/5; }
-  .card { @apply rounded-2xl border bg-white p-6 transition duration-300 dark:bg-[#160630]; box-shadow: var(--elev-2); }
-  .card-hover { @apply hover:-translate-y-1.5 hover:border-violet-300; }
-  .card-hover:hover { box-shadow: var(--elev-3); }
+  .card { @apply rounded-2xl border bg-white p-6 dark:bg-[#160630]; box-shadow: var(--elev-2); transition: transform .35s cubic-bezier(.22, 1, .36, 1), box-shadow .35s ease, border-color .35s ease; }
+  /* Le soulèvement était de 6px sans courbe marquée : le geste passait inaperçu. Un
+     déplacement plus franc, avec une courbe qui décélère, rend la carte réellement
+     réactive sous le curseur. */
+  .card-hover { @apply hover:border-violet-300; }
+  .card-hover:hover { transform: translateY(-6px) scale(1.012); box-shadow: var(--elev-3); }
+  @media (prefers-reduced-motion: reduce) {
+    .card, .card-hover:hover { transition: none; transform: none; }
+  }
   .tnum { font-variant-numeric: tabular-nums slashed-zero; }
   .field { @apply min-h-12 w-full rounded-xl border bg-white px-4 text-sm text-[#160630] placeholder:text-slate-400 focus:border-violet-500 focus:outline-none dark:bg-white/5 dark:text-white; }
 }
