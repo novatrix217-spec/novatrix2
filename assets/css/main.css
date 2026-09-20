@@ -298,6 +298,49 @@ header.glass {
   transform: translate3d(0, calc(var(--sy, 0) * var(--depth, 0) * 1px), 0);
 }
 
+/* ============================================================
+   MOUVEMENT AMBIANT (piloté par useAmbientMotion)
+   .drift  : se déplace pendant le défilement, selon --sy et --depth
+   .breathe: respire quand la page est immobile (la classe .scrolling
+             sur <html> suspend cette respiration pendant le scroll)
+   .follow : suit le pointeur sur toute la page, via --cx / --cy
+   ============================================================ */
+.drift {
+  will-change: transform;
+  transform: translate3d(0, calc(var(--sy, 0) * var(--depth, 0) * 1px), 0);
+}
+/* Pendant le défilement, le déplacement suit le scroll sans transition (sinon il traîne
+   derrière) ; à l'arrêt, une transition douce ramène l'élément à sa position de repos. */
+.scrolling .drift { transition: none; }
+.drift { transition: transform .5s cubic-bezier(.22, 1, .36, 1); }
+
+/* Respiration à l'arrêt : l'animation tourne en continu mais est mise en pause pendant le
+   défilement, où le parallax occupe déjà l'œil. */
+@keyframes ambient-breathe {
+  0%, 100% { transform: translate3d(0, 0, 0) scale(1); opacity: var(--breathe-min, .55); }
+  50% { transform: translate3d(0, -14px, 0) scale(1.06); opacity: var(--breathe-max, .85); }
+}
+.breathe { animation: ambient-breathe var(--breathe-time, 9s) ease-in-out infinite; }
+.scrolling .breathe { animation-play-state: paused; }
+
+/* Décor qui suit le pointeur à l'échelle de la page. --cx/--cy valent 0..1, recentrés ici
+   autour de 0 pour que le repos corresponde au centre de l'écran.
+   Le déplacement passe par la position (translate ne peut pas cohabiter avec l'animation
+   de respiration, qui pilote déjà `transform` sur le même élément) : `left`/`top` en
+   décalage relatif laissent les deux effets se cumuler. */
+.follow {
+  will-change: translate;
+  translate:
+    calc((var(--cx, .5) - .5) * var(--follow, 30) * 1px)
+    calc((var(--cy, .5) - .5) * var(--follow, 30) * 1px);
+  transition: translate .8s cubic-bezier(.22, 1, .36, 1);
+}
+@media (prefers-reduced-motion: reduce) {
+  .drift { transform: none !important; transition: none; }
+  .follow { translate: none !important; transition: none; }
+  .breathe { animation: none; }
+}
+
 /* --- Tilt 3D avec profondeur (piloté par useTiltDeep) ---
    La carte tourne, et ses couches `.depth-layer` glissent chacune à leur propre vitesse
    (`--layer`) : l'image de couverture prend de l'avance sur le texte, ce qui fait lire un

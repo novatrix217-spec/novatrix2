@@ -16,4 +16,7 @@ useSmoothScroll()
 // où qu'ils se trouvent, y compris dans les composants partagés (CtaBand, cartes).
 useMagnetic(0.14, 70)
 useSpotlight()
+// Mouvement ambiant du site : parallax des éléments .drift au défilement, respiration des
+// éléments .breathe une fois la page immobile, et décor .follow qui suit le pointeur.
+useAmbientMotion()
 </script>
