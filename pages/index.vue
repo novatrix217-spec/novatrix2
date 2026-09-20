@@ -83,8 +83,12 @@
     </section>
 
     <!-- 4. Cas d’usage -->
-    <section class="section-pad">
-      <div class="container-shell">
+    <!-- Aurora + parallax souris : les orbes dérivent en continu et suivent le pointeur,
+         ce qui donne du relief à une section autrement plate. Inerte au toucher et sous
+         prefers-reduced-motion (géré par useParallax et par le composant). -->
+    <section ref="useCasesSectionEl" class="section-pad relative overflow-hidden">
+      <AuroraBackground :intensity="0.45" variant="violet" />
+      <div class="container-shell relative z-10">
         <div class="reveal flex flex-col justify-between gap-6 sm:flex-row sm:items-end"><SectionHeading :kicker="t.useCasesKicker" :description="t.useCasesDescription">{{ t.useCasesTitle1 }} <span class="text-gradient">{{ t.useCasesTitle2 }}</span></SectionHeading><NuxtLink :to="localePath('/solutions')" class="btn-secondary">{{ t.allUseCases }} <ArrowRight class="h-4 w-4"/></NuxtLink></div>
         <!-- Le premier cas est mis en avant (colonne large, fond appuyé) : les trois cartes
              n'ont pas le même poids commercial, la mise en page le reflète. -->
@@ -124,6 +128,9 @@
     <section ref="methodSectionEl" class="method-band grain relative overflow-hidden py-16 text-white lg:py-20">
       <div class="scroll-parallax pointer-events-none absolute -right-24 -top-24 h-[420px] w-[420px] rounded-full bg-violet-600/20 blur-[110px]" style="--depth: 60" aria-hidden="true"/>
       <div class="scroll-parallax pointer-events-none absolute -bottom-32 -left-20 h-[380px] w-[380px] rounded-full bg-[#3DE0C5]/10 blur-[110px]" style="--depth: -45" aria-hidden="true"/>
+      <!-- Trait lumineux qui se trace au défilement : donne une direction de lecture à la
+           bande, là où les orbes ne font que flotter. Purement décoratif. -->
+      <BrandRibbon id="method-ribbon" on-dark />
       <div class="container-shell relative z-10">
         <div class="max-w-3xl">
           <p class="kicker !text-[#3DE0C5]">{{ t.methodKicker }}</p>
@@ -188,6 +195,8 @@ const { whatsappUrl, hasWhatsapp } = useWhatsapp()
 const revealRoot = useScrollReveal()
 // Parallax au scroll des halos de la bande "méthode" (inerte si prefers-reduced-motion).
 const methodSectionEl = useScrollParallax()
+// Parallax souris de la section cas d'usage : alimente les orbes de l'aurora (--px/--py).
+const useCasesSectionEl = useParallax(12)
 
 // Révélation séquencée du bloc texte hero à l'arrivée (one-shot, cf. brief J2 Hero).
 type ComponentWithEl = { $el?: unknown }
