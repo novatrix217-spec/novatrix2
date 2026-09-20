@@ -151,6 +151,92 @@ export function useTiltGroup(max = 8) {
 }
 
 /**
+ * Boutons magnétiques : tout élément `.magnetic` de la page suit légèrement le pointeur
+ * quand il s'en approche, puis revient en place. Un seul écouteur global couvre la page
+ * entière, y compris les boutons rendus par `v-for` ou ajoutés après coup.
+ * `radius` est la distance (px) au-delà de laquelle l'élément ne réagit plus.
+ * À appeler une fois par page. Inerte au toucher et sous prefers-reduced-motion.
+ */
+export function useMagnetic(strength = 0.28, radius = 90) {
+  let raf = 0
+  const active = new Set<HTMLElement>()
+
+  const onMove = (e: PointerEvent) => {
+    const els = document.querySelectorAll<HTMLElement>('.magnetic')
+    if (!els.length) return
+    cancelAnimationFrame(raf)
+    raf = requestAnimationFrame(() => {
+      els.forEach((el) => {
+        const r = el.getBoundingClientRect()
+        const dx = e.clientX - (r.left + r.width / 2)
+        const dy = e.clientY - (r.top + r.height / 2)
+        // Distance au bord du bouton plutôt qu'à son centre : un grand bouton ne doit pas
+        // se mettre à fuir le pointeur simplement parce qu'il est large.
+        const reach = Math.hypot(Math.max(0, Math.abs(dx) - r.width / 2), Math.max(0, Math.abs(dy) - r.height / 2))
+        if (reach > radius) {
+          if (active.delete(el)) el.style.transform = ''
+          return
+        }
+        active.add(el)
+        const falloff = 1 - reach / radius
+        el.style.transform = `translate(${(dx * strength * falloff).toFixed(1)}px, ${(dy * strength * falloff).toFixed(1)}px)`
+      })
+    })
+  }
+  const reset = () => {
+    cancelAnimationFrame(raf)
+    active.forEach((el) => { el.style.transform = '' })
+    active.clear()
+  }
+
+  onMounted(() => {
+    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    const coarse = window.matchMedia('(pointer: coarse)').matches
+    if (reduced || coarse) return
+    window.addEventListener('pointermove', onMove, { passive: true })
+    window.addEventListener('pointerleave', reset, { passive: true })
+  })
+  onBeforeUnmount(() => {
+    window.removeEventListener('pointermove', onMove)
+    window.removeEventListener('pointerleave', reset)
+    cancelAnimationFrame(raf)
+    reset()
+  })
+}
+
+/**
+ * Lueur qui suit le curseur sur les éléments `.spotlight` : écrit `--mx` / `--my` (en %)
+ * sur la carte survolée, qu'un dégradé radial CSS consomme. Un seul écouteur délégué
+ * couvre toute la page, cartes rendues par `v-for` comprises.
+ * À appeler une fois par page. Inerte au toucher et sous prefers-reduced-motion.
+ */
+export function useSpotlight() {
+  let raf = 0
+
+  const onMove = (e: PointerEvent) => {
+    const card = (e.target as HTMLElement | null)?.closest<HTMLElement>('.spotlight')
+    if (!card) return
+    cancelAnimationFrame(raf)
+    raf = requestAnimationFrame(() => {
+      const r = card.getBoundingClientRect()
+      card.style.setProperty('--mx', `${(((e.clientX - r.left) / r.width) * 100).toFixed(1)}%`)
+      card.style.setProperty('--my', `${(((e.clientY - r.top) / r.height) * 100).toFixed(1)}%`)
+    })
+  }
+
+  onMounted(() => {
+    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    const coarse = window.matchMedia('(pointer: coarse)').matches
+    if (reduced || coarse) return
+    window.addEventListener('pointermove', onMove, { passive: true })
+  })
+  onBeforeUnmount(() => {
+    window.removeEventListener('pointermove', onMove)
+    cancelAnimationFrame(raf)
+  })
+}
+
+/**
  * Barre de progression de scroll : écrit `--scroll` (0%..100%) sur <html>.
  * À appeler une fois dans le layout. Retourne rien (effet global).
  */

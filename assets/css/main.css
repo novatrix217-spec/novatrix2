@@ -298,6 +298,34 @@ header.glass {
   transform: translate3d(0, calc(var(--sy, 0) * var(--depth, 0) * 1px), 0);
 }
 
+/* --- Lueur qui suit le curseur (pilotée par useSpotlight) ---
+   Le dégradé vit dans un ::before en opacité 0, révélé au survol : la carte garde son
+   fond et sa bordure, seule la lueur s'ajoute. Le pseudo-élément n'intercepte aucun
+   clic et reste sous le contenu. */
+.spotlight { position: relative; isolation: isolate; }
+.spotlight::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  border-radius: inherit;
+  opacity: 0;
+  transition: opacity .35s ease;
+  pointer-events: none;
+  background: radial-gradient(420px circle at var(--mx, 50%) var(--my, 50%), rgba(139, 92, 246, .16), transparent 68%);
+}
+.spotlight:hover::before { opacity: 1; }
+.dark .spotlight::before {
+  background: radial-gradient(420px circle at var(--mx, 50%) var(--my, 50%), rgba(167, 139, 250, .2), transparent 68%);
+}
+@media (prefers-reduced-motion: reduce) { .spotlight::before { display: none; } }
+
+/* --- Boutons magnétiques (pilotés par useMagnetic) ---
+   Le retour en place est porté par la transition ; l'aller est écrit en JS à chaque frame,
+   d'où une durée courte qui ne traîne pas derrière le pointeur. */
+.magnetic { transition: transform .25s cubic-bezier(.22, 1, .36, 1); will-change: transform; }
+@media (prefers-reduced-motion: reduce) { .magnetic { transition: none; transform: none !important; } }
+
 /* --- Tilt 3D (cartes) --- */
 .tilt { transform-style: preserve-3d; transition: transform .4s cubic-bezier(.22, 1, .36, 1), box-shadow .4s ease, border-color .4s ease; will-change: transform; }
 /* L'élévation d'une carte inclinée passe par l'ombre et la bordure seules : sa propriété

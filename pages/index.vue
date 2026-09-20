@@ -12,7 +12,7 @@
           <h1 ref="heroTitleEl" class="mt-4 max-w-4xl text-[clamp(1.5rem,2.4vw+3vh,3.5rem)] font-bold leading-[1.08] tracking-[-.04em]" v-html="t.heroTitle"/>
           <p ref="heroDescEl" class="mt-3 max-w-2xl text-[clamp(.9rem,.3vw+1.4vh,1.15rem)] leading-7 text-white/75">{{ t.heroDescription }}</p>
           <div class="mt-5 flex flex-col gap-3 sm:flex-row">
-            <button ref="heroCtaBtnEl" type="button" class="btn-primary !px-6 !py-3 !text-sm" @click="openCalendly">{{ $t('header.bookCall') }} <ArrowRight class="h-4 w-4"/></button>
+            <button ref="heroCtaBtnEl" type="button" class="btn-primary magnetic !px-6 !py-3 !text-sm" @click="openCalendly">{{ $t('header.bookCall') }} <ArrowRight class="h-4 w-4"/></button>
             <NuxtLink ref="heroCtaLinkEl" :to="localePath('/realisations')" class="inline-flex min-h-11 items-center justify-center rounded-xl border border-white/20 px-6 py-3 text-sm font-bold text-white transition hover:bg-white/10">{{ t.seeProof }}</NuxtLink>
           </div>
           <div class="mt-3 flex flex-col gap-2 sm:flex-row sm:items-center sm:gap-4">
@@ -23,13 +23,26 @@
         </div>
         <HeroVideo class="mt-4 max-h-[36vh] lg:mt-0 lg:max-h-[min(440px,50vh)]" />
       </div>
+      <!-- Invitation à descendre : le hero occupe tout l'écran, rien n'indiquait qu'une
+           page entière suivait. Décoratif, donc masqué aux lecteurs d'écran. -->
+      <a
+        href="#problemes"
+        class="scroll-cue absolute bottom-6 left-1/2 hidden -translate-x-1/2 flex-col items-center gap-2 text-white/55 transition hover:text-white lg:flex"
+        aria-hidden="true"
+        tabindex="-1"
+      >
+        <span class="font-mono text-[10px] uppercase tracking-[.22em]">{{ t.scrollCue }}</span>
+        <span class="relative grid h-9 w-5 place-items-start justify-center rounded-full border border-white/25 pt-1.5">
+          <span class="scroll-dot h-1.5 w-1.5 rounded-full bg-[#3DE0C5]"/>
+        </span>
+      </a>
     </section>
 
     <!-- 1 bis. Preuve chiffrée immédiate, juste sous la promesse -->
     <MetricsStrip :projects-count="projectsCount" :testimonials-count="testimonialsCount" />
 
     <!-- 2. Problèmes reconnus -->
-    <section ref="problemsSectionEl" class="section-pad">
+    <section id="problemes" ref="problemsSectionEl" class="section-pad scroll-mt-24">
       <div class="container-shell">
         <SectionHeading :kicker="t.problemsKicker" center :description="t.problemsDescription">{{ t.problemsTitle1 }} <span class="text-gradient">{{ t.problemsTitle2 }}</span></SectionHeading>
         <div ref="problemsTrackEl" class="problems-track mt-12">
@@ -45,7 +58,7 @@
             v-for="(item, index) in problems"
             :key="item.title"
             :ref="(el) => setProblemCardRef(el, index)"
-            class="card problems-card"
+            class="card problems-card spotlight"
           >
             <component :is="item.icon" class="problems-card-icon h-6 w-6"/><h2 class="mt-5 text-xl font-bold">{{ item.title }}</h2><p class="mt-3 text-sm leading-6 text-[var(--muted)]">{{ item.text }}</p>
           </article>
@@ -151,7 +164,7 @@
       <div class="container-shell relative z-10">
         <div class="reveal flex flex-col justify-between gap-6 lg:flex-row lg:items-end">
           <SectionHeading :kicker="t.videoKicker" dark :description="t.videoDescription">{{ t.videoTitle1 }} <span class="text-gradient">{{ t.videoTitle2 }}</span></SectionHeading>
-          <NuxtLink :to="localePath('/video-lab')" class="btn-secondary shrink-0 !border-white/25 !text-white hover:!bg-white/10">{{ t.videoCta }} <ArrowRight class="h-4 w-4"/></NuxtLink>
+          <NuxtLink :to="localePath('/video-lab')" class="btn-secondary magnetic shrink-0 !border-white/25 !text-white hover:!bg-white/10">{{ t.videoCta }} <ArrowRight class="h-4 w-4"/></NuxtLink>
         </div>
         <VideoMosaic class="reveal mt-12" />
       </div>
@@ -209,6 +222,11 @@ const methodSectionEl = useScrollParallax()
 const useCasesSectionEl = useParallax(12)
 // Tilt 3D délégué : les trois cartes de cas d'usage s'inclinent sous le curseur.
 const useCasesGridEl = useTiltGroup()
+// Les CTA marqués .magnetic suivent légèrement le pointeur qui s'en approche. Amplitude
+// volontairement faible : au-delà, le bouton se dérobe sous le curseur au lieu d'attirer.
+useMagnetic(0.14, 70)
+// Lueur qui suit le curseur sur les cartes marquées .spotlight.
+useSpotlight()
 
 // Révélation séquencée du bloc texte hero à l'arrivée (one-shot, cf. brief J2 Hero).
 type ComponentWithEl = { $el?: unknown }
@@ -417,7 +435,7 @@ const t = computed(() => locale.value === 'en' ? {
   useCasesKicker: 'start from a concrete leak', useCasesTitle1: 'A use case your team', useCasesTitle2: 'recognizes immediately.', useCasesDescription: 'Each use case solves a visible break and can connect to the complete acquisition system.', allUseCases: 'All use cases', discover: 'See the use case',
   secondaryKicker: 'four more connected systems', secondaryTitle1: 'Pilot operations, grow, retain', secondaryTitle2: 'or produce video content.', secondaryDescription: 'When the bottleneck is no longer acquisition, we connect the systems that run behind the sale.',
   methodKicker: 'a controlled path', methodTitle1: 'Understand first.', methodTitle2: 'Connect what matters.', methodDescription: 'Every phase has a decision, an explicit scope and a usable output.',
-  videoKicker: 'produced in-house', videoTitle1: 'Video content generated', videoTitle2: 'by AI, shot by no one.', videoDescription: 'Every sequence below was produced without a camera, a set or a crew. The same pipeline can carry your ads and your spokesperson videos.', videoCta: 'See the Video Lab',
+  videoKicker: 'produced in-house', videoTitle1: 'Video content generated', videoTitle2: 'by AI, shot by no one.', videoDescription: 'Every sequence below was produced without a camera, a set or a crew. The same pipeline can carry your ads and your spokesperson videos.', videoCta: 'See the Video Lab', scrollCue: 'Scroll',
   proofKicker: 'delivered, not invented', proofTitle1: 'Systems that have already', proofTitle2: 'run in real conditions.', proofDescription: 'The evidence below comes from published project records and client feedback available on the site.', allProof: 'All case studies', testimonialsKicker: 'client feedback',
   faqKicker: 'before you book', faqTitle1: 'Clear answers, then', faqTitle2: 'a useful audit.', bookingDescription: 'Check the main objections, then choose a slot directly here.', bookingKicker: 'book inside the site', bookingTitle: 'Choose your free audit slot.', bookingText: 'The calendar opens directly below. If it is unavailable, the local contact form takes over.',
 } : {
@@ -427,7 +445,7 @@ const t = computed(() => locale.value === 'en' ? {
   useCasesKicker: 'partir d’une fuite concrète', useCasesTitle1: 'Un cas d’usage que votre équipe', useCasesTitle2: 'reconnaît tout de suite.', useCasesDescription: 'Chaque cas règle une rupture visible et peut se connecter au système d’acquisition complet.', allUseCases: 'Tous les cas d’usage', discover: 'Voir le cas d’usage',
   secondaryKicker: 'quatre autres systèmes connectés', secondaryTitle1: 'Piloter les opérations, grandir, fidéliser', secondaryTitle2: 'ou produire du contenu vidéo.', secondaryDescription: 'Quand le blocage n’est plus l’acquisition, on relie les systèmes qui tournent derrière la vente.',
   methodKicker: 'un parcours maîtrisé', methodTitle1: 'Comprendre d’abord.', methodTitle2: 'Relier ce qui compte.', methodDescription: 'Chaque phase produit une décision, un périmètre explicite et un livrable utilisable.',
-  videoKicker: 'produit en interne', videoTitle1: 'Du contenu vidéo généré', videoTitle2: 'par IA, tourné par personne.', videoDescription: 'Chaque séquence ci-dessous a été produite sans caméra, sans décor et sans équipe. La même chaîne peut porter vos publicités et vos vidéos de porte-parole.', videoCta: 'Voir le Vidéo Lab',
+  videoKicker: 'produit en interne', videoTitle1: 'Du contenu vidéo généré', videoTitle2: 'par IA, tourné par personne.', videoDescription: 'Chaque séquence ci-dessous a été produite sans caméra, sans décor et sans équipe. La même chaîne peut porter vos publicités et vos vidéos de porte-parole.', videoCta: 'Voir le Vidéo Lab', scrollCue: 'Défiler',
   proofKicker: 'livré, pas inventé', proofTitle1: 'Des systèmes déjà', proofTitle2: 'mis en situation réelle.', proofDescription: 'Les preuves ci-dessous viennent des fiches projets publiées et des retours clients disponibles sur le site.', allProof: 'Toutes les réalisations', testimonialsKicker: 'retours clients',
   faqKicker: 'avant de réserver', faqTitle1: 'Des réponses claires, puis', faqTitle2: 'un audit utile.', bookingDescription: 'Vérifiez les principales objections, puis choisissez votre créneau directement ici.', bookingKicker: 'réservation sur le site', bookingTitle: 'Choisissez votre créneau d’audit gratuit.', bookingText: 'Le calendrier s’ouvre directement ci-dessous. S’il est indisponible, le formulaire local prend le relais.',
 })

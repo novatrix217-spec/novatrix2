@@ -1,6 +1,6 @@
 <template>
   <div style="perspective: 1000px">
-    <article ref="tiltEl" class="tilt card glass-sheen flex h-full flex-col overflow-hidden !p-0">
+    <article ref="tiltEl" class="tilt card glass-sheen spotlight flex h-full flex-col overflow-hidden !p-0">
       <div class="tilt-inner flex h-full flex-col">
         <div class="p-6 pb-4"><div class="flex items-start justify-between gap-4"><span class="gradient-action grid h-12 w-12 place-items-center rounded-xl text-white shadow-lg shadow-violet-500/30"><component :is="icon" class="h-6 w-6" /></span><span class="rounded-md border bg-violet-600/5 px-2 py-1 font-mono text-[10px] text-violet-700 dark:text-violet-300">{{ offerLabel }}_{{ tag }}</span></div><h3 class="mt-6 text-2xl font-bold">{{ title }}</h3><p class="mt-3 text-sm leading-6 text-[var(--muted)]">{{ description }}</p></div>
         <div class="mx-6 border-t py-4 font-mono text-xs font-semibold text-[var(--teal)]">→ {{ result }}</div>
