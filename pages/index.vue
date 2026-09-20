@@ -92,12 +92,12 @@
         <div class="reveal flex flex-col justify-between gap-6 sm:flex-row sm:items-end"><SectionHeading :kicker="t.useCasesKicker" :description="t.useCasesDescription">{{ t.useCasesTitle1 }} <span class="text-gradient">{{ t.useCasesTitle2 }}</span></SectionHeading><NuxtLink :to="localePath('/solutions')" class="btn-secondary">{{ t.allUseCases }} <ArrowRight class="h-4 w-4"/></NuxtLink></div>
         <!-- Le premier cas est mis en avant (colonne large, fond appuyé) : les trois cartes
              n'ont pas le même poids commercial, la mise en page le reflète. -->
-        <div class="use-case-grid mt-12 grid gap-5">
+        <div ref="useCasesGridEl" class="use-case-grid mt-12 grid gap-5">
           <NuxtLink
             v-for="(item, i) in useCases"
             :key="item.to"
             :to="localePath(item.to)"
-            class="use-case card card-hover reveal-scale flex flex-col"
+            class="use-case card reveal-scale tilt flex flex-col"
             :class="i === 0 ? 'use-case-lead' : ''"
             :data-reveal-delay="i * 110"
           >
@@ -141,6 +141,19 @@
             <p class="mt-3 text-sm leading-6 text-white/60">{{ item.text }}</p>
           </li>
         </ol>
+      </div>
+    </section>
+
+    <!-- 6 bis. Démonstration vidéo — la capacité de production se montre au lieu de se
+         décrire. Fond sombre : les séquences ressortent, et la page alterne enfin autre
+         chose que des aplats clairs successifs. -->
+    <section class="video-band relative overflow-hidden py-16 text-white lg:py-20">
+      <div class="container-shell relative z-10">
+        <div class="reveal flex flex-col justify-between gap-6 lg:flex-row lg:items-end">
+          <SectionHeading :kicker="t.videoKicker" dark :description="t.videoDescription">{{ t.videoTitle1 }} <span class="text-gradient">{{ t.videoTitle2 }}</span></SectionHeading>
+          <NuxtLink :to="localePath('/video-lab')" class="btn-secondary shrink-0 !border-white/25 !text-white hover:!bg-white/10">{{ t.videoCta }} <ArrowRight class="h-4 w-4"/></NuxtLink>
+        </div>
+        <VideoMosaic class="reveal mt-12" />
       </div>
     </section>
 
@@ -194,6 +207,8 @@ const revealRoot = useScrollReveal()
 const methodSectionEl = useScrollParallax()
 // Parallax souris de la section cas d'usage : alimente les orbes de l'aurora (--px/--py).
 const useCasesSectionEl = useParallax(12)
+// Tilt 3D délégué : les trois cartes de cas d'usage s'inclinent sous le curseur.
+const useCasesGridEl = useTiltGroup()
 
 // Révélation séquencée du bloc texte hero à l'arrivée (one-shot, cf. brief J2 Hero).
 type ComponentWithEl = { $el?: unknown }
@@ -402,6 +417,7 @@ const t = computed(() => locale.value === 'en' ? {
   useCasesKicker: 'start from a concrete leak', useCasesTitle1: 'A use case your team', useCasesTitle2: 'recognizes immediately.', useCasesDescription: 'Each use case solves a visible break and can connect to the complete acquisition system.', allUseCases: 'All use cases', discover: 'See the use case',
   secondaryKicker: 'four more connected systems', secondaryTitle1: 'Pilot operations, grow, retain', secondaryTitle2: 'or produce video content.', secondaryDescription: 'When the bottleneck is no longer acquisition, we connect the systems that run behind the sale.',
   methodKicker: 'a controlled path', methodTitle1: 'Understand first.', methodTitle2: 'Connect what matters.', methodDescription: 'Every phase has a decision, an explicit scope and a usable output.',
+  videoKicker: 'produced in-house', videoTitle1: 'Video content generated', videoTitle2: 'by AI, shot by no one.', videoDescription: 'Every sequence below was produced without a camera, a set or a crew. The same pipeline can carry your ads and your spokesperson videos.', videoCta: 'See the Video Lab',
   proofKicker: 'delivered, not invented', proofTitle1: 'Systems that have already', proofTitle2: 'run in real conditions.', proofDescription: 'The evidence below comes from published project records and client feedback available on the site.', allProof: 'All case studies', testimonialsKicker: 'client feedback',
   faqKicker: 'before you book', faqTitle1: 'Clear answers, then', faqTitle2: 'a useful audit.', bookingDescription: 'Check the main objections, then choose a slot directly here.', bookingKicker: 'book inside the site', bookingTitle: 'Choose your free audit slot.', bookingText: 'The calendar opens directly below. If it is unavailable, the local contact form takes over.',
 } : {
@@ -411,6 +427,7 @@ const t = computed(() => locale.value === 'en' ? {
   useCasesKicker: 'partir d’une fuite concrète', useCasesTitle1: 'Un cas d’usage que votre équipe', useCasesTitle2: 'reconnaît tout de suite.', useCasesDescription: 'Chaque cas règle une rupture visible et peut se connecter au système d’acquisition complet.', allUseCases: 'Tous les cas d’usage', discover: 'Voir le cas d’usage',
   secondaryKicker: 'quatre autres systèmes connectés', secondaryTitle1: 'Piloter les opérations, grandir, fidéliser', secondaryTitle2: 'ou produire du contenu vidéo.', secondaryDescription: 'Quand le blocage n’est plus l’acquisition, on relie les systèmes qui tournent derrière la vente.',
   methodKicker: 'un parcours maîtrisé', methodTitle1: 'Comprendre d’abord.', methodTitle2: 'Relier ce qui compte.', methodDescription: 'Chaque phase produit une décision, un périmètre explicite et un livrable utilisable.',
+  videoKicker: 'produit en interne', videoTitle1: 'Du contenu vidéo généré', videoTitle2: 'par IA, tourné par personne.', videoDescription: 'Chaque séquence ci-dessous a été produite sans caméra, sans décor et sans équipe. La même chaîne peut porter vos publicités et vos vidéos de porte-parole.', videoCta: 'Voir le Vidéo Lab',
   proofKicker: 'livré, pas inventé', proofTitle1: 'Des systèmes déjà', proofTitle2: 'mis en situation réelle.', proofDescription: 'Les preuves ci-dessous viennent des fiches projets publiées et des retours clients disponibles sur le site.', allProof: 'Toutes les réalisations', testimonialsKicker: 'retours clients',
   faqKicker: 'avant de réserver', faqTitle1: 'Des réponses claires, puis', faqTitle2: 'un audit utile.', bookingDescription: 'Vérifiez les principales objections, puis choisissez votre créneau directement ici.', bookingKicker: 'réservation sur le site', bookingTitle: 'Choisissez votre créneau d’audit gratuit.', bookingText: 'Le calendrier s’ouvre directement ci-dessous. S’il est indisponible, le formulaire local prend le relais.',
 })

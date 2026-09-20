@@ -299,7 +299,10 @@ header.glass {
 }
 
 /* --- Tilt 3D (cartes) --- */
-.tilt { transform-style: preserve-3d; transition: transform .4s cubic-bezier(.22, 1, .36, 1); will-change: transform; }
+.tilt { transform-style: preserve-3d; transition: transform .4s cubic-bezier(.22, 1, .36, 1), box-shadow .4s ease, border-color .4s ease; will-change: transform; }
+/* L'élévation d'une carte inclinée passe par l'ombre et la bordure seules : sa propriété
+   transform est pilotée en JS par le tilt, une règle :hover l'écraserait. */
+.tilt:hover { box-shadow: var(--elev-3); border-color: rgb(196 181 253); }
 .tilt-inner { transform: translateZ(40px); }
 
 /* --- Scroll reveal --- */
@@ -591,6 +594,12 @@ header.glass {
 .method-band {
   background-color: #1c0038;
   background-image: linear-gradient(150deg, #2a0a52 0%, #1c0038 55%, #150029 100%);
+}
+/* Bande de démonstration vidéo : plus sombre que .method-band pour que les séquences
+   en ressortent, avec une dominante encrée plutôt que violette. */
+.video-band {
+  background-color: #0b0318;
+  background-image: radial-gradient(120% 90% at 15% 0%, #241049 0%, #120627 45%, #0b0318 100%);
 }
 .method-steps {
   display: grid;

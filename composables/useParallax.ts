@@ -104,6 +104,53 @@ export function useTilt(max = 9) {
 }
 
 /**
+ * Tilt 3D par délégation : un seul jeu d'écouteurs sur le conteneur anime toutes les
+ * cartes `.tilt` qu'il contient, y compris celles rendues par `v-for`. `useTilt` ne
+ * pilote qu'un élément et ne convient donc pas à une liste.
+ */
+export function useTiltGroup(max = 8) {
+  const host = ref<HTMLElement | null>(null)
+  let raf = 0
+
+  const onMove = (e: PointerEvent) => {
+    const card = (e.target as HTMLElement | null)?.closest<HTMLElement>('.tilt')
+    if (!card) return
+    const r = card.getBoundingClientRect()
+    const px = (e.clientX - r.left) / r.width - 0.5
+    const py = (e.clientY - r.top) / r.height - 0.5
+    cancelAnimationFrame(raf)
+    raf = requestAnimationFrame(() => {
+      card.style.transform = `perspective(900px) rotateX(${(-py * max).toFixed(2)}deg) rotateY(${(px * max).toFixed(2)}deg) translateY(-6px)`
+    })
+  }
+  const onOut = (e: PointerEvent) => {
+    const card = (e.target as HTMLElement | null)?.closest<HTMLElement>('.tilt')
+    // `pointerout` remonte aussi pour un déplacement interne à la carte : on ne remet à
+    // plat que si le pointeur a réellement quitté cette carte.
+    if (!card || card.contains(e.relatedTarget as Node | null)) return
+    card.style.transform = 'perspective(900px) rotateX(0) rotateY(0) translateY(0)'
+  }
+
+  onMounted(() => {
+    const el = host.value
+    if (!el) return
+    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    const coarse = window.matchMedia('(pointer: coarse)').matches
+    if (reduced || coarse) return
+    el.addEventListener('pointermove', onMove, { passive: true })
+    el.addEventListener('pointerout', onOut, { passive: true })
+  })
+  onBeforeUnmount(() => {
+    const el = host.value
+    el?.removeEventListener('pointermove', onMove)
+    el?.removeEventListener('pointerout', onOut)
+    cancelAnimationFrame(raf)
+  })
+
+  return host
+}
+
+/**
  * Barre de progression de scroll : écrit `--scroll` (0%..100%) sur <html>.
  * À appeler une fois dans le layout. Retourne rien (effet global).
  */
