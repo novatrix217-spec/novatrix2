@@ -27,7 +27,9 @@ export function loadCalendlyAssets(): Promise<void> {
       document.head.appendChild(link)
     }
 
-    const timeout = window.setTimeout(() => reject(new Error('timeout')), 20000)
+    // 20 s laissaient l'écran de chargement figé bien au-delà du seuil où un visiteur
+    // abandonne. 8 s suffisent à distinguer une connexion lente d'un échec réel.
+    const timeout = window.setTimeout(() => reject(new Error('timeout')), 8000)
     const finish = () => {
       window.clearTimeout(timeout)
       window.Calendly ? resolve() : reject(new Error('unavailable'))
@@ -38,6 +40,10 @@ export function loadCalendlyAssets(): Promise<void> {
     }
     const existing = document.querySelector<HTMLScriptElement>('script[data-calendly]')
     if (existing) {
+      // Un script déjà chargé n'émettra plus jamais `load` : sans cette vérification, la
+      // promesse restait en attente jusqu'au délai de 20 s et le widget semblait figé.
+      // Le cas se produit dès la deuxième ouverture du calendrier dans une même session.
+      if (window.Calendly) { window.clearTimeout(timeout); resolve(); return }
       existing.addEventListener('load', finish, { once: true })
       existing.addEventListener('error', fail, { once: true })
       return

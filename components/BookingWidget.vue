@@ -67,7 +67,7 @@ async function start(isRetry = false) {
       host.value?.replaceChildren()
       expectedFrame = null
       status.value = navigator.onLine ? 'error' : 'offline'
-    }, 20000)
+    }, 10000)
   } catch {
     if (!autoRetried) {
       autoRetried = true
