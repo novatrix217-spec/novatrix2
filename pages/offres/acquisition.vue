@@ -1,4 +1,4 @@
-<template><OfferDetail v-bind="content"><template #title><span v-html="titleHtml"/></template><template #proof><DashboardProof v-bind="dashboardProof"/></template></OfferDetail></template>
+<template><OfferDetail v-bind="content" illustration="/media/video-lab/posters/ceo-tournage-publicite.webp"><template #title><span v-html="titleHtml"/></template><template #proof><DashboardProof v-bind="dashboardProof"/></template></OfferDetail></template>
 <script setup lang="ts">
 import { BarChart3,MailCheck,MousePointerClick } from 'lucide-vue-next'
 const { locale } = useI18n()

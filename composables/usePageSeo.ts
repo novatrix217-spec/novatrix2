@@ -14,6 +14,7 @@ export function usePageSeo(
   title: MaybeRefOrGetter<string>,
   description: MaybeRefOrGetter<string>,
   image: MaybeRefOrGetter<string> = '/og-default.png',
+  type: MaybeRefOrGetter<'website' | 'article'> = 'website',
 ) {
   const config = useRuntimeConfig()
   const route = useRoute()
@@ -30,12 +31,22 @@ export function usePageSeo(
     description: () => toValue(description),
     ogTitle: () => toValue(title),
     ogDescription: () => toValue(description),
-    ogType: 'website',
+    // `article` sur les pages d'article : les réseaux et les moteurs distinguent un contenu
+    // éditorial daté d'une page de site, et l'aperçu de partage n'est pas le même.
+    ogType: () => toValue(type),
     ogUrl: canonical,
     ogImage: absoluteImage,
     ogImageWidth: 1200,
     ogImageHeight: 630,
-    ogImageType: 'image/png',
+    // Le type n'est annoncé que pour les formats que `useSeoMeta` accepte. Il était figé à
+    // image/png, ce qui décrivait faussement les couvertures d'article en .webp ; mieux
+    // vaut ne rien annoncer que d'annoncer un format erroné, les réseaux le détectant seuls.
+    ogImageType: () => {
+      const src = toValue(image)
+      if (/\.jpe?g($|\?)/i.test(src)) return 'image/jpeg'
+      if (/\.png($|\?)/i.test(src)) return 'image/png'
+      return undefined
+    },
     ogLocale: () => (locale.value === 'en' ? 'en_US' : 'fr_FR'),
     ogSiteName: 'NovatrixAI',
     twitterCard: 'summary_large_image',

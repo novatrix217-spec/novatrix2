@@ -1,4 +1,4 @@
-<template><OfferDetail v-bind="content"><template #title><span v-html="titleHtml"/></template></OfferDetail></template>
+<template><OfferDetail v-bind="content" illustration="/media/video-lab/posters/ceo-face-camera.webp"><template #title><span v-html="titleHtml"/></template></OfferDetail></template>
 <script setup lang="ts">
 import { MailCheck, MessageSquareText, Users } from 'lucide-vue-next'
 const { locale } = useI18n()

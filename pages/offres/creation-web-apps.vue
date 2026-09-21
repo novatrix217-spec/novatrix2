@@ -1,4 +1,4 @@
-<template><OfferDetail v-bind="content"><template #title><span v-html="titleHtml"/></template></OfferDetail></template>
+<template><OfferDetail v-bind="content" illustration="/media/video-lab/posters/laboratoire-spatial-vide.webp"><template #title><span v-html="titleHtml"/></template></OfferDetail></template>
 <script setup lang="ts">
 import { Blocks,PanelsTopLeft,Workflow } from 'lucide-vue-next'
 const { locale } = useI18n()
