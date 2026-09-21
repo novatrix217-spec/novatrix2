@@ -8,9 +8,8 @@
       <ClientOnly><HeroCanvas /></ClientOnly>
       <div class="container-shell relative z-10 grid w-full items-center gap-6 py-6 lg:grid-cols-[1.12fr_.88fr] lg:gap-8">
         <div class="relative z-10">
-          <p ref="heroKickerEl" class="kicker !text-[#3DE0C5] !text-xs">{{ t.heroKicker }}</p>
-          <h1 ref="heroTitleEl" class="mt-4 max-w-4xl text-[clamp(1.5rem,2.4vw+3vh,3.5rem)] font-bold leading-[1.08] tracking-[-.04em]" v-html="t.heroTitle"/>
-          <p ref="heroDescEl" class="mt-3 max-w-2xl text-[clamp(.9rem,.3vw+1.4vh,1.15rem)] leading-7 text-white/75">{{ t.heroDescription }}</p>
+          <h1 ref="heroTitleEl" class="max-w-4xl text-[clamp(1.5rem,2.4vw+3vh,3.5rem)] font-bold leading-[1.08] tracking-[-.04em]" v-html="t.heroTitle"/>
+          <p ref="heroDescEl" class="mt-4 max-w-xl text-[clamp(.9rem,.25vw+1.2vh,1.05rem)] leading-7 text-white/70">{{ t.heroDescription }}</p>
           <div class="mt-5 flex flex-col gap-3 sm:flex-row">
             <button ref="heroCtaBtnEl" type="button" class="btn-primary magnetic !px-6 !py-3 !text-sm" @click="openCalendly">{{ $t('header.bookCall') }} <ArrowRight class="h-4 w-4"/></button>
             <NuxtLink ref="heroCtaLinkEl" :to="localePath('/realisations')" class="inline-flex min-h-11 items-center justify-center rounded-xl border border-white/20 px-6 py-3 text-sm font-bold text-white transition hover:bg-white/10">{{ t.seeProof }}</NuxtLink>
@@ -246,7 +245,6 @@ const { track: methodTrack, setStepRef: setMethodStepRef } = useStepCycle(4, 220
 
 // Révélation séquencée du bloc texte hero à l'arrivée (one-shot, cf. brief J2 Hero).
 type ComponentWithEl = { $el?: unknown }
-const heroKickerEl = ref<HTMLElement | null>(null)
 const heroTitleEl = ref<HTMLElement | null>(null)
 const heroDescEl = ref<HTMLElement | null>(null)
 const heroCtaBtnEl = ref<HTMLElement | null>(null)
@@ -261,12 +259,11 @@ function toEl(node: HTMLElement | ComponentWithEl | null): HTMLElement | null {
 
 onMounted(() => {
   if (!import.meta.client) return
-  const kicker = toEl(heroKickerEl.value)
   const title = toEl(heroTitleEl.value)
   const desc = toEl(heroDescEl.value)
   const ctaBtn = toEl(heroCtaBtnEl.value)
   const ctaLink = toEl(heroCtaLinkEl.value)
-  const targets = [kicker, title, desc, ctaBtn, ctaLink].filter((el): el is HTMLElement => !!el)
+  const targets = [title, desc, ctaBtn, ctaLink].filter((el): el is HTMLElement => !!el)
   if (!targets.length) return
 
   const accent = title?.querySelector<HTMLElement>('.text-gradient-flow') ?? null
@@ -281,18 +278,16 @@ onMounted(() => {
   // Même courbe que `.reveal` dans main.css : cubic-bezier(.22,1,.36,1)
   const ease = CustomEase.create('novatrixHeroReveal', '0.22,1,0.36,1')
 
-  gsap.set(kicker, { opacity: 0, y: 10 })
+  gsap.set(desc, { opacity: 0, y: 12 })
   gsap.set(title, { opacity: 0, y: 16 })
-  gsap.set(desc, { opacity: 0, y: 16 })
   gsap.set(ctaBtn, { opacity: 0, y: 16 })
   gsap.set(ctaLink, { opacity: 0, y: 16 })
   if (accent) gsap.set(accent, { opacity: 0, y: 16 })
 
   const tl = gsap.timeline()
-  if (kicker) tl.to(kicker, { opacity: 1, y: 0, duration: 0.45, ease }, 0)
+  if (desc) tl.to(desc, { opacity: 1, y: 0, duration: 0.5, ease }, 0.35)
   if (title) tl.to(title, { opacity: 1, y: 0, duration: 0.6, ease }, 0.13)
   if (accent) tl.to(accent, { opacity: 1, y: 0, duration: 0.6, ease }, 0.26)
-  if (desc) tl.to(desc, { opacity: 1, y: 0, duration: 0.55, ease }, 0.48)
   if (ctaBtn) tl.to(ctaBtn, { opacity: 1, y: 0, duration: 0.45, ease }, 0.65)
   if (ctaLink) tl.to(ctaLink, { opacity: 1, y: 0, duration: 0.45, ease }, 0.73)
 })
@@ -441,7 +436,7 @@ const seo = computed(() => locale.value === 'en' ? {
 usePageSeo(() => seo.value.title, () => seo.value.description)
 
 const t = computed(() => locale.value === 'en' ? {
-  heroKicker: 'connected acquisition system', heroTitle: 'Turn more of your prospects into meetings, <span class="text-gradient-flow">without losing them between your tools.</span>', heroDescription: 'We connect campaigns, conversion pages, CRM and follow-up into one sales system, with defined next steps and ownership.', seeProof: 'See delivered work', contactUs: 'Contact us directly', whatsappUs: 'Or message us on WhatsApp',
+  heroTitle: 'Turn more of your prospects into meetings, <span class="text-gradient-flow">without losing them between your tools.</span>', heroDescription: 'Campaigns, conversion pages, CRM and follow-up connected into one sales system.', seeProof: 'See delivered work', contactUs: 'Contact us directly', whatsappUs: 'Or message us on WhatsApp',
   problemsKicker: 'where sales stall', problemsTitle1: 'Your leads are there.', problemsTitle2: 'The handoffs fail.', problemsDescription: 'The loss often happens after the click: between a form, a message, a spreadsheet and the next follow-up.',
   acquisitionKicker: 'flagship solution', acquisitionTitle1: 'One acquisition system,', acquisitionTitle2: 'from attention to sales.', acquisitionDescription: 'We connect the five links that move a prospect forward. The scope adapts to what already exists and what is actually broken.', viewAcquisition: 'Explore the acquisition system',
   useCasesKicker: 'start from a concrete leak', useCasesTitle1: 'A use case your team', useCasesTitle2: 'recognizes immediately.', useCasesDescription: 'Each use case solves a visible break and can connect to the complete acquisition system.', allUseCases: 'All use cases', discover: 'See the use case',
@@ -451,7 +446,7 @@ const t = computed(() => locale.value === 'en' ? {
   proofKicker: 'delivered, not invented', proofTitle1: 'Systems that have already', proofTitle2: 'run in real conditions.', proofDescription: 'The evidence below comes from published project records and client feedback available on the site.', allProof: 'All case studies', testimonialsKicker: 'client feedback',
   faqKicker: 'before you book', faqTitle1: 'Clear answers, then', faqTitle2: 'a useful audit.', bookingDescription: 'Check the main objections, then choose a slot directly here.', bookingKicker: 'book inside the site', bookingTitle: 'Choose your free audit slot.', bookingText: 'The calendar opens directly below. If it is unavailable, the local contact form takes over.',
 } : {
-  heroKicker: 'système d’acquisition connecté', heroTitle: 'Transformez plus de vos prospects en rendez-vous, <span class="text-gradient-flow">sans les perdre entre vos outils.</span>', heroDescription: 'On relie campagnes, pages de conversion, CRM et relances dans un seul système commercial, avec des prochaines étapes et responsabilités définies.', seeProof: 'Voir les réalisations', contactUs: 'Nous contacter directement', whatsappUs: 'Ou écrivez-nous sur WhatsApp',
+  heroTitle: 'Transformez plus de vos prospects en rendez-vous, <span class="text-gradient-flow">sans les perdre entre vos outils.</span>', heroDescription: 'Campagnes, pages de conversion, CRM et relances reliés en un seul système commercial.', seeProof: 'Voir les réalisations', contactUs: 'Nous contacter directement', whatsappUs: 'Ou écrivez-nous sur WhatsApp',
   problemsKicker: 'là où les ventes se bloquent', problemsTitle1: 'Vos leads sont là.', problemsTitle2: 'Les passages de relais cassent.', problemsDescription: 'La perte arrive souvent après le clic : entre un formulaire, un message, un tableur et la prochaine relance.',
   acquisitionKicker: 'solution locomotive', acquisitionTitle1: 'Un système d’acquisition,', acquisitionTitle2: 'de l’attention à la vente.', acquisitionDescription: 'On relie les cinq maillons qui font avancer un prospect. Le périmètre s’adapte à l’existant et à ce qui bloque réellement.', viewAcquisition: 'Découvrir le système d’acquisition',
   useCasesKicker: 'partir d’une fuite concrète', useCasesTitle1: 'Un cas d’usage que votre équipe', useCasesTitle2: 'reconnaît tout de suite.', useCasesDescription: 'Chaque cas règle une rupture visible et peut se connecter au système d’acquisition complet.', allUseCases: 'Tous les cas d’usage', discover: 'Voir le cas d’usage',
