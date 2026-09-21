@@ -252,9 +252,9 @@ const useCasesGridEl = useTiltGroup()
 const proofGridEl = useTiltDeep()
 // Parallax au scroll de la bande vidéo : halos et titre se décalent à leur propre vitesse.
 const videoBandEl = useScrollParallax()
-// Les quatre phases s'activent l'une après l'autre au défilement, et la ligne qui les
-// relie se trace au même rythme.
-const { track: methodTrack, setStepRef: setMethodStepRef } = useStepProgress(4)
+// Les quatre phases tournent en boucle d'elles-mêmes : chacune s'allume à son tour, sans
+// action du visiteur. Le cycle ne tourne que lorsque la bande est à l'écran.
+const { track: methodTrack, setStepRef: setMethodStepRef } = useStepCycle(4, 2200)
 
 // Révélation séquencée du bloc texte hero à l'arrivée (one-shot, cf. brief J2 Hero).
 type ComponentWithEl = { $el?: unknown }

@@ -739,9 +739,7 @@ header.glass {
    Le retrait n'est appliqué que sous `.js-steps`, posée par le composable une fois
    l'observateur en place : si le script ne s'exécute pas, le texte reste pleinement
    lisible au lieu de rester délavé pour toujours. */
-.method-step h3, .method-step p { transition: opacity .6s ease, transform .6s cubic-bezier(.22, 1, .36, 1); }
-.js-steps .method-step:not(.is-active) h3, .js-steps .method-step:not(.is-active) p { opacity: .42; }
-.method-step.is-active h3, .method-step.is-active p { opacity: 1; }
+.method-step h3 { transition: color .5s ease; }
 .method-step:last-child::before { display: none; }
 .method-step-num {
   position: absolute;
@@ -761,19 +759,28 @@ header.glass {
   backdrop-filter: blur(6px);
   transition: transform .4s cubic-bezier(.22, 1, .36, 1), border-color .4s ease, box-shadow .4s ease, background-color .4s ease;
 }
-/* Le numéro d'une phase atteinte s'allume et pulse une fois : le parcours se construit
-   au défilement plutôt que de s'afficher déjà terminé. */
+/* Le parcours tourne en boucle : l'étape courante (.is-current) est mise en avant, les
+   autres restent en retrait. Rien à faire pour le visiteur, la bande vit d'elle-même. */
 .method-step.is-active .method-step-num {
-  border-color: rgba(61, 224, 197, .5);
-  background-color: rgba(61, 224, 197, .1);
-  box-shadow: 0 0 0 5px rgba(61, 224, 197, .07);
-  animation: method-num-pop .6s cubic-bezier(.22, 1, .36, 1);
+  border-color: rgba(61, 224, 197, .35);
+  background-color: rgba(61, 224, 197, .08);
 }
-@keyframes method-num-pop {
-  0% { transform: scale(.82); box-shadow: 0 0 0 0 rgba(61, 224, 197, .45); }
-  60% { transform: scale(1.1); }
-  100% { transform: scale(1); box-shadow: 0 0 0 5px rgba(61, 224, 197, .07); }
+.method-step.is-current .method-step-num {
+  border-color: #3DE0C5;
+  background-color: rgba(61, 224, 197, .18);
+  color: #fff;
+  transform: scale(1.18);
+  box-shadow: 0 0 0 8px rgba(61, 224, 197, .1), 0 10px 30px rgba(61, 224, 197, .35);
+  animation: method-num-pulse 2.2s ease-in-out infinite;
 }
+@keyframes method-num-pulse {
+  0%, 100% { box-shadow: 0 0 0 8px rgba(61, 224, 197, .1), 0 10px 30px rgba(61, 224, 197, .3); }
+  50% { box-shadow: 0 0 0 14px rgba(61, 224, 197, .04), 0 10px 38px rgba(61, 224, 197, .5); }
+}
+/* L'étape courante se détache aussi par son texte et sa position. */
+.js-steps .method-step { opacity: .5; transform: translateY(0); }
+.js-steps .method-step.is-current { opacity: 1; transform: translateY(-8px); }
+.js-steps .method-step.is-current h3 { color: #3DE0C5; }
 @media (prefers-reduced-motion: reduce) {
   .method-step.is-active .method-step-num { animation: none; }
   .method-step::before { transition: none; transform: scaleY(1); }
@@ -782,8 +789,7 @@ header.glass {
 
 /* L'étape survolée s'allume et se détache : le parcours répond au pointeur au lieu de
    rester une liste inerte. Le halo reprend le mint des numéros. */
-.method-step { transition: transform .4s cubic-bezier(.22, 1, .36, 1); }
-.method-step:hover { transform: translateY(-4px); }
+.method-step { transition: transform .6s cubic-bezier(.22, 1, .36, 1), opacity .6s ease; }
 .method-step:hover .method-step-num {
   transform: scale(1.12);
   border-color: rgba(61, 224, 197, .55);
