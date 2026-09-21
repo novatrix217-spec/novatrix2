@@ -77,8 +77,12 @@ void main() {
   vec3 color = mix(cStart, cEnd, mixVal);
   // Le fond reste largement dominé par cBg : le shader donne du mouvement,
   // il ne doit jamais concurrencer la lisibilité du H1 et des CTA posés dessus.
-  color = mix(cBg, color, 0.16 + n * 0.10);
-  color += glow * 0.10 * cEnd;
+  // Le mélange est volontairement faible et resserré (0,09 à 0,15 au lieu de 0,16 à 0,26) :
+  // mixVal croît avec la distance au centre, donc les bords du hero s'éclaircissaient
+  // nettement. Depuis que la section peut dépasser la hauteur de l'écran, cet écart se
+  // lisait comme un fond qui change de couleur pendant le défilement.
+  color = mix(cBg, color, 0.09 + n * 0.06);
+  color += glow * 0.07 * cEnd;
 
   gl_FragColor = vec4(color, 1.0);
 }
