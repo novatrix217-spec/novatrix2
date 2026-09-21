@@ -6,10 +6,13 @@
          100svh suit la barre d'URL mobile, avec repli 100vh pour les navigateurs anciens. -->
     <section class="hero-rich hero-screen relative flex items-center overflow-hidden text-white">
       <ClientOnly><HeroCanvas /></ClientOnly>
-      <div class="container-shell relative z-10 grid w-full items-center gap-6 py-6 lg:grid-cols-[1.12fr_.88fr] lg:gap-8">
-        <div class="relative z-10">
-          <h1 ref="heroTitleEl" class="max-w-4xl text-[clamp(1.5rem,2.4vw+3vh,3.5rem)] font-bold leading-[1.08] tracking-[-.04em]" v-html="t.heroTitle"/>
-          <p ref="heroDescEl" class="mt-4 max-w-xl text-[clamp(.9rem,.25vw+1.2vh,1.05rem)] leading-7 text-white/70">{{ t.heroDescription }}</p>
+      <!-- Sur mobile, l'ordre de lecture place la vidéo juste après le titre : elle doit
+           faire partie de ce qu'on voit d'emblée, pas arriver après tous les CTA. En
+           desktop la grille reprend ses deux colonnes et l'ordre redevient naturel. -->
+      <div class="container-shell relative z-10 flex w-full flex-col gap-5 py-6 lg:grid lg:grid-cols-[1.12fr_.88fr] lg:items-center lg:gap-8">
+        <h1 ref="heroTitleEl" class="order-1 max-w-4xl text-[clamp(1.5rem,2.4vw+3vh,3.5rem)] font-bold leading-[1.08] tracking-[-.04em] lg:order-none lg:col-start-1 lg:row-start-1 lg:self-end" v-html="t.heroTitle"/>
+        <div class="relative z-10 order-3 lg:order-none lg:col-start-1 lg:row-start-2 lg:self-start">
+          <p ref="heroDescEl" class="max-w-xl text-[clamp(.9rem,.25vw+1.2vh,1.05rem)] leading-7 text-white/70 lg:mt-4">{{ t.heroDescription }}</p>
           <div class="mt-5 flex flex-col gap-3 sm:flex-row">
             <button ref="heroCtaBtnEl" type="button" class="btn-primary magnetic !px-6 !py-3 !text-sm" @click="openCalendly">{{ $t('header.bookCall') }} <ArrowRight class="h-4 w-4"/></button>
             <NuxtLink ref="heroCtaLinkEl" :to="localePath('/realisations')" class="inline-flex min-h-11 items-center justify-center rounded-xl border border-white/20 px-6 py-3 text-sm font-bold text-white transition hover:bg-white/10">{{ t.seeProof }}</NuxtLink>
@@ -19,9 +22,7 @@
             <a v-if="hasWhatsapp" :href="whatsappUrl" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 text-sm font-semibold text-white/70 transition hover:text-white"><SvgWhatsappSVG class="h-4 w-4 shrink-0"/>{{ t.whatsappUs }}</a>
           </div>
         </div>
-        <!-- Sur mobile la vidéo passe après les CTA et ne doit pas les repousser hors de
-             l'écran : sa hauteur est plafonnée plus bas que sur grand écran. -->
-        <HeroVideo class="mt-4 max-h-[26vh] lg:mt-0 lg:max-h-[min(440px,50vh)]" />
+        <HeroVideo class="order-2 max-h-[26vh] lg:order-none lg:col-start-2 lg:row-span-2 lg:row-start-1 lg:max-h-[min(440px,50vh)]" />
       </div>
       <!-- Invitation à descendre : le hero occupe tout l'écran, rien n'indiquait qu'une
            page entière suivait. Décoratif, donc masqué aux lecteurs d'écran. -->
