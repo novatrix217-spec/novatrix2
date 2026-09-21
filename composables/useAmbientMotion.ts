@@ -53,7 +53,8 @@ export function useAmbientMotion() {
   }
 
   const collect = () => {
-    targets = [...document.querySelectorAll<HTMLElement>('.drift')]
+    // `.drift-grid` porte --sy pour ses enfants, qui dérivent en quinconce via le CSS.
+    targets = [...document.querySelectorAll<HTMLElement>('.drift, .drift-grid')]
     measure()
   }
 

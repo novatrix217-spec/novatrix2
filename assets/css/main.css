@@ -309,6 +309,15 @@ header.glass {
   will-change: transform;
   transform: translate3d(0, calc(var(--sy, 0) * var(--depth, 0) * 1px), 0);
 }
+/* Les cartes d'une même grille dérivent en quinconce : la colonne du milieu monte quand
+   les autres descendent. C'est ce décalage entre éléments voisins qui se voit, bien plus
+   qu'un halo flou qui bouge derrière le texte. */
+.drift-grid > * { will-change: transform; transform: translate3d(0, calc(var(--sy, 0) * var(--depth, 34) * 1px), 0); }
+.drift-grid > *:nth-child(2n) { transform: translate3d(0, calc(var(--sy, 0) * var(--depth, 34) * -1.4px), 0); }
+.drift-grid > *:nth-child(3n) { transform: translate3d(0, calc(var(--sy, 0) * var(--depth, 34) * .7px), 0); }
+@media (prefers-reduced-motion: reduce) {
+  .drift-grid > * { transform: none !important; }
+}
 /* Pendant le défilement, le déplacement suit le scroll sans transition (sinon il traîne
    derrière) ; à l'arrêt, une transition douce ramène l'élément à sa position de repos. */
 .scrolling .drift { transition: none; }
