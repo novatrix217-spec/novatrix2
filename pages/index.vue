@@ -45,9 +45,9 @@
     <section id="problemes" ref="problemsSectionEl" class="section-pad relative overflow-hidden scroll-mt-24">
       <!-- Halo qui respire à l'arrêt et suit discrètement le pointeur : la section n'est
            jamais complètement figée, même quand on ne défile pas. -->
-      <div class="breathe follow pointer-events-none absolute -right-20 top-10 h-[360px] w-[360px] rounded-full bg-violet-500/10 blur-[110px]" style="--follow: 26; --breathe-time: 11s" aria-hidden="true"/>
+      <div class="breathe follow pointer-events-none absolute -right-20 top-10 h-[360px] w-[360px] rounded-full bg-violet-500/25 blur-[100px]" style="--follow: 90; --breathe-time: 11s" aria-hidden="true"/>
       <div class="container-shell relative z-10">
-        <div class="drift" style="--depth: 16"><SectionHeading :kicker="t.problemsKicker" center :description="t.problemsDescription">{{ t.problemsTitle1 }} <span class="text-gradient">{{ t.problemsTitle2 }}</span></SectionHeading></div>
+        <div class="drift" style="--depth: 90"><SectionHeading :kicker="t.problemsKicker" center :description="t.problemsDescription">{{ t.problemsTitle1 }} <span class="text-gradient">{{ t.problemsTitle2 }}</span></SectionHeading></div>
         <div ref="problemsTrackEl" class="problems-track mt-12">
           <div class="problems-line" aria-hidden="true"><span class="problems-line-fill"/></div>
           <span
@@ -71,9 +71,9 @@
 
     <!-- 3. Offre locomotive -->
     <section ref="acquisitionSectionEl" class="section-pad relative overflow-hidden border-y bg-[var(--surface)]">
-      <div class="breathe follow pointer-events-none absolute -left-24 bottom-0 h-[340px] w-[340px] rounded-full bg-[#3DE0C5]/10 blur-[110px]" style="--follow: -22; --breathe-time: 13s" aria-hidden="true"/>
+      <div class="breathe follow pointer-events-none absolute -left-24 bottom-0 h-[340px] w-[340px] rounded-full bg-[#3DE0C5]/20 blur-[100px]" style="--follow: -80; --breathe-time: 13s" aria-hidden="true"/>
       <div class="container-shell relative z-10 grid items-center gap-12 lg:grid-cols-[.9fr_1.1fr]">
-        <div class="drift" style="--depth: 14">
+        <div class="drift" style="--depth: 75">
           <SectionHeading :kicker="t.acquisitionKicker" :description="t.acquisitionDescription">{{ t.acquisitionTitle1 }} <span class="text-gradient">{{ t.acquisitionTitle2 }}</span></SectionHeading>
           <NuxtLink :to="localePath('/offres/acquisition')" class="btn-primary mt-8">{{ t.viewAcquisition }} <ArrowRight class="h-4 w-4"/></NuxtLink>
         </div>
@@ -134,9 +134,9 @@
 
     <!-- 5. Systèmes secondaires -->
     <section class="section-pad relative overflow-hidden border-y bg-[var(--surface)]">
-      <div class="breathe follow pointer-events-none absolute -right-28 top-1/4 h-[380px] w-[380px] rounded-full bg-violet-500/10 blur-[120px]" style="--follow: 24; --breathe-time: 10s" aria-hidden="true"/>
+      <div class="breathe follow pointer-events-none absolute -right-28 top-1/4 h-[380px] w-[380px] rounded-full bg-violet-500/25 blur-[110px]" style="--follow: 85; --breathe-time: 10s" aria-hidden="true"/>
       <div class="container-shell relative z-10">
-        <div class="reveal drift" style="--depth: 16"><SectionHeading :kicker="t.secondaryKicker" center :description="t.secondaryDescription">{{ t.secondaryTitle1 }} <span class="text-gradient">{{ t.secondaryTitle2 }}</span></SectionHeading></div>
+        <div class="reveal drift" style="--depth: 90"><SectionHeading :kicker="t.secondaryKicker" center :description="t.secondaryDescription">{{ t.secondaryTitle1 }} <span class="text-gradient">{{ t.secondaryTitle2 }}</span></SectionHeading></div>
         <div class="mx-auto mt-12 grid max-w-5xl gap-6 md:grid-cols-2"><OfferCard v-for="(offer, i) in secondaryOffers" :key="offer.tag" v-bind="offer" class="reveal" :data-reveal-delay="i * 110"/></div>
       </div>
     </section>
@@ -145,9 +145,9 @@
          et donne un deuxième temps fort après le hero. Parallax au scroll sur le fond. -->
     <section ref="methodSectionEl" class="method-band grain relative overflow-hidden py-16 text-white lg:py-20">
       <div class="scroll-parallax pointer-events-none absolute -right-24 -top-24 h-[420px] w-[420px] rounded-full bg-violet-600/20 blur-[110px]" style="--depth: 60" aria-hidden="true"/>
-      <div class="scroll-parallax pointer-events-none absolute -bottom-32 -left-20 h-[380px] w-[380px] rounded-full bg-[#3DE0C5]/10 blur-[110px]" style="--depth: -45" aria-hidden="true"/>
+      <div class="scroll-parallax pointer-events-none absolute -bottom-32 -left-20 h-[380px] w-[380px] rounded-full bg-[#3DE0C5]/20 blur-[100px]" style="--depth: -45" aria-hidden="true"/>
       <div class="container-shell relative z-10">
-        <div class="reveal scroll-parallax max-w-3xl" style="--depth: 20">
+        <div class="reveal scroll-parallax max-w-3xl" style="--depth: 70">
           <p class="kicker !text-[#3DE0C5]">{{ t.methodKicker }}</p>
           <h2 class="mt-5 text-3xl font-bold leading-[1.1] tracking-[-.03em] sm:text-5xl">{{ t.methodTitle1 }} <span class="text-gradient-flow">{{ t.methodTitle2 }}</span></h2>
           <p class="mt-5 text-lg leading-8 text-white/70">{{ t.methodDescription }}</p>
@@ -185,7 +185,7 @@
       <div class="scroll-parallax pointer-events-none absolute -left-32 top-0 h-[460px] w-[460px] rounded-full bg-violet-600/20 blur-[120px]" style="--depth: 70" aria-hidden="true"/>
       <div class="scroll-parallax pointer-events-none absolute -bottom-40 right-0 h-[420px] w-[420px] rounded-full bg-[#C026D3]/12 blur-[120px]" style="--depth: -55" aria-hidden="true"/>
       <div class="container-shell relative z-10">
-        <div class="reveal scroll-parallax flex flex-col justify-between gap-6 lg:flex-row lg:items-end" style="--depth: 22">
+        <div class="reveal scroll-parallax flex flex-col justify-between gap-6 lg:flex-row lg:items-end" style="--depth: 80">
           <SectionHeading :kicker="t.videoKicker" dark :description="t.videoDescription">{{ t.videoTitle1 }} <span class="text-gradient">{{ t.videoTitle2 }}</span></SectionHeading>
           <NuxtLink :to="localePath('/video-lab')" class="btn-secondary magnetic shrink-0 !border-white/25 !text-white hover:!bg-white/10">{{ t.videoCta }} <ArrowRight class="h-4 w-4"/></NuxtLink>
         </div>
@@ -196,7 +196,7 @@
     <!-- 7. Preuves concentrées -->
     <section class="section-pad border-y bg-[var(--surface)]">
       <div class="container-shell">
-        <div class="reveal drift flex flex-col justify-between gap-6 sm:flex-row sm:items-end" style="--depth: 14"><SectionHeading :kicker="t.proofKicker" :description="t.proofDescription">{{ t.proofTitle1 }} <span class="text-gradient">{{ t.proofTitle2 }}</span></SectionHeading><NuxtLink :to="localePath('/realisations')" class="btn-secondary">{{ t.allProof }} <ArrowRight class="h-4 w-4"/></NuxtLink></div>
+        <div class="reveal drift flex flex-col justify-between gap-6 sm:flex-row sm:items-end" style="--depth: 75"><SectionHeading :kicker="t.proofKicker" :description="t.proofDescription">{{ t.proofTitle1 }} <span class="text-gradient">{{ t.proofTitle2 }}</span></SectionHeading><NuxtLink :to="localePath('/realisations')" class="btn-secondary">{{ t.allProof }} <ArrowRight class="h-4 w-4"/></NuxtLink></div>
         <div ref="proofGridEl" class="mt-12 grid gap-6 md:grid-cols-3"><ProjectCard v-for="(project, i) in featuredProjects" :key="project.slug" :project="project" class="reveal-scale" :data-reveal-delay="i * 110"/></div>
         <div v-if="testimonials.length" class="reveal mt-14 border-t pt-12"><p class="kicker text-center">{{ t.testimonialsKicker }}</p><TestimonialCarousel class="mt-7" :items="testimonials"/></div>
       </div>

@@ -317,8 +317,8 @@ header.glass {
 /* Respiration à l'arrêt : l'animation tourne en continu mais est mise en pause pendant le
    défilement, où le parallax occupe déjà l'œil. */
 @keyframes ambient-breathe {
-  0%, 100% { transform: translate3d(0, 0, 0) scale(1); opacity: var(--breathe-min, .55); }
-  50% { transform: translate3d(0, -14px, 0) scale(1.06); opacity: var(--breathe-max, .85); }
+  0%, 100% { transform: translate3d(0, 0, 0) scale(.92); opacity: var(--breathe-min, .45); }
+  50% { transform: translate3d(0, -48px, 0) scale(1.18); opacity: var(--breathe-max, .95); }
 }
 .breathe { animation: ambient-breathe var(--breathe-time, 9s) ease-in-out infinite; }
 .scrolling .breathe { animation-play-state: paused; }
