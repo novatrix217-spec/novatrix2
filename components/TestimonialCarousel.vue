@@ -32,23 +32,47 @@ let raf = 0
 let trackEl: HTMLElement | null = null
 const SPEED = 32 // px/s
 
+// Le défilement ne tourne que lorsque le carrousel est à l'écran : sans cela, la boucle
+// restait active sur toute la session, y compris sur les pages qui n'affichent aucun
+// témoignage, et alourdissait le défilement général.
+let observer: IntersectionObserver | null = null
+let last = 0
+
+function step(now: number) {
+  const dt = (now - last) / 1000
+  last = now
+  if (!paused.value && trackEl) {
+    offset.value += SPEED * dt
+    const half = trackEl.scrollWidth / 2
+    if (offset.value >= half) offset.value -= half
+  }
+  raf = requestAnimationFrame(step)
+}
+function play() {
+  if (raf) return
+  last = performance.now()
+  raf = requestAnimationFrame(step)
+}
+function halt() {
+  if (!raf) return
+  cancelAnimationFrame(raf)
+  raf = 0
+}
+
 onMounted(() => {
   if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
   trackEl = document.querySelector('.testimonial-track')
-  let last = performance.now()
-  const step = (now: number) => {
-    const dt = (now - last) / 1000
-    last = now
-    if (!paused.value && trackEl) {
-      offset.value += SPEED * dt
-      const half = trackEl.scrollWidth / 2
-      if (offset.value >= half) offset.value -= half
-    }
-    raf = requestAnimationFrame(step)
-  }
-  raf = requestAnimationFrame(step)
+  const host = trackEl?.parentElement
+  if (!host) return
+  observer = new IntersectionObserver(([entry]) => {
+    entry?.isIntersecting ? play() : halt()
+  }, { rootMargin: '100px' })
+  observer.observe(host)
 })
-onBeforeUnmount(() => cancelAnimationFrame(raf))
+onBeforeUnmount(() => {
+  halt()
+  observer?.disconnect()
+})
 </script>
 <style scoped>
 .testimonial-carousel {

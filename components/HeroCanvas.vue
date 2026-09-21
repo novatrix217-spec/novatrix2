@@ -145,9 +145,21 @@ onMounted(() => {
       window.addEventListener('pointermove', onPointerMove, { passive: true })
       window.addEventListener('resize', resize)
 
-      const observer = new IntersectionObserver(([entry]) => { inViewport = !!entry?.isIntersecting }, { rootMargin: '120px' })
+      // La boucle est relancée à la demande plutôt que de tourner à vide : hors écran ou
+      // onglet masqué, elle s'arrête réellement au lieu de redemander une frame à chaque
+      // tour, ce qui la laissait active sur toute la session.
+      // `loop` est défini plus bas : on passe par une variable pour que l'ordre de
+      // déclaration n'impose pas de réorganiser tout le bloc d'initialisation.
+      let resume = () => {}
+      const observer = new IntersectionObserver(([entry]) => {
+        inViewport = !!entry?.isIntersecting
+        if (inViewport) resume()
+      }, { rootMargin: '120px' })
       observer.observe(host)
-      const onVisibility = () => { pageVisible = document.visibilityState === 'visible' }
+      const onVisibility = () => {
+        pageVisible = document.visibilityState === 'visible'
+        if (pageVisible) resume()
+      }
       document.addEventListener('visibilitychange', onVisibility)
 
       cleanup = () => {
@@ -162,13 +174,19 @@ onMounted(() => {
       const start = performance.now()
       const loop = (now: number) => {
         if (destroyed) return
-        if (!inViewport || !pageVisible) { raf = requestAnimationFrame(loop); return }
+        // Hors écran ou onglet masqué : on rend la main au navigateur. `resume` relance la
+        // boucle dès que le hero redevient visible.
+        if (!inViewport || !pageVisible) { raf = 0; return }
         currentMouse[0] += (targetMouse[0] - currentMouse[0]) * 0.06
         currentMouse[1] += (targetMouse[1] - currentMouse[1]) * 0.06
         program.uniforms.uTime.value = (now - start) / 1000
         program.uniforms.uMouse.value = currentMouse
         renderer.render({ scene: mesh })
         if (!ready.value) ready.value = true
+        raf = requestAnimationFrame(loop)
+      }
+      resume = () => {
+        if (destroyed || raf || !inViewport || !pageVisible) return
         raf = requestAnimationFrame(loop)
       }
       raf = requestAnimationFrame(loop)

@@ -10,7 +10,10 @@
 
 <script setup lang="ts">
 useScrollProgress()
-useSmoothScroll()
+// useSmoothScroll (Lenis) est retiré : il interceptait le défilement natif et faisait
+// tourner une boucle requestAnimationFrame en continu, sur toutes les pages et même à
+// l'arrêt. Le défilement en devenait pâteux. Le scroll natif du navigateur est plus fluide
+// et ne coûte rien ; les ancres internes sont gérées par `scroll-behavior: smooth` en CSS.
 // Les effets de pointeur et le mouvement ambiant (useMagnetic, useSpotlight,
 // useAmbientMotion) ont été retirés : trois écouteurs actifs en continu sur toutes les
 // pages, pour un rendu que l'utilisateur ne percevait pas, et un défilement devenu lourd.
