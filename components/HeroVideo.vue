@@ -75,9 +75,12 @@ onBeforeUnmount(() => {
   box-shadow: 0 24px 70px rgba(0, 0, 0, .45);
   /* Format plus ramassé sur mobile : en 16/10 la vidéo dépassait sous la ligne de
      flottaison et se retrouvait coupée. Le ratio large reprend à partir du desktop, où
-     elle occupe la colonne de droite. */
+     elle occupe la colonne de droite.
+     La hauteur est exprimée en svh (hauteur réellement disponible, barre d'URL comprise)
+     et non en vh, qui ignore cette barre et laissait le CTA déborder de quelques pixels
+     sur un écran court. */
   aspect-ratio: 16 / 9;
-  max-height: 24vh;
+  max-height: 22svh;
 }
 @media (min-width: 1024px) {
   .hero-video {

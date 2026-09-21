@@ -922,6 +922,14 @@ header.glass {
   padding-top: 6.5rem;
   padding-bottom: 2rem;
 }
+/* Écran court (téléphone avec barre d'URL affichée, paysage) : on resserre pour que le
+   CTA principal reste au-dessus de la ligne de flottaison sans avoir à défiler. */
+@media (max-height: 700px) {
+  .hero-screen {
+    padding-top: 5.5rem;
+    padding-bottom: 1rem;
+  }
+}
 @media (min-width: 1024px) {
   .hero-screen {
     padding-top: 9rem;
