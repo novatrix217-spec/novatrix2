@@ -11,12 +11,8 @@
 <script setup lang="ts">
 useScrollProgress()
 useSmoothScroll()
-// Effets de pointeur déclarés ici plutôt que page par page : un seul écouteur délégué
-// suffit pour tout le site, et les éléments marqués .magnetic / .spotlight réagissent
-// où qu'ils se trouvent, y compris dans les composants partagés (CtaBand, cartes).
-useMagnetic(0.14, 70)
-useSpotlight()
-// Mouvement ambiant du site : parallax des éléments .drift au défilement, respiration des
-// éléments .breathe une fois la page immobile, et décor .follow qui suit le pointeur.
-useAmbientMotion()
+// Les effets de pointeur et le mouvement ambiant (useMagnetic, useSpotlight,
+// useAmbientMotion) ont été retirés : trois écouteurs actifs en continu sur toutes les
+// pages, pour un rendu que l'utilisateur ne percevait pas, et un défilement devenu lourd.
+// Les composables restent dans le dépôt, prêts à être rebranchés un par un et mesurés.
 </script>
