@@ -19,7 +19,7 @@
         </template>
         <NuxtLink :to="localePath('/contact')" class="whitespace-nowrap rounded-lg px-3 py-2 text-[.95rem] font-semibold transition" :class="navClass('/contact')">{{ $t('nav.contact') }}</NuxtLink>
       </nav>
-      <div class="hidden items-center gap-2 xl:flex">
+      <div class="hidden items-center gap-2 md:flex">
         <NuxtLink :to="switchLocalePath(locale === 'fr' ? 'en' : 'fr')" class="grid h-10 place-items-center rounded-xl border px-3 font-mono text-xs font-bold transition hover:bg-[var(--accent-soft)]" :class="isHero ? 'border-white/15' : ''" :aria-label="$t('header.switchLang')">{{ locale === 'fr' ? 'EN' : 'FR' }}</NuxtLink>
         <button class="grid h-10 w-10 place-items-center rounded-xl border transition hover:bg-[var(--accent-soft)]" :class="isHero ? 'border-white/15' : ''" :aria-label="colorMode.value === 'dark' ? $t('header.lightMode') : $t('header.darkMode')" @click="toggleTheme">
           <Sun v-if="colorMode.value === 'dark'" class="h-4 w-4" />
@@ -36,7 +36,9 @@
       <div v-if="menuOpen" id="mobile-menu" class="border-t px-5 py-5 xl:hidden" :class="isHero ? 'border-white/10 glass-dark' : 'border-[var(--border-subtle)] glass'">
         <nav class="flex flex-col gap-1" :aria-label="$t('header.mobileNav')">
           <NuxtLink v-for="link in mobileLinks" :key="link.to" :to="localePath(link.to)" class="rounded-xl px-4 py-3 text-sm font-semibold transition" :class="isActive(link.to) ? (isHero ? 'bg-white/10 text-white' : 'bg-[var(--accent-soft)] text-[var(--accent)]') : 'hover:bg-[var(--accent-soft)]'" @click="menuOpen = false">{{ link.label }}</NuxtLink>
-          <div class="mt-3 flex gap-2">
+          <!-- Langue, thème et prise de rendez-vous sont déjà dans la barre à partir de
+               768 px : on ne les répète dans le menu que sur les écrans plus étroits. -->
+          <div class="mt-3 flex gap-2 md:hidden">
             <NuxtLink :to="switchLocalePath(locale === 'fr' ? 'en' : 'fr')" class="grid h-12 place-items-center rounded-xl border px-4 font-mono text-xs font-bold" @click="menuOpen = false">{{ locale === 'fr' ? 'EN' : 'FR' }}</NuxtLink>
             <button class="grid h-12 w-12 place-items-center rounded-xl border" :aria-label="$t('header.changeTheme')" @click="toggleTheme"><Sun v-if="colorMode.value === 'dark'" class="h-4 w-4" /><Moon v-else class="h-4 w-4" /></button>
             <button type="button" class="btn-primary flex-1" @click="openMobileCalendly">{{ $t('header.bookCall') }}</button>
