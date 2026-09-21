@@ -132,11 +132,11 @@
 
     <!-- 6. Méthode — rupture sombre à mi-page : casse la répétition des sections claires
          et donne un deuxième temps fort après le hero. Parallax au scroll sur le fond. -->
-    <section ref="methodSectionEl" class="method-band grain relative overflow-hidden py-16 text-white lg:py-20">
-      <div class="scroll-parallax pointer-events-none absolute -right-24 -top-24 h-[420px] w-[420px] rounded-full bg-violet-600/20 blur-[110px]" style="--depth: 60" aria-hidden="true"/>
-      <div class="scroll-parallax pointer-events-none absolute -bottom-32 -left-20 h-[380px] w-[380px] rounded-full bg-[#3DE0C5]/20 blur-[100px]" style="--depth: -45" aria-hidden="true"/>
+    <section class="method-band grain relative overflow-hidden py-16 text-white lg:py-20">
+      <div class="pointer-events-none absolute -right-24 -top-24 h-[420px] w-[420px] rounded-full bg-violet-600/20 blur-[110px]" style="--depth: 60" aria-hidden="true"/>
+      <div class="pointer-events-none absolute -bottom-32 -left-20 h-[380px] w-[380px] rounded-full bg-[#3DE0C5]/20 blur-[100px]" style="--depth: -45" aria-hidden="true"/>
       <div class="container-shell relative z-10">
-        <div class="reveal scroll-parallax max-w-3xl" style="--depth: 70">
+        <div class="reveal max-w-3xl">
           <p class="kicker !text-[#3DE0C5]">{{ t.methodKicker }}</p>
           <h2 class="mt-5 text-3xl font-bold leading-[1.1] tracking-[-.03em] sm:text-5xl">{{ t.methodTitle1 }} <span class="text-gradient-flow">{{ t.methodTitle2 }}</span></h2>
           <p class="mt-5 text-lg leading-8 text-white/70">{{ t.methodDescription }}</p>
@@ -168,13 +168,13 @@
     <!-- 6 bis. Démonstration vidéo — la capacité de production se montre au lieu de se
          décrire. Fond sombre : les séquences ressortent, et la page alterne enfin autre
          chose que des aplats clairs successifs. -->
-    <section ref="videoBandEl" class="video-band relative overflow-hidden py-16 text-white lg:py-20">
+    <section class="video-band relative overflow-hidden py-16 text-white lg:py-20">
       <!-- Halos en parallax : ils remontent plus vite que la section, ce qui creuse la
            profondeur du fond pendant le défilement. -->
-      <div class="scroll-parallax pointer-events-none absolute -left-32 top-0 h-[460px] w-[460px] rounded-full bg-violet-600/20 blur-[120px]" style="--depth: 70" aria-hidden="true"/>
-      <div class="scroll-parallax pointer-events-none absolute -bottom-40 right-0 h-[420px] w-[420px] rounded-full bg-[#C026D3]/12 blur-[120px]" style="--depth: -55" aria-hidden="true"/>
+      <div class="pointer-events-none absolute -left-32 top-0 h-[460px] w-[460px] rounded-full bg-violet-600/20 blur-[120px]" style="--depth: 70" aria-hidden="true"/>
+      <div class="pointer-events-none absolute -bottom-40 right-0 h-[420px] w-[420px] rounded-full bg-[#C026D3]/12 blur-[120px]" style="--depth: -55" aria-hidden="true"/>
       <div class="container-shell relative z-10">
-        <div class="reveal scroll-parallax flex flex-col justify-between gap-6 lg:flex-row lg:items-end" style="--depth: 80">
+        <div class="reveal flex flex-col justify-between gap-6 lg:flex-row lg:items-end">
           <SectionHeading :kicker="t.videoKicker" dark :description="t.videoDescription">{{ t.videoTitle1 }} <span class="text-gradient">{{ t.videoTitle2 }}</span></SectionHeading>
           <NuxtLink :to="localePath('/video-lab')" class="btn-secondary magnetic shrink-0 !border-white/25 !text-white hover:!bg-white/10">{{ t.videoCta }} <ArrowRight class="h-4 w-4"/></NuxtLink>
         </div>
@@ -229,7 +229,6 @@ const { openCalendly } = useCalendly()
 const { whatsappUrl, hasWhatsapp } = useWhatsapp()
 const revealRoot = useScrollReveal()
 // Parallax au scroll des halos de la bande "méthode" (inerte si prefers-reduced-motion).
-const methodSectionEl = useScrollParallax()
 // Tilt 3D délégué : les trois cartes de cas d'usage s'inclinent sous le curseur.
 const useCasesGridEl = useTiltGroup()
 // useMagnetic et useSpotlight sont déclarés une fois pour tout le site dans
@@ -238,7 +237,6 @@ const useCasesGridEl = useTiltGroup()
 // le texte, et un reflet suit l'inclinaison.
 const proofGridEl = useTiltDeep()
 // Parallax au scroll de la bande vidéo : halos et titre se décalent à leur propre vitesse.
-const videoBandEl = useScrollParallax()
 // Les quatre phases tournent en boucle d'elles-mêmes : chacune s'allume à son tour, sans
 // action du visiteur. Le cycle ne tourne que lorsque la bande est à l'écran.
 const { track: methodTrack, setStepRef: setMethodStepRef } = useStepCycle(4, 2200)

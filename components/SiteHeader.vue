@@ -66,19 +66,37 @@ const { openCalendly } = useCalendly()
 // isHero est conservé et figé à false : le header garde une seule apparence, et les variantes
 // « sur le hero » des classes utilitaires ci-dessous deviennent inertes sans être supprimées.
 const isHero = computed(() => false)
-// Le hero (.hero-screen) fait 100vh moins la hauteur du header, pas la hauteur pleine du
-// viewport : on bascule dès qu'on a dépassé sa position réelle dans le document, pour ne
-// pas garder le texte blanc de la nav sur un fond clair une fois le hero passé.
-// La bascule se fait quand le bas du hero atteint le bas du header, mesuré sur l'élément
-// lui-même : en dur (90px), le seuil était calé sur le header desktop et se déclenchait
-// trop tôt sur mobile, où la nav claire réapparaissait par-dessus le hero encore violet.
-// getBoundingClientRect() est relatif au viewport : il suit donc la barre d'URL mobile,
-// contrairement à une hauteur mémorisée au montage.
-function onScroll() {
-  const hero = document.querySelector('.hero-screen')
-  if (!hero) { scrolled.value = window.scrollY > window.innerHeight; return }
+// `scrolled` ne pilote plus que l'ombre portée du header, une fois le hero dépassé.
+// Seuil mémorisé : position du bas du hero dans le document, moins la hauteur du header.
+// Il ne dépend pas du défilement, donc il se mesure au montage et au redimensionnement,
+// pas à chaque événement de scroll.
+let threshold = 0
+let ticking = false
+
+function measure() {
+  const hero = document.querySelector('.hero-screen') as HTMLElement | null
+  if (!hero) { threshold = window.innerHeight; return }
   const headerHeight = headerEl.value?.offsetHeight ?? 76
-  scrolled.value = hero.getBoundingClientRect().bottom <= headerHeight
+  threshold = hero.offsetTop + hero.offsetHeight - headerHeight
+}
+
+function update() {
+  ticking = false
+  scrolled.value = window.scrollY >= threshold
+}
+
+// Le gestionnaire de scroll ne lit plus le layout : il se contente de programmer une
+// mise à jour. Lire getBoundingClientRect() à chaque événement forçait un recalcul de
+// mise en page et rendait le défilement saccadé.
+function onScroll() {
+  if (ticking) return
+  ticking = true
+  requestAnimationFrame(update)
+}
+
+function onResize() {
+  measure()
+  update()
 }
 function onClickOutside(event: MouseEvent) {
   if (openGroup.value && !(event.target as HTMLElement).closest('[data-nav-group]')) {
@@ -90,19 +108,19 @@ function onKeydown(event: KeyboardEvent) {
 }
 onMounted(() => {
   window.addEventListener('scroll', onScroll, { passive: true })
-  window.addEventListener('resize', onScroll, { passive: true })
+  window.addEventListener('resize', onResize, { passive: true })
   document.addEventListener('click', onClickOutside)
   document.addEventListener('keydown', onKeydown)
-  onScroll()
+  onResize()
 })
 onBeforeUnmount(() => {
   window.removeEventListener('scroll', onScroll)
-  window.removeEventListener('resize', onScroll)
+  window.removeEventListener('resize', onResize)
   document.removeEventListener('click', onClickOutside)
   document.removeEventListener('keydown', onKeydown)
 })
 // Recalcule l'état au changement de route (sinon le header garde son apparence "scrollé" en revenant à l'accueil).
-watch(() => route.path, () => { nextTick(onScroll) })
+watch(() => route.path, () => { nextTick(onResize) })
 const navItems = computed(() => [
   { key: 'home', label: t('nav.home'), to: '/' },
   {

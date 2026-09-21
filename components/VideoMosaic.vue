@@ -1,10 +1,10 @@
 <template>
-  <div ref="host" class="video-mosaic">
+  <div class="video-mosaic">
     <figure
       v-for="(item, i) in items"
       :key="item.slug"
-      class="video-mosaic-tile scroll-parallax"
-      :style="{ '--depth': depths[i % depths.length], '--i': i }"
+      class="video-mosaic-tile"
+
     >
       <video
         v-if="playVideo && item.animated"
@@ -58,9 +58,10 @@ const items = slugs.map(slug => ({
   poster: assets[slug]!.poster,
   animated: animatedSlugs.has(slug),
 }))
-const depths = [26, -18, 34, -26, 18, -32]
 
-const host = useScrollParallax()
+// Le parallax au scroll est retiré : trois instances lisaient le layout puis écrivaient
+// un style à chaque frame, ce qui forçait des recalculs en cascade et saccadait le
+// défilement, pour un déplacement que l’utilisateur jugeait imperceptible.
 
 // Les vidéos ne tournent que sur grand écran et hors mouvement réduit : ailleurs, seules
 // les affiches sont servies, donc aucun octet de vidéo sur la connexion du visiteur.
