@@ -484,6 +484,10 @@ header.glass {
 .problems-track {
   display: grid;
   grid-template-columns: 20px 1fr;
+  /* Les trois lignes sont déclarées explicitement : sans cela elles restent implicites et
+     `grid-row: 1 / -1` sur le trait vertical ne couvre que la première, de sorte que la
+     ligne de progression s'arrêtait sous la première carte au lieu de relier les trois. */
+  grid-template-rows: repeat(3, auto);
   column-gap: 1rem;
   row-gap: 1.25rem;
 }
