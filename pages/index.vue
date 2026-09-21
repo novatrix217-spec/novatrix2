@@ -19,7 +19,6 @@
             <a href="#reservation" class="inline-flex items-center gap-2 text-sm font-bold text-white underline decoration-white/40 underline-offset-4 transition hover:decoration-white">{{ t.contactUs }} <ArrowRight class="h-3.5 w-3.5"/></a>
             <a v-if="hasWhatsapp" :href="whatsappUrl" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 text-sm font-semibold text-white/70 transition hover:text-white"><SvgWhatsappSVG class="h-4 w-4 shrink-0"/>{{ t.whatsappUs }}</a>
           </div>
-          <p ref="heroAuditNoteEl" class="mt-3 max-w-xl text-xs leading-5 text-white/55">{{ t.auditNote }}</p>
         </div>
         <HeroVideo class="mt-4 max-h-[36vh] lg:mt-0 lg:max-h-[min(440px,50vh)]" />
       </div>
@@ -252,7 +251,6 @@ const heroTitleEl = ref<HTMLElement | null>(null)
 const heroDescEl = ref<HTMLElement | null>(null)
 const heroCtaBtnEl = ref<HTMLElement | null>(null)
 const heroCtaLinkEl = ref<ComponentWithEl | null>(null)
-const heroAuditNoteEl = ref<HTMLElement | null>(null)
 const heroReducedMotion = useReducedMotion()
 
 function toEl(node: HTMLElement | ComponentWithEl | null): HTMLElement | null {
@@ -268,8 +266,7 @@ onMounted(() => {
   const desc = toEl(heroDescEl.value)
   const ctaBtn = toEl(heroCtaBtnEl.value)
   const ctaLink = toEl(heroCtaLinkEl.value)
-  const auditNote = toEl(heroAuditNoteEl.value)
-  const targets = [kicker, title, desc, ctaBtn, ctaLink, auditNote].filter((el): el is HTMLElement => !!el)
+  const targets = [kicker, title, desc, ctaBtn, ctaLink].filter((el): el is HTMLElement => !!el)
   if (!targets.length) return
 
   const accent = title?.querySelector<HTMLElement>('.text-gradient-flow') ?? null
@@ -289,7 +286,6 @@ onMounted(() => {
   gsap.set(desc, { opacity: 0, y: 16 })
   gsap.set(ctaBtn, { opacity: 0, y: 16 })
   gsap.set(ctaLink, { opacity: 0, y: 16 })
-  gsap.set(auditNote, { opacity: 0 })
   if (accent) gsap.set(accent, { opacity: 0, y: 16 })
 
   const tl = gsap.timeline()
@@ -299,7 +295,6 @@ onMounted(() => {
   if (desc) tl.to(desc, { opacity: 1, y: 0, duration: 0.55, ease }, 0.48)
   if (ctaBtn) tl.to(ctaBtn, { opacity: 1, y: 0, duration: 0.45, ease }, 0.65)
   if (ctaLink) tl.to(ctaLink, { opacity: 1, y: 0, duration: 0.45, ease }, 0.73)
-  if (auditNote) tl.to(auditNote, { opacity: 1, duration: 0.4, ease }, 0.85)
 })
 
 // Section "Problèmes reconnus" : ligne de progression + 3 nœuds, activés par paliers au
@@ -446,7 +441,7 @@ const seo = computed(() => locale.value === 'en' ? {
 usePageSeo(() => seo.value.title, () => seo.value.description)
 
 const t = computed(() => locale.value === 'en' ? {
-  heroKicker: 'connected acquisition system', heroTitle: 'Turn more of your prospects into meetings, <span class="text-gradient-flow">without losing them between your tools.</span>', heroDescription: 'We connect campaigns, conversion pages, CRM and follow-up into one sales system, with defined next steps and ownership.', seeProof: 'See delivered work', auditNote: 'The audit identifies the first break in your journey. No commitment and no tool imposed.', contactUs: 'Contact us directly', whatsappUs: 'Or message us on WhatsApp',
+  heroKicker: 'connected acquisition system', heroTitle: 'Turn more of your prospects into meetings, <span class="text-gradient-flow">without losing them between your tools.</span>', heroDescription: 'We connect campaigns, conversion pages, CRM and follow-up into one sales system, with defined next steps and ownership.', seeProof: 'See delivered work', contactUs: 'Contact us directly', whatsappUs: 'Or message us on WhatsApp',
   problemsKicker: 'where sales stall', problemsTitle1: 'Your leads are there.', problemsTitle2: 'The handoffs fail.', problemsDescription: 'The loss often happens after the click: between a form, a message, a spreadsheet and the next follow-up.',
   acquisitionKicker: 'flagship solution', acquisitionTitle1: 'One acquisition system,', acquisitionTitle2: 'from attention to sales.', acquisitionDescription: 'We connect the five links that move a prospect forward. The scope adapts to what already exists and what is actually broken.', viewAcquisition: 'Explore the acquisition system',
   useCasesKicker: 'start from a concrete leak', useCasesTitle1: 'A use case your team', useCasesTitle2: 'recognizes immediately.', useCasesDescription: 'Each use case solves a visible break and can connect to the complete acquisition system.', allUseCases: 'All use cases', discover: 'See the use case',
@@ -456,7 +451,7 @@ const t = computed(() => locale.value === 'en' ? {
   proofKicker: 'delivered, not invented', proofTitle1: 'Systems that have already', proofTitle2: 'run in real conditions.', proofDescription: 'The evidence below comes from published project records and client feedback available on the site.', allProof: 'All case studies', testimonialsKicker: 'client feedback',
   faqKicker: 'before you book', faqTitle1: 'Clear answers, then', faqTitle2: 'a useful audit.', bookingDescription: 'Check the main objections, then choose a slot directly here.', bookingKicker: 'book inside the site', bookingTitle: 'Choose your free audit slot.', bookingText: 'The calendar opens directly below. If it is unavailable, the local contact form takes over.',
 } : {
-  heroKicker: 'système d’acquisition connecté', heroTitle: 'Transformez plus de vos prospects en rendez-vous, <span class="text-gradient-flow">sans les perdre entre vos outils.</span>', heroDescription: 'On relie campagnes, pages de conversion, CRM et relances dans un seul système commercial, avec des prochaines étapes et responsabilités définies.', seeProof: 'Voir les réalisations', auditNote: 'L’audit identifie la première rupture de votre parcours. Sans engagement et sans outil imposé.', contactUs: 'Nous contacter directement', whatsappUs: 'Ou écrivez-nous sur WhatsApp',
+  heroKicker: 'système d’acquisition connecté', heroTitle: 'Transformez plus de vos prospects en rendez-vous, <span class="text-gradient-flow">sans les perdre entre vos outils.</span>', heroDescription: 'On relie campagnes, pages de conversion, CRM et relances dans un seul système commercial, avec des prochaines étapes et responsabilités définies.', seeProof: 'Voir les réalisations', contactUs: 'Nous contacter directement', whatsappUs: 'Ou écrivez-nous sur WhatsApp',
   problemsKicker: 'là où les ventes se bloquent', problemsTitle1: 'Vos leads sont là.', problemsTitle2: 'Les passages de relais cassent.', problemsDescription: 'La perte arrive souvent après le clic : entre un formulaire, un message, un tableur et la prochaine relance.',
   acquisitionKicker: 'solution locomotive', acquisitionTitle1: 'Un système d’acquisition,', acquisitionTitle2: 'de l’attention à la vente.', acquisitionDescription: 'On relie les cinq maillons qui font avancer un prospect. Le périmètre s’adapte à l’existant et à ce qui bloque réellement.', viewAcquisition: 'Découvrir le système d’acquisition',
   useCasesKicker: 'partir d’une fuite concrète', useCasesTitle1: 'Un cas d’usage que votre équipe', useCasesTitle2: 'reconnaît tout de suite.', useCasesDescription: 'Chaque cas règle une rupture visible et peut se connecter au système d’acquisition complet.', allUseCases: 'Tous les cas d’usage', discover: 'Voir le cas d’usage',
