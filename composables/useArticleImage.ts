@@ -1,4 +1,5 @@
 import type { PublicArticle } from '~/shared/types'
+import videoAssets from '~/shared/video-lab-assets.json'
 
 /**
  * Visuel de couverture d'un article. Même contrat que `useProjectImage` : une image
@@ -9,7 +10,14 @@ import type { PublicArticle } from '~/shared/types'
  * cartes d'article s'affichaient sans aucune image, alors que les cartes de projet en
  * avaient une : le blog paraissait vide en comparaison.
  */
-const POSTERS = '/media/video-lab/posters/'
+/**
+ * Les affiches sont prises sur Cloudinary via le manifeste, et non dans public/ : le
+ * dossier public/media/video-lab/ est exclu du dépôt (.gitignore) parce qu'il contient les
+ * sources vidéo. Pointer vers ces fichiers locaux donnait donc des 404 en production,
+ * alors que tout fonctionnait en développement.
+ */
+const assets = videoAssets as Record<string, { poster: string }>
+const poster = (slug: string) => assets[slug]?.poster ?? ''
 
 /**
  * Association explicite pour les articles publiés : chacun reçoit le visuel qui colle le
@@ -17,23 +25,23 @@ const POSTERS = '/media/video-lab/posters/'
  * voisins, quelle que soit la fonction de répartition.
  */
 const bySlug: Record<string, string> = {
-  'pourquoi-whatsapp-est-le-bon-canal-pour-un-agent-ia-en-afrique-francophone': `${POSTERS}porte-parole-studio-fr.webp`,
-  'trois-niveaux-d-autonomie-pour-vos-agents-ia-et-ou-mettre-le-curseur': `${POSTERS}porte-parole-logiciel-saas.webp`,
-  'le-referencement-pour-les-ia-ce-qui-compte-quand-chatgpt-repond-a-votre-place': `${POSTERS}scientifique-labo.webp`,
-  'cinq-questions-a-trancher-avant-de-cadrer-une-application-metier': `${POSTERS}laboratoire-spatial-vide.webp`,
-  'le-diagnostic-en-5-points-pour-reperer-ou-votre-acquisition-fuit': `${POSTERS}ceo-face-camera.webp`,
+  'pourquoi-whatsapp-est-le-bon-canal-pour-un-agent-ia-en-afrique-francophone': poster('porte-parole-studio-fr'),
+  'trois-niveaux-d-autonomie-pour-vos-agents-ia-et-ou-mettre-le-curseur': poster('porte-parole-logiciel-saas'),
+  'le-referencement-pour-les-ia-ce-qui-compte-quand-chatgpt-repond-a-votre-place': poster('scientifique-labo'),
+  'cinq-questions-a-trancher-avant-de-cadrer-une-application-metier': poster('laboratoire-spatial-vide'),
+  'le-diagnostic-en-5-points-pour-reperer-ou-votre-acquisition-fuit': poster('ceo-face-camera'),
 }
 
 const byCategory: Record<string, string[]> = {
-  Acquisition: [`${POSTERS}ceo-tournage-publicite.webp`, `${POSTERS}ceo-face-camera.webp`],
-  'Pilotage IA': [`${POSTERS}porte-parole-logiciel-saas.webp`, `${POSTERS}porte-parole-studio-fr.webp`],
-  'Web & applications': [`${POSTERS}orbit-lab.webp`, `${POSTERS}laboratoire-spatial-vide.webp`],
-  Stratégie: [`${POSTERS}fondateur-cinematique.webp`, `${POSTERS}scientifique-labo.webp`],
-  Produit: [`${POSTERS}scientifique-labo.webp`],
+  Acquisition: [poster('ceo-tournage-publicite'), poster('ceo-face-camera')],
+  'Pilotage IA': [poster('porte-parole-logiciel-saas'), poster('porte-parole-studio-fr')],
+  'Web & applications': [poster('orbit-lab'), poster('laboratoire-spatial-vide')],
+  Stratégie: [poster('fondateur-cinematique'), poster('scientifique-labo')],
+  Produit: [poster('scientifique-labo')],
 }
 
 // Repli de dernier recours, pour une catégorie non prévue ou absente.
-const fallback = [`${POSTERS}erudit-village-gothique.webp`]
+const fallback = [poster('erudit-village-gothique')]
 
 /**
  * Index stable dérivé du slug : deux articles d'une même catégorie ne reçoivent pas la

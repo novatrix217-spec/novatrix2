@@ -1,6 +1,10 @@
-<template><OfferDetail v-bind="content" illustration="/media/video-lab/posters/ceo-face-camera.webp"><template #title><span v-html="titleHtml"/></template></OfferDetail></template>
+<template><OfferDetail v-bind="content" :illustration="illustration"><template #title><span v-html="titleHtml"/></template></OfferDetail></template>
 <script setup lang="ts">
 import { MailCheck, MessageSquareText, Users } from 'lucide-vue-next'
+import videoAssets from '~/shared/video-lab-assets.json'
+// Affiche prise sur Cloudinary : public/media/video-lab/ est exclu du depot, un chemin
+// local y pointant renvoyait un 404 en production.
+const illustration = (videoAssets as Record<string, { poster: string }>)['ceo-face-camera'].poster
 const { locale } = useI18n()
 const seoMeta = computed(() => locale.value === 'en'
   ? { title: 'E-commerce retention and conversion', description: 'Email and SMS abandoned-cart recovery, segmentation and AI CRM for e-commerce, built to recover more carts and keep customers coming back.' }

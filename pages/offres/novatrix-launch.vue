@@ -1,6 +1,10 @@
-<template><OfferDetail v-bind="content" illustration="/media/video-lab/posters/fondateur-cinematique.webp"><template #title><span v-html="titleHtml"/></template></OfferDetail></template>
+<template><OfferDetail v-bind="content" :illustration="illustration"><template #title><span v-html="titleHtml"/></template></OfferDetail></template>
 <script setup lang="ts">
 import { Rocket, Layers, TrendingUp } from 'lucide-vue-next'
+import videoAssets from '~/shared/video-lab-assets.json'
+// Affiche prise sur Cloudinary : public/media/video-lab/ est exclu du depot, un chemin
+// local y pointant renvoyait un 404 en production.
+const illustration = (videoAssets as Record<string, { poster: string }>)['fondateur-cinematique'].poster
 const { locale } = useI18n()
 const seoMeta = computed(() => locale.value === 'en'
   ? { title: 'Novatrix Launch: Start, Growth, Scale', description: 'A complete support program to launch, grow and scale your digital acquisition system, structured in three progressive stages.' }

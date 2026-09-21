@@ -1,6 +1,10 @@
-<template><OfferDetail v-bind="content" illustration="/media/video-lab/posters/ceo-tournage-publicite.webp"><template #title><span v-html="titleHtml"/></template><template #proof><DashboardProof v-bind="dashboardProof"/></template></OfferDetail></template>
+<template><OfferDetail v-bind="content" :illustration="illustration"><template #title><span v-html="titleHtml"/></template><template #proof><DashboardProof v-bind="dashboardProof"/></template></OfferDetail></template>
 <script setup lang="ts">
 import { BarChart3,MailCheck,MousePointerClick } from 'lucide-vue-next'
+import videoAssets from '~/shared/video-lab-assets.json'
+// Affiche prise sur Cloudinary : public/media/video-lab/ est exclu du depot, un chemin
+// local y pointant renvoyait un 404 en production.
+const illustration = (videoAssets as Record<string, { poster: string }>)['ceo-tournage-publicite'].poster
 const { locale } = useI18n()
 const seoMeta = computed(() => locale.value === 'en'
   ? { title: 'Connected acquisition system', description: 'Connect creatives, campaigns, conversion pages, CRM, follow-up and sales handoff in one readable prospect journey.' }

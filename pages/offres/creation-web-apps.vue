@@ -1,6 +1,10 @@
-<template><OfferDetail v-bind="content" illustration="/media/video-lab/posters/laboratoire-spatial-vide.webp"><template #title><span v-html="titleHtml"/></template></OfferDetail></template>
+<template><OfferDetail v-bind="content" :illustration="illustration"><template #title><span v-html="titleHtml"/></template></OfferDetail></template>
 <script setup lang="ts">
 import { Blocks,PanelsTopLeft,Workflow } from 'lucide-vue-next'
+import videoAssets from '~/shared/video-lab-assets.json'
+// Affiche prise sur Cloudinary : public/media/video-lab/ est exclu du depot, un chemin
+// local y pointant renvoyait un 404 en production.
+const illustration = (videoAssets as Record<string, { poster: string }>)['laboratoire-spatial-vide'].poster
 const { locale } = useI18n()
 const seoMeta = computed(() => locale.value === 'en'
   ? { title: 'Custom web development and applications', description: 'Websites, web and mobile apps, APIs and integrations that connect your processes and stop double entry. Built to be used, not just demoed.' }
