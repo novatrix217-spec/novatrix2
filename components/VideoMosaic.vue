@@ -3,11 +3,11 @@
     <figure
       v-for="(item, i) in items"
       :key="item.slug"
+      :ref="(el) => setTileRef(el, i)"
       class="video-mosaic-tile"
-
     >
       <video
-        v-if="playVideo && item.animated"
+        v-if="playVideo && visible[i]"
         :src="item.src"
         :poster="item.poster"
         class="video-mosaic-media"
@@ -33,6 +33,7 @@
 </template>
 
 <script setup lang="ts">
+import type { ComponentPublicInstance } from 'vue'
 import videoAssets from '~/shared/video-lab-assets.json'
 
 // Mur de séquences générées par IA : la capacité de production vidéo de l'agence se montre
@@ -48,39 +49,54 @@ const slugs = [
 ] as const
 
 const assets = videoAssets as Record<string, { src: string; poster: string }>
-// Seules trois tuiles sont animées : six vidéos simultanées pèseraient une quinzaine de
-// mégaoctets et se disputeraient l'attention. Les autres restent sur leur affiche, ce qui
-// suffit à faire lire le bloc comme un mur de production vidéo.
-const animatedSlugs = new Set(['fondateur-cinematique', 'ceo-tournage-publicite', 'porte-parole-studio-fr'])
 const items = slugs.map(slug => ({
   slug,
   src: assets[slug]!.src,
   poster: assets[slug]!.poster,
-  animated: animatedSlugs.has(slug),
 }))
 
 // Le parallax au scroll est retiré : trois instances lisaient le layout puis écrivaient
 // un style à chaque frame, ce qui forçait des recalculs en cascade et saccadait le
 // défilement, pour un déplacement que l’utilisateur jugeait imperceptible.
 
-// Les vidéos ne tournent que sur grand écran et hors mouvement réduit : ailleurs, seules
-// les affiches sont servies, donc aucun octet de vidéo sur la connexion du visiteur.
+// Les six tuiles s'animent sur tous les écrans, mobile compris, mais leur vidéo n'est
+// montée qu'au moment où la tuile entre dans le champ : rien n'est téléchargé pour une
+// tuile jamais atteinte, et les six ne partent jamais en même temps. Seul
+// prefers-reduced-motion laisse la mosaïque entièrement sur ses affiches.
 const playVideo = ref(false)
+const visible = ref<boolean[]>(items.map(() => false))
+const tiles = ref<(HTMLElement | null)[]>(items.map(() => null))
+let observer: IntersectionObserver | null = null
 let motionQuery: MediaQueryList | null = null
-let widthQuery: MediaQueryList | null = null
+
+function setTileRef(el: Element | ComponentPublicInstance | null, index: number) {
+  tiles.value[index] = el instanceof HTMLElement ? el : null
+}
 function syncPlayback() {
-  playVideo.value = !!widthQuery?.matches && !motionQuery?.matches
+  playVideo.value = !motionQuery?.matches
 }
 onMounted(() => {
   motionQuery = window.matchMedia('(prefers-reduced-motion: reduce)')
-  widthQuery = window.matchMedia('(min-width: 768px)')
   motionQuery.addEventListener('change', syncPlayback)
-  widthQuery.addEventListener('change', syncPlayback)
   syncPlayback()
+
+  // Une tuile atteinte garde sa vidéo : on cesse de l'observer, elle ne repasse donc jamais
+  // sur son affiche. La marge fait démarrer le chargement juste avant l'entrée à l'écran.
+  observer = new IntersectionObserver((entries) => {
+    for (const entry of entries) {
+      if (!entry.isIntersecting) continue
+      const index = tiles.value.indexOf(entry.target as HTMLElement)
+      if (index === -1) continue
+      visible.value[index] = true
+      observer?.unobserve(entry.target)
+    }
+  }, { rootMargin: '200px' })
+
+  tiles.value.forEach(el => el && observer!.observe(el))
 })
 onBeforeUnmount(() => {
   motionQuery?.removeEventListener('change', syncPlayback)
-  widthQuery?.removeEventListener('change', syncPlayback)
+  observer?.disconnect()
 })
 </script>
 

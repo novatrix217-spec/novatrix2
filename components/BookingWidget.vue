@@ -57,6 +57,17 @@ async function start(isRetry = false) {
   status.value = 'loading'
   try {
     await initInlineWidget(host.value)
+    // Filet de sécurité : le passage en « prêt » dépendait uniquement d'un message envoyé
+    // par Calendly, dont le nom peut changer et qu'un bloqueur peut empêcher d'arriver.
+    // L'écran de chargement restait alors affiché par-dessus un calendrier pourtant
+    // utilisable. Le chargement de l'iframe suffit désormais à lever cet écran.
+    const frame = host.value.querySelector<HTMLIFrameElement>('iframe')
+    frame?.addEventListener('load', () => {
+      if (status.value === 'loading') {
+        clearResponseTimeout()
+        status.value = 'ready'
+      }
+    }, { once: true })
     responseTimeout = window.setTimeout(() => {
       if (status.value !== 'loading') return
       if (!autoRetried) {
