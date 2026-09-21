@@ -73,7 +73,17 @@ onBeforeUnmount(() => {
   border: 1px solid rgba(255, 255, 255, .16);
   background: linear-gradient(135deg, #2a0f5c, #160630 55%, #0b0318);
   box-shadow: 0 24px 70px rgba(0, 0, 0, .45);
-  aspect-ratio: 16 / 10;
+  /* Format plus ramassé sur mobile : en 16/10 la vidéo dépassait sous la ligne de
+     flottaison et se retrouvait coupée. Le ratio large reprend à partir du desktop, où
+     elle occupe la colonne de droite. */
+  aspect-ratio: 16 / 9;
+  max-height: 24vh;
+}
+@media (min-width: 1024px) {
+  .hero-video {
+    aspect-ratio: 16 / 10;
+    max-height: none;
+  }
 }
 .hero-video-media {
   display: block;

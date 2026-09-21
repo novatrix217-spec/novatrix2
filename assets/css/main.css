@@ -911,13 +911,16 @@ header.glass {
    du header, ce centrage remonte le kicker/titre jusque sous la nav transparente (effet
    "collé"). Le padding-top (hauteur du header + marge supplémentaire) pousse donc le
    centrage flex vers le bas de l'écran ; le padding-bottom reste minimal. */
+/* Hauteur MINIMALE, pas fixe : sur un petit écran le contenu du hero dépassait la hauteur
+   imposée et se retrouvait rogné, d'autant plus que la barre d'URL mobile réduit encore
+   l'espace réel. La section s'étend maintenant si son contenu l'exige. */
 .hero-screen {
-  height: 100vh;
-  height: 100svh;
-  /* La barre de navigation est opaque : le contenu doit commencer franchement dessous,
-     sinon le kicker passe sous la barre au lieu de s'aligner avec. */
-  padding-top: 8.5rem;
-  padding-bottom: 1.5rem;
+  min-height: 100vh;
+  min-height: 100svh;
+  /* Marge haute calée sur la barre de navigation (76 px) plus une respiration. Elle valait
+     8,5rem, un reliquat de l'époque où le hero portait encore un kicker et une note. */
+  padding-top: 6.5rem;
+  padding-bottom: 2rem;
 }
 @media (min-width: 1024px) {
   .hero-screen {

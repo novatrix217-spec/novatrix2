@@ -19,7 +19,9 @@
             <a v-if="hasWhatsapp" :href="whatsappUrl" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 text-sm font-semibold text-white/70 transition hover:text-white"><SvgWhatsappSVG class="h-4 w-4 shrink-0"/>{{ t.whatsappUs }}</a>
           </div>
         </div>
-        <HeroVideo class="mt-4 max-h-[36vh] lg:mt-0 lg:max-h-[min(440px,50vh)]" />
+        <!-- Sur mobile la vidéo passe après les CTA et ne doit pas les repousser hors de
+             l'écran : sa hauteur est plafonnée plus bas que sur grand écran. -->
+        <HeroVideo class="mt-4 max-h-[26vh] lg:mt-0 lg:max-h-[min(440px,50vh)]" />
       </div>
       <!-- Invitation à descendre : le hero occupe tout l'écran, rien n'indiquait qu'une
            page entière suivait. Décoratif, donc masqué aux lecteurs d'écran. -->
