@@ -425,9 +425,14 @@ const featuredProjects = computed(() => {
   return (items.some(project => project.featured) ? items.filter(project => project.featured) : items).slice(0, 3)
 })
 const testimonials = computed(() => testimonialsData.value?.items?.length ? testimonialsData.value.items : demoTestimonials)
-// Compteurs de la bande de preuve : volumes réels publiés, jamais de chiffre inventé.
-const projectsCount = computed(() => projectsData.value?.items?.length || demoProjects.length)
-const testimonialsCount = computed(() => testimonialsData.value?.items?.length || demoTestimonials.length)
+// Compteurs de la bande de preuve. Ils comptaient les fiches publiées sur le site, ce qui
+// affichait « 6 systèmes livrés · 5 avis » en production alors que le profil ComeUp de
+// l'agence recense 78 ventes et 65 avis positifs (note 5/5, 0 avis négatif).
+// Ces valeurs sont donc celles de ComeUp, vérifiables publiquement sur
+// https://comeup.com/fr/@novatrixai, et non le nombre de fiches rédigées ici : une vente
+// correspond au minimum à un projet livré. À réactualiser quand le profil évolue.
+const projectsCount = 78
+const testimonialsCount = 65
 
 const seo = computed(() => locale.value === 'en' ? {
   title: 'Turn more prospects into booked meetings', description: 'NovatrixAI connects acquisition, CRM and follow-up so prospects stop leaking between your tools. Explore the system and book a free audit.',
